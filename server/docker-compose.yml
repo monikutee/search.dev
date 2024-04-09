@@ -1,0 +1,23 @@
+version: "3"
+services:
+  db:
+    env_file: .env.development
+    container_name: postgres
+    image: postgres:11
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:5432
+
+  db-admin:
+    env_file: .env.development
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_LISTEN_PORT: ${PGADMIN_PORT}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - ${PGADMIN_PORT}:5050
