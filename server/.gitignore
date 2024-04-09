@@ -1,0 +1,13 @@
+
+# ignore .ts-node which contains temporary files
+**/.ts-node/
+
+node_modules
+./.vscode
+\.idea/
+yarn-error.log
+dist
+.vscode/
+.DS_Store
+tmp
+node_modules
