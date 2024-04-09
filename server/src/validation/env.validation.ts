@@ -9,9 +9,9 @@ const schema = joi
     POSTGRES_HOST: joi.string().required(),
     POSTGRES_PORT: joi.number().required(),
 
-    // PGADMIN_EMAIL: joi.string().required(),
-    // PGADMIN_PASSWORD: joi.string().required(),
-    // PGADMIN_PORT: joi.string().required(),
+    PGADMIN_EMAIL: joi.string().required(),
+    PGADMIN_PASSWORD: joi.string().required(),
+    PGADMIN_PORT: joi.string().required(),
 
     API_ROOT: joi.string().required(),
 
