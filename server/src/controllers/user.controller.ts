@@ -1,16 +1,25 @@
 import { Request, Response } from "express";
-import { handleErrorResponse } from "../helpers/app-errors";
-import { getAccessToken } from "../helpers/util";
+import { AppErrors, handleErrorResponse } from "../helpers/app-errors";
+import { getAccessToken, verifyAccessToken } from "../helpers/util";
 import { authService, userService } from "../services";
+import { ERROR_CODES } from "../types/errors.enum";
 
 export const getUserById =
   (
     dependencies = {
       getUserById: userService.getUserById,
+      getUser: userService.getUser,
     }
   ) =>
   async (req: Request, res: Response) => {
     try {
+      const userData = verifyAccessToken(req.cookies.jwt);
+      const userCompact = await dependencies.getUser(userData.email);
+
+      if (!userData || userData.userId !== userCompact.id) {
+        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
+      }
+
       const { id } = req.params;
       const user = await dependencies.getUserById(id).catch(() => undefined);
       if (!user) {
@@ -27,10 +36,17 @@ export const getUsersByIds =
   (
     dependencies = {
       getUsersByIds: userService.getUsersByIds,
+      getUser: userService.getUser,
     }
   ) =>
   async (req: Request, res: Response) => {
     try {
+      const userData = verifyAccessToken(req.cookies.jwt);
+      const userCompact = await dependencies.getUser(userData.email);
+
+      if (!userData || userData.userId !== userCompact.id) {
+        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
+      }
       const { ids } = req.body;
       const users = await dependencies
         .getUsersByIds(ids)
@@ -45,15 +61,21 @@ export const edit =
   (
     dependencies = {
       editUser: userService.editUser,
+      getUser: userService.getUser,
     }
   ) =>
   async (req: Request, res: Response) => {
     try {
-      //local auth on gateway side
+      const userData = verifyAccessToken(req.cookies.jwt);
+      const userCompact = await dependencies.getUser(userData.email);
+
+      if (!userData || userData.userId !== userCompact.id) {
+        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
+      }
+
       const user = req.body;
-      delete user.credits;
       delete user.password;
-      console.log("user before", user);
+
       const editedUser = await dependencies.editUser(user);
       const accessToken = getAccessToken(editedUser.id, editedUser.email);
 
@@ -96,10 +118,16 @@ export const refresh =
   (
     dependencies = {
       getUserCompact: userService.getUserCompact,
+      getUser: userService.getUser,
     }
   ) =>
   async (req: Request, res: Response) => {
-    //jwt auth on gateway side
+    const userData = verifyAccessToken(req.cookies.jwt);
+    const userCompact = await dependencies.getUser(userData.email);
+
+    if (!userData || userData.userId !== userCompact.id) {
+      throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
+    }
     const { email } = req.body;
 
     const compactUser = await dependencies.getUserCompact(email);
@@ -108,9 +136,19 @@ export const refresh =
   };
 
 export const startPasswordReset =
-  (dependencies = { startPasswordReset: userService.startPasswordReset }) =>
+  (
+    dependencies = {
+      startPasswordReset: userService.startPasswordReset,
+      getUser: userService.getUser,
+    }
+  ) =>
   async (req: Request, res: Response) => {
     try {
+      const userData = verifyAccessToken(req.cookies.jwt);
+      const userCompact = await dependencies.getUser(userData.email);
+      if (!userData || userData.userId !== userCompact.id) {
+        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
+      }
       const { email } = req.body;
       await dependencies.startPasswordReset(email);
       res.send(
@@ -122,9 +160,19 @@ export const startPasswordReset =
   };
 
 export const finishPasswordReset =
-  (dependencies = { finishPasswordReset: userService.finishPasswordReset }) =>
+  (
+    dependencies = {
+      finishPasswordReset: userService.finishPasswordReset,
+      getUser: userService.getUser,
+    }
+  ) =>
   async (req: Request, res: Response) => {
     try {
+      const userData = verifyAccessToken(req.cookies.jwt);
+      const userCompact = await dependencies.getUser(userData.email);
+      if (!userData || userData.userId !== userCompact.id) {
+        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
+      }
       const { token, password } = req.body;
       await dependencies.finishPasswordReset(token, password);
       res.status(200).send("ok");

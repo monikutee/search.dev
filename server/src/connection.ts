@@ -1,6 +1,13 @@
 import { DataSource } from "typeorm";
 import { DataReset } from "./database/typeorm/data-resets/data-reset.entity";
 import { User } from "./database/typeorm/user/user.entity";
+import { JobOffer } from "./database/typeorm/job-offer/job-offer.entity";
+import { Quiz } from "./database/typeorm/quiz/quiz.entity";
+import { ApplicantAnswer } from "./database/typeorm/applicant-answer/applicant-answer.entity";
+import { Applicant } from "./database/typeorm/applicant/applicant.entity";
+import { Question } from "./database/typeorm/question/question.entity";
+import { QuestionChoice } from "./database/typeorm/question-choice/question-choice.entity";
+import { ApiData } from "./database/typeorm/api-data/api-data.entity";
 
 require("dotenv").config({
   path: __dirname + `/../.env`,
@@ -18,7 +25,17 @@ export const AppDB = new DataSource({
   logging: false,
   synchronize: true,
   migrationsRun: true,
-  entities: [User, DataReset],
+  entities: [
+    ApiData,
+    User,
+    DataReset,
+    JobOffer,
+    Quiz,
+    ApplicantAnswer,
+    Applicant,
+    Question,
+    QuestionChoice,
+  ],
   migrations: ["src/migration/**/*.ts"],
   subscribers: ["src/subscriber/**/*.ts"],
 });

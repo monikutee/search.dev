@@ -2,28 +2,32 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Quiz } from "../quiz/quiz.entity";
 
 @Entity()
-export class DataReset {
+export class Question {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ name: "user_id" })
-  userId: string;
+  @ManyToOne(() => Quiz, (quiz) => quiz.id)
+  quiz: Quiz;
 
-  @CreateDateColumn({
-    name: "reset_password_expires",
-    type: "timestamp with time zone",
-    select: true,
-    nullable: true,
+  @Column("text")
+  questionText: string;
+
+  @Column({
+    type: "enum",
+    enum: ["MCQ", "ONE", "OPEN"],
+    default: "MCQ",
   })
-  resetExpires: Date;
+  questionType: string;
 
-  @Column({ default: false })
-  reseted: boolean;
+  @Column({ default: true })
+  isActive: boolean;
 
   @CreateDateColumn({
     name: "created_at",

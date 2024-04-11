@@ -6,10 +6,9 @@ export function getAccessToken(id: string, email: string) {
     { email, userId: id },
     process.env.ACCESS_TOKEN_SECRET as string,
     {
-      expiresIn: "750h",
+      expiresIn: "1h",
     }
   );
-  console.log(process.env.ACCESS_TOKEN_SECRET, accessToken);
   return accessToken;
 }
 
@@ -18,7 +17,6 @@ export function verifyAccessToken(jwtString: string) {
     jwtString,
     process.env.ACCESS_TOKEN_SECRET as string
   ) as JwtPayload;
-  console.log(process.env.ACCESS_TOKEN_SECRET, verify);
   return verify;
 }
 

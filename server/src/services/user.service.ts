@@ -96,14 +96,10 @@ export const getUserCompact =
     return {
       id: user.id,
       email: user.email,
-      credits: user.credits,
       phoneNumber: user.phoneNumber,
       name: user.name,
       country: user.country,
       city: user.city,
-      newsletters: user.newsletters,
-      newMessageNotificationsEmail: user.newMessageNotificationsEmail,
-      newMessageNotificationsPhone: user.newMessageNotificationsPhone,
       createdAt: user.createdAt,
     };
   };

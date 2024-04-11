@@ -12,7 +12,6 @@ export const authJWT =
   ) =>
   async (req: Request, res: Response) => {
     const { jwt } = req.body;
-    console.log("jwt", jwt);
     try {
       const userData = verifyAccessToken(jwt);
       await dependencies.authJwt(userData);

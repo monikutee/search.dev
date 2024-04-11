@@ -2,28 +2,28 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { User } from "../user/user.entity";
 
 @Entity()
-export class DataReset {
+export class JobOffer {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ name: "user_id" })
-  userId: string;
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
 
-  @CreateDateColumn({
-    name: "reset_password_expires",
-    type: "timestamp with time zone",
-    select: true,
-    nullable: true,
-  })
-  resetExpires: Date;
+  @Column()
+  title: string;
 
-  @Column({ default: false })
-  reseted: boolean;
+  @Column("text")
+  description: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 
   @CreateDateColumn({
     name: "created_at",
