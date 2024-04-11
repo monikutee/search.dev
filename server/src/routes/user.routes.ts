@@ -1,20 +1,23 @@
 import express from "express";
 import { userController } from "../controllers";
+import { verifyUser } from "../middleware/verify-user";
 const app = express();
 const apiRoot = process.env.API_ROOT;
 
-app.get(`${apiRoot}/user/:id`, userController.getUserById);
-app.post(`${apiRoot}/user/get`, userController.getUsersByIds);
 app.post(`${apiRoot}/user/login`, userController.login);
-app.post(`${apiRoot}/user/edit`, userController.edit);
 app.post(`${apiRoot}/user/signup`, userController.signup);
-app.post(`${apiRoot}/user/refresh`, userController.refresh);
+app.get(`${apiRoot}/user/:id`, verifyUser, userController.getUserById);
+app.post(`${apiRoot}/user/get`, verifyUser, userController.getUsersByIds);
+app.post(`${apiRoot}/user/edit`, verifyUser, userController.edit);
+app.post(`${apiRoot}/user/refresh`, verifyUser, userController.refresh);
 app.post(
   `${apiRoot}/user/start-password-reset`,
+  verifyUser,
   userController.startPasswordReset
 );
 app.post(
   `${apiRoot}/user/finish-password-reset`,
+  verifyUser,
   userController.finishPasswordReset
 );
 

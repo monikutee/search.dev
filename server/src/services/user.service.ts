@@ -137,7 +137,6 @@ export const finishPasswordReset =
       finishPasswordreset: typeormDatabase.dataResetRepository.finishDataReset,
       getSingleUserById: typeormDatabase.userRepository.getSingleUserById,
       upsertUser: typeormDatabase.userRepository.upsertUser,
-      resetPasswordSucc: mailerService.resetPasswordSucc,
     }
   ) =>
   async (id: string, newPassword: string) => {
@@ -163,7 +162,6 @@ export const finishPasswordReset =
     await dependencies.finishPasswordreset(passwordReset.id);
     user.password = await bcrypt.hash(newPassword, 10);
     await dependencies.upsertUser(user);
-    await dependencies.resetPasswordSucc(user.email);
   };
 
 export default {

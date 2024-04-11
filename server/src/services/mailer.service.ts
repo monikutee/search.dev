@@ -1,92 +1,41 @@
-import { axiosRequests } from "../helpers/util";
+import Mailjet from "node-mailjet";
 
-const NOTIFICATION_API_PORT = process.env.NOTIFICATION_API_PORT;
-const NOTIFICATION_API_ENDPOINT = process.env.NOTIFICATION_API_ENDPOINT;
-const API_ROOT = process.env.API_ROOT;
-
-const userAxiosRequests = axiosRequests(
-  NOTIFICATION_API_ENDPOINT as string,
-  NOTIFICATION_API_PORT as string
+const mailjet = Mailjet.apiConnect(
+  "1a78b3707b8106db2e30b4aa2ce22c63",
+  "44fe545b3cc9926b7dcd6aec58ae07f0"
 );
-const axiosPost = userAxiosRequests.axiosPost;
 
-export const resetPassword =
-  (
-    dependencies = {
-      axiosPost,
-    }
-  ) =>
-  async (email: string, token: string) => {
-    await dependencies
-      .axiosPost(`${API_ROOT}/mailer/reset-password`, {
-        email,
-        token,
-      })
-      .then((response) => response.data)
-      .catch((e) => {
-        console.log(e.message, e.stack);
-        return undefined;
-      });
-  };
+export const resetPassword = () => async (email: string, token: string) => {
+  const request = mailjet.post("send", { version: "v3.1" }).request({
+    Messages: [
+      {
+        From: {
+          Email: "petrulevicmonika@gmail.com",
+          Name: "MONIKA SEARCH.DEV",
+        },
+        To: [
+          {
+            Email: email,
+          },
+        ],
+        Subject: "Your password reset link",
+        TextPart: "Dear user, here is your password reset link.",
+        HTMLPart: `<h3>Dear user,</h3><p>Here is your password reset token: ${token}</p>`,
+      },
+    ],
+  });
 
-export const resetPasswordSucc =
-  (
-    dependencies = {
-      axiosPost,
-    }
-  ) =>
-  async (email: string) => {
-    await dependencies
-      .axiosPost(`${API_ROOT}/mailer/reset-password-success`, {
-        email,
-      })
-      .then((response) => response.data)
-      .catch((e) => {
-        console.log(e.message, e.stack);
-        return undefined;
-      });
-  };
-
-export const resetEmail =
-  (
-    dependencies = {
-      axiosPost,
-    }
-  ) =>
-  async (email: string, token: string) => {
-    await dependencies
-      .axiosPost(`${API_ROOT}/mailer/reset-email`, {
-        email,
-        token,
-      })
-      .then((response) => response.data)
-      .catch((e) => {
-        console.log(e.message, e.stack);
-        return undefined;
-      });
-  };
-
-export const resetEmailSucc =
-  (
-    dependencies = {
-      axiosPost,
-    }
-  ) =>
-  async (email: string) => {
-    await dependencies
-      .axiosPost(`${API_ROOT}/mailer/reset-email-success`, {
-        email,
-      })
-      .then((response) => response.data)
-      .catch((e) => {
-        console.log(e.message, e.stack);
-        return undefined;
-      });
-  };
+  return request
+    .then((result) => {
+      console.log(result.body);
+      return result.body;
+    })
+    .catch((err) => {
+      console.log(err.statusCode);
+      return undefined;
+    });
+};
 
 export default {
   resetPassword: resetPassword(),
-  resetPasswordSucc: resetPasswordSucc(),
-  resetEmail: resetEmail(),
-  resetEmailSucc: resetEmailSucc(),
 };

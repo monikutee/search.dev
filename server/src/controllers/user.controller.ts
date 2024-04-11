@@ -13,13 +13,6 @@ export const getUserById =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const userData = verifyAccessToken(req.cookies.jwt);
-      const userCompact = await dependencies.getUser(userData.email);
-
-      if (!userData || userData.userId !== userCompact.id) {
-        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
-      }
-
       const { id } = req.params;
       const user = await dependencies.getUserById(id).catch(() => undefined);
       if (!user) {
@@ -41,12 +34,6 @@ export const getUsersByIds =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const userData = verifyAccessToken(req.cookies.jwt);
-      const userCompact = await dependencies.getUser(userData.email);
-
-      if (!userData || userData.userId !== userCompact.id) {
-        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
-      }
       const { ids } = req.body;
       const users = await dependencies
         .getUsersByIds(ids)
@@ -66,13 +53,6 @@ export const edit =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const userData = verifyAccessToken(req.cookies.jwt);
-      const userCompact = await dependencies.getUser(userData.email);
-
-      if (!userData || userData.userId !== userCompact.id) {
-        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
-      }
-
       const user = req.body;
       delete user.password;
 
@@ -122,12 +102,6 @@ export const refresh =
     }
   ) =>
   async (req: Request, res: Response) => {
-    const userData = verifyAccessToken(req.cookies.jwt);
-    const userCompact = await dependencies.getUser(userData.email);
-
-    if (!userData || userData.userId !== userCompact.id) {
-      throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
-    }
     const { email } = req.body;
 
     const compactUser = await dependencies.getUserCompact(email);
@@ -144,11 +118,6 @@ export const startPasswordReset =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const userData = verifyAccessToken(req.cookies.jwt);
-      const userCompact = await dependencies.getUser(userData.email);
-      if (!userData || userData.userId !== userCompact.id) {
-        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
-      }
       const { email } = req.body;
       await dependencies.startPasswordReset(email);
       res.send(
@@ -168,11 +137,6 @@ export const finishPasswordReset =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const userData = verifyAccessToken(req.cookies.jwt);
-      const userCompact = await dependencies.getUser(userData.email);
-      if (!userData || userData.userId !== userCompact.id) {
-        throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
-      }
       const { token, password } = req.body;
       await dependencies.finishPasswordReset(token, password);
       res.status(200).send("ok");
