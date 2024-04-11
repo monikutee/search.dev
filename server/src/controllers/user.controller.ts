@@ -79,8 +79,8 @@ export const signup =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const { email, password } = req.body;
-      const user = await dependencies.createUser(email, password, "signup");
+      const { email, password, name } = req.body;
+      const user = await dependencies.createUser(email, password, name);
       const accessToken = getAccessToken(user.id, user.email);
 
       res.cookie("jwt", accessToken, {

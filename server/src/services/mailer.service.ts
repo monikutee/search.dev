@@ -27,11 +27,9 @@ export const resetPassword = () => async (email: string, token: string) => {
 
   return request
     .then((result) => {
-      console.log(result.body);
       return result.body;
     })
     .catch((err) => {
-      console.log(err.statusCode);
       return undefined;
     });
 };

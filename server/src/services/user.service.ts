@@ -13,10 +13,11 @@ export const createUser =
       upsertUser: typeormDatabase.userRepository.upsertUser,
     }
   ) =>
-  async (email: string, password: string, createdBy: string) => {
+  async (email: string, password: string, name: string) => {
     const user: User = {
       email,
       password,
+      name,
     };
     await validateUser(user);
     user.password = await bcrypt.hash(password, 10);
