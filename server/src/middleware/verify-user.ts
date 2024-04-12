@@ -23,6 +23,7 @@ export const verifyUser = async (req, res, next) => {
     req.userCompact = userCompact;
     next();
   } catch (error) {
+    console.log(error, "DEBUG");
     if (error.code === "INVALID_TOKEN") {
       res.status(401).send({ error: "Invalid token" });
     } else {

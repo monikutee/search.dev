@@ -71,6 +71,19 @@ export const edit =
     }
   };
 
+export const logout = () => async (req: Request, res: Response) => {
+  try {
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      secure: false,
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (e) {
+    handleErrorResponse(e, res);
+  }
+};
+
 export const signup =
   (
     dependencies = {
@@ -88,7 +101,7 @@ export const signup =
         secure: false,
       });
       res.status(200);
-      res.json({ accessToken: accessToken });
+      res.json({ id: user.id });
     } catch (e) {
       handleErrorResponse(e, res);
     }
@@ -164,7 +177,7 @@ export const loginLocal =
           secure: false,
         })
         .status(200)
-        .json({ accessToken });
+        .json({ id: user.id });
     } catch (e) {
       handleErrorResponse(e, res);
     }
@@ -179,4 +192,5 @@ export default {
   refresh: refresh(),
   startPasswordReset: startPasswordReset(),
   finishPasswordReset: finishPasswordReset(),
+  logout: logout(),
 };
