@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Api from "../../api";
@@ -7,10 +7,12 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useGlobalModalContext } from "../GlobalModal";
 import FormHelperText from "@mui/material/FormHelperText";
+import { UserContext } from "../../helpers/UserStore";
 
 export const SignUp = () => {
   const { hideModal } = useGlobalModalContext();
   const [error, setError] = React.useState(null);
+  const { setUserId } = useContext(UserContext);
 
   const [initialValues] = React.useState({
     email: "",
@@ -38,7 +40,7 @@ export const SignUp = () => {
   const onSubmit = async (req: SignUpDto) => {
     try {
       await Api.user.signUp(req).then((res) => {
-        localStorage.setItem("user", res.data.id);
+        setUserId(res.data.id);
       });
       hideModal();
     } catch (e: any) {

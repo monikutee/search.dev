@@ -11,7 +11,7 @@ export const StyledHeader = styled.div`
   background: white;
   max-width: 1200px;
   margin: auto;
-
+  height: 80px;
   button,
   a {
     border-radius: 20px;
@@ -22,6 +22,7 @@ export const StyledLayout = styled.div`
   max-width: 1200px;
   margin: auto;
   padding: 100px;
+  min-height: calc(100vh - 200px);
 
   @media screen and (max-width: 762px) {
     padding: 20px;

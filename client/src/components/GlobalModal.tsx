@@ -17,7 +17,6 @@ export const GlobalModal: React.FC<{ children: React.ReactElement }> = ({
   children,
 }) => {
   const [modal, setModal] = React.useState<JSX.Element>();
-
   const showModal = (Modal: JSX.Element) => {
     setModal(<Modal.type {...Modal?.props} />);
   };

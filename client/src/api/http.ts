@@ -21,8 +21,6 @@ export type RequestUrl = {
   protected: boolean;
 };
 
-console.log(process.env.BASE_URL);
-
 type RequestInterface = <T = any, R = AxiosResponse<T>>(
   url: RequestUrl,
   data?: any,
@@ -90,7 +88,6 @@ class Http {
     error: AxiosError
   ): Promise<CustomAxiosError | any> => {
     const status = error.response?.status || null;
-    const x = error.config as RequestConfig;
     const data =
       error?.response?.data instanceof Blob
         ? JSON.parse(await error.response.data.text())

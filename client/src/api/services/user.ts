@@ -22,7 +22,9 @@ class User extends Client {
     return this.http.post(this.api.LOGOUT);
   };
 
-  signUp = (data: SignUpDto): Promise<AxiosResponse<{ id: string }>> => {
+  signUp = (
+    data: Omit<SignUpDto, "id">
+  ): Promise<AxiosResponse<{ id: string }>> => {
     return this.http.post(this.api.SIGNUP, data);
   };
 

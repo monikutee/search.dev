@@ -12,3 +12,13 @@ export interface SignUpDto {
   country: string;
   city: string;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+  name: string;
+  phone: string;
+  country: string;
+  city: string;
+}
