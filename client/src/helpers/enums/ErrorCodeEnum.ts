@@ -1,0 +1,4 @@
+export enum ErrorCodeEnum {
+  USER_MISSING = "USER_MISSING",
+  WRONG_PASSWORD = "WRONG_PASSWORD",
+}
