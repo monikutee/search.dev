@@ -7,7 +7,6 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useGlobalModalContext } from "../GlobalModal";
 import FormHelperText from "@mui/material/FormHelperText";
-import { ErrorCodeEnum } from "../../helpers/enums/ErrorCodeEnum";
 import { ErrorMessages } from "../../helpers/constants/ErrorMessages";
 
 export const Login = () => {
