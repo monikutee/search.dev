@@ -25,7 +25,9 @@ export const Login = () => {
 
   const onSubmit = async (req: LoginDto) => {
     try {
-      await Api.user.login(req);
+      await Api.user.login(req).then((res) => {
+        localStorage.setItem("user", res.data.id);
+      });
       hideModal();
     } catch (e: any) {
       setError(ErrorMessages[e.response.error.code]);

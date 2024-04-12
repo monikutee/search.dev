@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import { Login } from "./Login";
 import { SignUp } from "./SignUp";
 
-export const LoginSignupModal = () => {
+export const LoginSignUpModal = () => {
   const { hideModal } = useGlobalModalContext();
   const [isLogin, setIsLogin] = React.useState(true);
 

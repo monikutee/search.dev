@@ -37,7 +37,9 @@ export const SignUp = () => {
 
   const onSubmit = async (req: SignUpDto) => {
     try {
-      await Api.user.signUp(req);
+      await Api.user.signUp(req).then((res) => {
+        localStorage.setItem("user", res.data.id);
+      });
       hideModal();
     } catch (e: any) {
       setError(e.definedMessage);

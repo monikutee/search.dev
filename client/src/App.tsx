@@ -6,20 +6,23 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { RouteList } from "./routes";
 import { Homepage } from "./pages/Homepage";
 import { NoMatch } from "./pages/NoMatch";
+import { UserContextProvider } from "./helpers/UserStore";
 
 const App = () => {
   return (
     <React.Fragment>
-      <GlobalModal>
-        <>
-          <LogoutTimer />
-          <Routes>
-            <Route path={RouteList.HOME} element={<Homepage />} />
-            <Route path="*" element={<Navigate to="/404" replace />} />
-            <Route path="/404" element={<NoMatch />} />
-          </Routes>
-        </>
-      </GlobalModal>
+      <UserContextProvider>
+        <GlobalModal>
+          <>
+            <LogoutTimer />
+            <Routes>
+              <Route path={RouteList.HOME} element={<Homepage />} />
+              <Route path="*" element={<Navigate to="/404" replace />} />
+              <Route path="/404" element={<NoMatch />} />
+            </Routes>
+          </>
+        </GlobalModal>
+      </UserContextProvider>
     </React.Fragment>
   );
 };
