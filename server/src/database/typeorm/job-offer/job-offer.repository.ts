@@ -6,28 +6,67 @@ import { JobOffer as JobOfferEntity } from "./job-offer.entity";
 
 export async function getSingleJobOfferById(id: string) {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
-  return (
-    (await jobOfferRepository.findOne({
-      where: { id },
-      relations: ["user", "quizzes"],
-    })) || undefined
-  );
+
+  const jobOffer = await jobOfferRepository.findOne({
+    where: { id },
+    relations: [
+      "quizzes",
+      "quizzes.questions",
+      "quizzes.questions.questionChoices",
+    ],
+  });
+
+  jobOffer.quizzes.forEach((quiz) => {
+    quiz.questions.forEach((question) => {
+      question.questionChoices.forEach((choice) => {
+        delete choice.isCorrect;
+      });
+    });
+  });
+  return jobOffer || undefined;
 }
 
-export async function getAllJobOffers() {
+export async function getAllUserJobOffers(userId: string) {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
+
   return (
     (await jobOfferRepository.find({
-      relations: ["user", "quizzes"],
+      where: { user: { id: userId } },
     })) || []
   );
 }
+
+// ALL INFO
+// export async function getAllUserJobOffers(userId: string) {
+//   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
+//   const jobOffers = await jobOfferRepository.find({
+//     where: { user: { id: userId } },
+//     relations: [
+//       "user",
+//       "quizzes",
+//       "quizzes.questions",
+//       "quizzes.questions.questionChoices",
+//     ],
+//   });
+
+//   jobOffers.forEach((jobOffer) => {
+//     jobOffer.quizzes.forEach((quiz) => {
+//       quiz.questions.forEach((question) => {
+//         question.questionChoices.forEach((choice) => {
+//           delete choice.isCorrect;
+//         });
+//       });
+//     });
+//   });
+
+//   return jobOffers || [];
+// }
 
 export async function disableJobOffer(id: string) {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
   const disabledJobOffer = await jobOfferRepository.findOne({
     where: { id },
-    relations: ["user", "quizzes"],
+    relations: ["user", "quiz"],
   });
   if (disabledJobOffer) {
     disabledJobOffer.isActive = false;
@@ -44,7 +83,7 @@ export async function upsertJobOffer(jobOffer: JobOfferType) {
 
 export default {
   getSingleJobOfferById,
-  getAllJobOffers,
+  getAllUserJobOffers,
   upsertJobOffer,
   disableJobOffer,
 };

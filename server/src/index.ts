@@ -2,6 +2,8 @@ import express from "express";
 import connection from "./connection";
 import userApp from "./routes/user.routes";
 import authApp from "./routes/auth.routes";
+import applicantApp from "./routes/applicant.routes";
+import jobOfferApp from "./routes/job-offer.routes";
 import { validateEnv } from "./validation/env.validation";
 import cookieParser from "cookie-parser";
 import { Request, Response } from "express";
@@ -69,6 +71,8 @@ connection
     app.use(express.urlencoded({ extended: true }));
 
     app.use(userApp);
+    app.use(applicantApp);
+    app.use(jobOfferApp);
     app.use(authApp);
 
     app.listen(PORT, () => {

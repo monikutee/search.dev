@@ -14,14 +14,20 @@ export class ApplicantAnswer {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => Applicant, (applicant) => applicant.id)
+  @ManyToOne(() => Applicant, (applicant) => applicant.id, {
+    nullable: true,
+  })
   applicant: Applicant;
 
-  @ManyToOne(() => Question, (question) => question.id)
-  question: Question;
+  @ManyToOne(() => Question, (question) => question.id, {
+    nullable: true,
+    cascade: true,
+  })
+  questionId: string;
 
   @ManyToOne(() => QuestionChoice, (questionChoice) => questionChoice.id, {
     nullable: true,
+    cascade: true,
   })
   questionChoice: QuestionChoice;
 

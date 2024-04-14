@@ -5,8 +5,10 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
 import { JobOffer } from "../job-offer/job-offer.entity";
+import { Question } from "../question/question.entity";
 
 @Entity()
 export class Quiz {
@@ -15,6 +17,11 @@ export class Quiz {
 
   @ManyToOne(() => JobOffer, (jobOffer) => jobOffer.id)
   jobOffer: JobOffer;
+
+  @OneToMany(() => Question, (question) => question.quiz, {
+    cascade: true,
+  })
+  questions: Question[];
 
   @Column()
   title: string;

@@ -14,7 +14,9 @@ export const getUserById =
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const user = await dependencies.getUserById(id).catch(() => undefined);
+      const user = await dependencies
+        .getUserById(id)
+        .catch(() => console.log("ERROR IN getUserById"));
       if (!user) {
         res.status(400).json("User not found");
       }

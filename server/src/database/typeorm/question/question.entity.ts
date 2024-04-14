@@ -5,7 +5,9 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+import { QuestionChoice } from "../question-choice/question-choice.entity";
 import { Quiz } from "../quiz/quiz.entity";
 
 @Entity()
@@ -15,6 +17,15 @@ export class Question {
 
   @ManyToOne(() => Quiz, (quiz) => quiz.id)
   quiz: Quiz;
+
+  @OneToMany(
+    () => QuestionChoice,
+    (questionChoice) => questionChoice.question,
+    {
+      cascade: true,
+    }
+  )
+  questionChoices: QuestionChoice[];
 
   @Column("text")
   questionText: string;
