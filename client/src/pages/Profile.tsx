@@ -6,6 +6,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { ProfileInfo } from "../components/ProfileInfo";
 import Typography from "@mui/material/Typography";
+import { JobOffer } from "../components/JobOffer";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -69,7 +70,7 @@ export const Profile = () => {
             Active job offers
           </TabPanel>
           <TabPanel value={value} index={2}>
-            New job offer
+            <JobOffer />
           </TabPanel>
         </Grid>
       </Grid>

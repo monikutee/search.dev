@@ -21,10 +21,10 @@ export const ProfileInfo = () => {
         id: user.id,
         email: user.email,
         about: user.about ?? "",
-        name: user.name,
-        phoneNumber: user.phoneNumber,
-        country: user.country,
-        city: user.city,
+        name: user.name ?? "",
+        phoneNumber: user.phoneNumber ?? "",
+        country: user.country ?? "",
+        city: user.city ?? "",
       });
   }, [user]);
 

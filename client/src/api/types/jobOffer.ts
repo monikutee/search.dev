@@ -9,18 +9,30 @@ export interface JobOfferCreateDto {
   title: string;
   description: string;
   country: string;
-  jobType: JobTypeEnum;
-  remote: RemoteEnum;
-  experienceLevel: ExperienceLevelEnum;
+  jobType: JobTypeEnum | string;
+  remote: RemoteEnum | string;
+  experienceLevel: ExperienceLevelEnum | string;
   role: string;
   benefits: string[];
   commitments: string[];
-  quiz: {
-    title: string;
-    questions: {
-      questionText: string;
-      questionChoices: { choiceText: string; isCorrect: boolean }[];
-      questionType: AnswerTypeEnum;
-    }[];
-  };
+  isActive: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  quizzes?: QuizI[];
+}
+
+export interface QuizI {
+  title: string;
+  questions?: QuestionI[];
+}
+export interface QuestionChoiceI {
+  choiceText: string;
+  isCorrect: boolean;
+}
+
+export interface QuestionI {
+  questionText: string;
+  questionType: AnswerTypeEnum | string;
+  questionChoices?: QuestionChoiceI[];
+  isActive: boolean;
 }
