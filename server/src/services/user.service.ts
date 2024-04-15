@@ -13,14 +13,9 @@ export const createUser =
       upsertUser: typeormDatabase.userRepository.upsertUser,
     }
   ) =>
-  async (email: string, password: string, name: string) => {
-    const user: User = {
-      email,
-      password,
-      name,
-    };
+  async (user: User) => {
     await validateUser(user);
-    user.password = await bcrypt.hash(password, 10);
+    user.password = await bcrypt.hash(user.password, 10);
     const newUser = await dependencies.upsertUser(user);
     return newUser;
   };

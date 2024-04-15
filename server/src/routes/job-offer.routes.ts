@@ -18,8 +18,14 @@ app.get(
 );
 
 app.get(
-  `${apiRoot}/job-offer/:jobOfferId`,
+  `${apiRoot}/:userId/job-offer/:jobOfferId`,
+  verifyUser,
   jobOfferController.getSingleJobOfferById
+);
+
+app.get(
+  `${apiRoot}/apply/:jobOfferId`,
+  jobOfferController.getSingleJobOfferByIdApply
 );
 
 export default app;

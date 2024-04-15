@@ -19,25 +19,25 @@ export class AppErrors extends Error {
 }
 
 export const handleErrorResponse = (e: AppErrors, res: Response) => {
-  let message = "";
   if (e.message.includes("duplicate key value violates unique constraint")) {
     const constraintName = e.message.match(/constraint "(.*?)"/)[1];
 
     if (constraintName === "IDX_e12875dfb3b1d92d7d7c5377e2") {
-      message = "An account with this email already exists.";
+      e.code = ERROR_CODES.EMAIL_EXIST;
     } else {
-      message = "A record with the provided information already exists.";
+      e.code = ERROR_CODES.RECORD_EXIST;
     }
   } else {
     e.message;
   }
+
   return res.status(e.statusCode || 400).json({
     error: {
       code:
         e.code && Object.values(ERROR_CODES).includes(e.code)
           ? e.code
           : ERROR_CODES.UNKNOWN,
-      message: message,
+      message: e.message,
       stack:
         process.env.NODE_ENV && DEBUG_ENV.includes(process.env.NODE_ENV)
           ? e.stack

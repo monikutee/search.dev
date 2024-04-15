@@ -1,11 +1,5 @@
-import bcrypt from "bcrypt";
-import { User } from "../types/user.type";
-import { validateEmail, validateUser } from "../validation/user.validation";
-import { DataReset } from "../types/password-reset.type";
 import typeormDatabase from "../database/typeorm";
-import { AppErrors } from "../helpers/app-errors";
-import { ERROR_CODES } from "../types/errors.enum";
-import mailerService from "./mailer.service";
+import { AnswerTypeEnum, JobOfferType } from "../types/jobOffer.type";
 
 export const createJobOffer =
   (
@@ -13,9 +7,28 @@ export const createJobOffer =
       upsertJobOffer: typeormDatabase.jobOfferRepository.upsertJobOffer,
     }
   ) =>
-  async (jobOffer: any) => {
-    const newUser = await dependencies.upsertJobOffer(jobOffer);
-    return newUser;
+  async (jobOffer: JobOfferType) => {
+    for (const quiz of jobOffer.quizzes) {
+      for (const question of quiz.questions) {
+        switch (question.questionType) {
+          case AnswerTypeEnum.OPEN:
+            if (question.questionChoices.length !== 0) {
+              throw new Error("Open questions should not have choices.");
+            }
+            break;
+          case AnswerTypeEnum.ONE:
+          case AnswerTypeEnum.MULTI:
+            if (question.questionChoices.length === 0) {
+              throw new Error(
+                "Questions of type ONE or MULTI should have choices."
+              );
+            }
+            break;
+        }
+      }
+    }
+    const newJobOffer = await dependencies.upsertJobOffer(jobOffer);
+    return newJobOffer;
   };
 
 export const getAllUserJobOffers =
@@ -42,8 +55,21 @@ export const getSingleJobOfferById =
     return jobOffer;
   };
 
+export const getSingleJobOfferByIdApply =
+  (
+    dependencies = {
+      getSingleJobOfferByIdApply:
+        typeormDatabase.jobOfferRepository.getSingleJobOfferByIdApply,
+    }
+  ) =>
+  async (jobOfferId: string) => {
+    const jobOffer = await dependencies.getSingleJobOfferByIdApply(jobOfferId);
+    return jobOffer;
+  };
+
 export default {
   createJobOffer: createJobOffer(),
   getAllUserJobOffers: getAllUserJobOffers(),
   getSingleJobOfferById: getSingleJobOfferById(),
+  getSingleJobOfferByIdApply: getSingleJobOfferByIdApply(),
 };

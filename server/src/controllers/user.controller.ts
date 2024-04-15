@@ -14,12 +14,12 @@ export const getUserById =
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const user = await dependencies
-        .getUserById(id)
-        .catch(() => console.log("ERROR IN getUserById"));
+      const user = await dependencies.getUserById(id);
       if (!user) {
         res.status(400).json("User not found");
       }
+
+      delete user.password;
 
       res.status(200).json(user);
     } catch (e) {
@@ -37,9 +37,9 @@ export const getUsersByIds =
   async (req: Request, res: Response) => {
     try {
       const { ids } = req.body;
-      const users = await dependencies
-        .getUsersByIds(ids)
-        .catch(() => undefined);
+      const users = await dependencies.getUsersByIds(ids);
+
+      users.forEach((user) => delete user.password);
       res.status(200).json(users);
     } catch (e) {
       handleErrorResponse(e, res);
@@ -67,7 +67,7 @@ export const edit =
           secure: false,
         })
         .status(200)
-        .json({ accessToken, user: editedUser });
+        .json(editedUser);
     } catch (e) {
       handleErrorResponse(e, res);
     }
@@ -94,8 +94,15 @@ export const signup =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const { email, password, name } = req.body;
-      const user = await dependencies.createUser(email, password, name);
+      const { email, password, name, city, country, phoneNumber } = req.body;
+      const user = await dependencies.createUser({
+        email,
+        password,
+        name,
+        city,
+        country,
+        phoneNumber,
+      });
       const accessToken = getAccessToken(user.id, user.email);
 
       res.cookie("jwt", accessToken, {

@@ -67,8 +67,30 @@ export const getSingleJobOfferById =
     }
   };
 
+export const getSingleJobOfferByIdApply =
+  (
+    dependencies = {
+      getSingleJobOfferByIdApply: jobOfferService.getSingleJobOfferByIdApply,
+    }
+  ) =>
+  async (req: Request, res: Response) => {
+    try {
+      const { jobOfferId } = req.params;
+
+      const getJobOffer = await dependencies.getSingleJobOfferByIdApply(
+        jobOfferId
+      );
+
+      res.status(200);
+      res.json(getJobOffer);
+    } catch (e) {
+      handleErrorResponse(e, res);
+    }
+  };
+
 export default {
   createJobOffer: createJobOffer(),
   getAllUserJobOffers: getAllUserJobOffers(),
   getSingleJobOfferById: getSingleJobOfferById(),
+  getSingleJobOfferByIdApply: getSingleJobOfferByIdApply(),
 };

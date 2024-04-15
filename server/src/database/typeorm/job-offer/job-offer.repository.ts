@@ -1,11 +1,12 @@
 import { In } from "typeorm";
 import { AppDB } from "../../../connection";
-import { JobOffer as JobOfferType } from "../../../types/jobOffer.type";
-import { User as UserEntity } from "../user/user.entity";
+import { JobOfferType as JobOfferType } from "../../../types/jobOffer.type";
+import { Applicant as ApplicantEntity } from "../applicant/applicant.entity";
 import { JobOffer as JobOfferEntity } from "./job-offer.entity";
 
-export async function getSingleJobOfferById(id: string) {
+export async function getSingleJobOfferByIdApply(id: string) {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
+  const applicantRepository = AppDB.getRepository(ApplicantEntity);
 
   const jobOffer = await jobOfferRepository.findOne({
     where: { id },
@@ -16,6 +17,11 @@ export async function getSingleJobOfferById(id: string) {
     ],
   });
 
+  const applicantCount = await applicantRepository
+    .createQueryBuilder("applicant")
+    .where("applicant.jobOfferId = :id", { id })
+    .getCount();
+
   jobOffer.quizzes.forEach((quiz) => {
     quiz.questions.forEach((question) => {
       question.questionChoices.forEach((choice) => {
@@ -23,6 +29,32 @@ export async function getSingleJobOfferById(id: string) {
       });
     });
   });
+
+  return { ...jobOffer, applicantCount } || undefined;
+}
+
+export async function getSingleJobOfferById(id: string) {
+  const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
+
+  const jobOffer = await jobOfferRepository.findOne({
+    where: { id },
+    relations: [
+      "quizzes",
+      "quizzes.questions",
+      "quizzes.questions.questionChoices",
+      "applicants.answers",
+      "applicants.answers.questionChoice",
+    ],
+  });
+
+  jobOffer.quizzes.forEach((quiz) => {
+    quiz.questions.forEach((question) => {
+      question.questionChoices.forEach((choice) => {
+        delete choice.isCorrect;
+      });
+    });
+  });
+
   return jobOffer || undefined;
 }
 
@@ -82,6 +114,7 @@ export async function upsertJobOffer(jobOffer: JobOfferType) {
 }
 
 export default {
+  getSingleJobOfferByIdApply,
   getSingleJobOfferById,
   getAllUserJobOffers,
   upsertJobOffer,
