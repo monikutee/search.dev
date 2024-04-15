@@ -1,4 +1,6 @@
 import typeormDatabase from "../database/typeorm";
+import { AppErrors } from "../helpers/app-errors";
+import { ERROR_CODES } from "../types/errors.enum";
 import { AnswerTypeEnum, JobOfferType } from "../types/jobOffer.type";
 
 export const createJobOffer =
@@ -8,25 +10,31 @@ export const createJobOffer =
     }
   ) =>
   async (jobOffer: JobOfferType) => {
-    for (const quiz of jobOffer.quizzes) {
-      for (const question of quiz.questions) {
-        switch (question.questionType) {
-          case AnswerTypeEnum.OPEN:
-            if (question.questionChoices.length !== 0) {
-              throw new Error("Open questions should not have choices.");
+    if (jobOffer.quizzes)
+      for (const quiz of jobOffer.quizzes) {
+        if (quiz.questions)
+          for (const question of quiz.questions) {
+            switch (question.questionType) {
+              case AnswerTypeEnum.OPEN:
+                if (question.questionChoices.length !== 0) {
+                  throw new AppErrors(
+                    ERROR_CODES.OPEN_QUESTIONS_DOES_NEED_CHOICE
+                  );
+                }
+                break;
+              case AnswerTypeEnum.ONE:
+              case AnswerTypeEnum.MULTI:
+              default:
+                if (
+                  !question.questionChoices ||
+                  question.questionChoices.length === 0
+                ) {
+                  throw new AppErrors(ERROR_CODES.QUESTION_CHOICES_MUST);
+                }
+                break;
             }
-            break;
-          case AnswerTypeEnum.ONE:
-          case AnswerTypeEnum.MULTI:
-            if (question.questionChoices.length === 0) {
-              throw new Error(
-                "Questions of type ONE or MULTI should have choices."
-              );
-            }
-            break;
-        }
+          }
       }
-    }
     const newJobOffer = await dependencies.upsertJobOffer(jobOffer);
     return newJobOffer;
   };

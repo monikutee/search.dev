@@ -1,7 +1,7 @@
 // import { User } from "./user.type";
 
 export type JobOfferType = {
-  id: string;
+  id?: string;
   userId: string;
   title: string;
   description: string;
@@ -15,12 +15,12 @@ export type JobOfferType = {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-  quizzes: {
+  quizzes?: {
     title: string;
-    questions: {
+    questions?: {
       questionText: string;
       questionType: AnswerTypeEnum;
-      questionChoices: {
+      questionChoices?: {
         choiceText: string;
         isCorrect: boolean;
       }[];
