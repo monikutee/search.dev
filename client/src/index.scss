@@ -31,9 +31,13 @@ img {
     @media screen and (min-width: 762px) {
       width: 500px;
     }
-
-    button {
-      border-radius: 20px;
-    }
   }
+}
+
+.MuiTabs-flexContainer {
+  align-items: center;
+}
+
+.MuiButton-root {
+  border-radius: 20px !important;
 }

@@ -8,17 +8,17 @@ export interface SignUpDto {
   password: string;
   repeat_password: string;
   name: string;
-  phone: string;
+  phoneNumber: string;
   country: string;
   city: string;
 }
 
-export interface User {
+export interface UserI {
   id: string;
   email: string;
-  password: string;
   name: string;
-  phone: string;
+  phoneNumber: string;
   country: string;
   city: string;
+  about: string | null;
 }

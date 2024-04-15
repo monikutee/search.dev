@@ -1,65 +1,63 @@
 import React, { useContext } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import Api from "../../api";
-import { SignUpDto } from "../../api/types/user";
+import Api from "../api";
+import { UserI } from "../api/types/user";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useGlobalModalContext } from "../GlobalModal";
 import FormHelperText from "@mui/material/FormHelperText";
-import { UserContext } from "../../helpers/UserStore";
-import { ErrorMessages } from "../../helpers/constants/ErrorMessages";
+import { UserContext } from "../helpers/UserStore";
+import Loader from "./Loader";
 
-export const SignUp = () => {
-  const { hideModal } = useGlobalModalContext();
-  const [error, setError] = React.useState<string | null>(null);
-  const { setUserId } = useContext(UserContext);
+export const ProfileInfo = () => {
+  const [error, setError] = React.useState(null);
+  const { user, setUserId } = useContext(UserContext);
 
-  const [initialValues] = React.useState({
-    email: "",
-    password: "",
-    repeat_password: "",
-    name: "",
-    phoneNumber: "",
-    country: "",
-    city: "",
-  });
+  const [initialValues, setInitialValues] = React.useState<UserI | null>(null);
+
+  React.useEffect(() => {
+    if (user)
+      setInitialValues({
+        id: user.id,
+        email: user.email,
+        about: user.about ?? "",
+        name: user.name,
+        phoneNumber: user.phoneNumber,
+        country: user.country,
+        city: user.city,
+      });
+  }, [user]);
 
   const schema = Yup.object().shape({
     email: Yup.string().required("Required"),
-    password: Yup.string().required("Required"),
-    repeat_password: Yup.string().oneOf(
-      [Yup.ref("password"), ""],
-      "Passwords must match"
-    ),
     name: Yup.string().required("Required"),
     phoneNumber: Yup.string().required("Required"),
     country: Yup.string().required("Required"),
     city: Yup.string().required("Required"),
   });
 
-  const onSubmit = async (req: SignUpDto) => {
+  const onSubmit = async (req: UserI) => {
     try {
-      await Api.user.signUp(req).then((res) => {
+      if (!user) return;
+      await Api.user.editUser(req).then((res) => {
         setUserId(res.data.id);
       });
-      hideModal();
     } catch (e: any) {
-      setError(ErrorMessages[e.definedMessage]);
+      setError(e.definedMessage);
     }
   };
 
-  return (
+  return initialValues ? (
     <Formik
       initialValues={initialValues}
       validateOnMount={false}
       validationSchema={schema}
       onSubmit={onSubmit}
-      enableReinitialize={true}
     >
-      {({ handleSubmit, handleChange, touched, errors }) => (
+      {({ handleSubmit, handleChange, touched, errors, values }) => (
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
           <TextField
+            value={values.name}
             name="name"
             onChange={handleChange}
             label="Company name"
@@ -67,13 +65,25 @@ export const SignUp = () => {
             error={touched.name && !!errors.name}
           />
           <TextField
+            value={values.about}
+            name="about"
+            onChange={handleChange}
+            multiline
+            rows={7}
+            label="About company"
+            helperText={errors.about}
+            error={touched.about && !!errors.about}
+          />
+          <TextField
             name="email"
+            value={values.email}
             onChange={handleChange}
             label="Email"
             helperText={errors.email}
             error={touched.email && !!errors.email}
           />
           <TextField
+            value={values.phoneNumber}
             name="phoneNumber"
             onChange={handleChange}
             label="Phone number"
@@ -82,6 +92,7 @@ export const SignUp = () => {
           />
           <TextField
             name="country"
+            value={values.country}
             onChange={handleChange}
             label="Country"
             helperText={errors.country}
@@ -89,33 +100,22 @@ export const SignUp = () => {
           />
           <TextField
             name="city"
+            value={values.city}
             onChange={handleChange}
             label="City"
             helperText={errors.city}
             error={touched.city && !!errors.city}
           />
-          <TextField
-            name="password"
-            onChange={handleChange}
-            label="Password"
-            type="password"
-            helperText={errors.password}
-            error={touched.password && !!errors.password}
-          />
-          <TextField
-            name="repeat_password"
-            onChange={handleChange}
-            type="password"
-            label="Repeat password"
-            helperText={errors.repeat_password}
-            error={touched.repeat_password && !!errors.repeat_password}
-          />
           {error && <FormHelperText error>{error}</FormHelperText>}
           <Button type="submit" variant="contained">
-            Sign up
+            Update
           </Button>
         </form>
       )}
     </Formik>
+  ) : (
+    <div className="d-flex align-items-center justify-content-center">
+      <Loader />
+    </div>
   );
 };

@@ -32,7 +32,7 @@ export const Login = () => {
       });
       hideModal();
     } catch (e: any) {
-      setError(ErrorMessages[e.response.error.code]);
+      setError(ErrorMessages[e.definedMessage]);
     }
   };
 

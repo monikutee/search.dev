@@ -104,7 +104,7 @@ class Http {
     return Promise.reject({
       ...error,
       status: status,
-      definedMessage: httpError.response.error.message,
+      definedMessage: httpError.response.error.code,
     });
   };
 }

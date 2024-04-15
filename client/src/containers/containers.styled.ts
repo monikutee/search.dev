@@ -12,6 +12,8 @@ export const StyledHeader = styled.div`
   max-width: 1200px;
   margin: auto;
   height: 80px;
+  z-index: 100;
+
   button,
   a {
     border-radius: 20px;

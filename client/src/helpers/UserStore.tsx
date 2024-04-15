@@ -1,12 +1,13 @@
 import React, { createContext, useEffect, useState } from "react";
 import Api from "../api";
-import { User } from "../api/types/user";
+import { UserI } from "../api/types/user";
 import { toast } from "react-toastify";
+import { redirect } from "react-router-dom";
 
 interface IUserContext {
-  user: User | null;
+  user: UserI | null;
   isLoading: boolean;
-  setUser: (user: User | null) => void;
+  setUser: (user: UserI | null) => void;
   setUserId: (id: string | null) => void;
 }
 
@@ -24,7 +25,7 @@ export const UserContext = createContext<IUserContext>({
 export const UserContextProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }): JSX.Element => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserI | null>(null);
   const [isLoading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(
     localStorage.getItem("user")
@@ -38,7 +39,9 @@ export const UserContextProvider: React.FC<{
         setLoading(false);
       });
     } catch (e) {
-      toast.error("An unexpected error occured!", {
+      setUserId(null);
+      localStorage.removeItem("user");
+      toast.error("An unexpected error occurred! You were logged out", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -48,6 +51,7 @@ export const UserContextProvider: React.FC<{
         progress: undefined,
         theme: "dark",
       });
+      return redirect("/");
     }
   };
 
