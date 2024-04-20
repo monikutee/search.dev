@@ -52,7 +52,7 @@ class Http {
       "Access-Control-Allow-Headers":
         "Access-Control-*, Origin, X-Requested-With, Content-Type, Accept",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, HEAD",
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "https://searchdev.netlify.app",
       Allow: "GET, POST, PUT, DELETE, OPTIONS, HEAD",
       crossdomain: true,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
