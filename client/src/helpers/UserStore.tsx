@@ -2,10 +2,11 @@ import React, { createContext, useEffect, useState } from "react";
 import Api from "../api";
 import { UserI } from "../api/types/user";
 import { toast } from "react-toastify";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface IUserContext {
   user: UserI | null;
+  userId: string | null;
   isLoading: boolean;
   setUser: (user: UserI | null) => void;
   setUserId: (id: string | null) => void;
@@ -13,6 +14,7 @@ interface IUserContext {
 
 export const UserContext = createContext<IUserContext>({
   user: null,
+  userId: null,
   isLoading: true,
   setUser: (): void => {
     throw new Error("setUser function must be overridden");
@@ -30,6 +32,7 @@ export const UserContextProvider: React.FC<{
   const [userId, setUserId] = useState<string | null>(
     localStorage.getItem("user")
   );
+  const navigate = useNavigate();
 
   const fetchUser = async (userId: string) => {
     try {
@@ -41,6 +44,7 @@ export const UserContextProvider: React.FC<{
     } catch (e) {
       setUserId(null);
       localStorage.removeItem("user");
+      navigate("/");
       toast.error("An unexpected error occurred! You were logged out", {
         position: "top-right",
         autoClose: 5000,
@@ -49,9 +53,8 @@ export const UserContextProvider: React.FC<{
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
       });
-      return redirect("/");
     }
   };
 
@@ -62,6 +65,8 @@ export const UserContextProvider: React.FC<{
     }
     setLoading(true);
     fetchUser(userId);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   return (
@@ -69,6 +74,7 @@ export const UserContextProvider: React.FC<{
       value={{
         isLoading: isLoading,
         user: user,
+        userId: userId,
         setUser: setUser,
         setUserId: setUserId,
       }}

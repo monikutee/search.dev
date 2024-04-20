@@ -7,25 +7,25 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import { UserContext } from "../helpers/UserStore";
-import Loader from "./Loader";
+import Loader from "./Global/Loader";
+import { useNavigate } from "react-router-dom";
 
-export const ProfileInfo = () => {
+export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   const [error, setError] = React.useState(null);
-  const { user, setUserId } = useContext(UserContext);
-
+  const { setUserId } = useContext(UserContext);
   const [initialValues, setInitialValues] = React.useState<UserI | null>(null);
 
   React.useEffect(() => {
-    if (user)
-      setInitialValues({
-        id: user.id,
-        email: user.email,
-        about: user.about ?? "",
-        name: user.name ?? "",
-        phoneNumber: user.phoneNumber ?? "",
-        country: user.country ?? "",
-        city: user.city ?? "",
-      });
+    setInitialValues({
+      id: user.id,
+      email: user.email,
+      about: user.about ?? "",
+      name: user.name ?? "",
+      phoneNumber: user.phoneNumber ?? "",
+      country: user.country ?? "",
+      city: user.city ?? "",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const schema = Yup.object().shape({

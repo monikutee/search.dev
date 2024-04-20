@@ -41,3 +41,22 @@ img {
 .MuiButton-root {
   border-radius: 20px !important;
 }
+
+.MuiFilledInput-root {
+  background-color: transparent !important;
+}
+
+.MuiChip-label {
+  font-weight: 300 !important;
+}
+
+.profile_tabs {
+  a {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0e213b;
+    text-decoration: none;
+  }
+}

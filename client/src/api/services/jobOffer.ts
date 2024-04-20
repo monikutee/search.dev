@@ -1,6 +1,5 @@
 import Client from "./client";
 import Http from "../http";
-import { LoginDto, SignUpDto } from "../types/user";
 import type { AxiosResponse } from "axios";
 import { JobOfferCreateDto } from "../types/jobOffer";
 
@@ -32,8 +31,11 @@ class JobOffer extends Client {
     return this.http.get(url);
   };
 
-  fetchOneJobOfferUsers = (id: string): Promise<AxiosResponse<any>> => {
-    const url = this.buildUrl(this.api.FETCH_ONE_USERS, { userId: id });
+  fetchOneJobOfferUsers = (
+    userId: string,
+    jobOfferId: string
+  ): Promise<AxiosResponse<any>> => {
+    const url = this.buildUrl(this.api.FETCH_ONE_USERS, { userId, jobOfferId });
     return this.http.get(url);
   };
 }

@@ -1,7 +1,9 @@
+import { QuestionChoiceI, QuestionI } from "../../api/types/jobOffer";
 import {
   JobTypeEnum,
   RemoteEnum,
   ExperienceLevelEnum,
+  AnswerTypeEnum,
 } from "../enums/JobOfferEnums";
 
 export const JobTypeText: { [key: string]: string } = {
@@ -26,6 +28,11 @@ export const ExperienceLevelText: { [key: string]: string } = {
   [ExperienceLevelEnum.SENIOR]: "Senior",
   [ExperienceLevelEnum.DIRECTOR]: "Director",
   [ExperienceLevelEnum.EXECUTIVE]: "Executive",
+};
+
+export const AnswerTypeText: { [key: string]: string } = {
+  [AnswerTypeEnum.MULTI]: "Choice",
+  [AnswerTypeEnum.OPEN]: "Open",
 };
 
 export const RoleText: { [key: string]: string } = {
@@ -54,4 +61,15 @@ export const CommitmentsText: { [key: string]: string } = {
   CAREER: "Career growth and learning",
   SOCIAL: "Social impact",
   BALANCE: "Work-life balance",
+};
+
+export const INITIAL_QUESTION_CHOICE: QuestionChoiceI = {
+  choiceText: "",
+  isCorrect: true,
+};
+
+export const INITIAL_QUESTION: QuestionI = {
+  questionText: "",
+  questionType: AnswerTypeEnum.MULTI,
+  questionChoices: [INITIAL_QUESTION_CHOICE, INITIAL_QUESTION_CHOICE],
 };

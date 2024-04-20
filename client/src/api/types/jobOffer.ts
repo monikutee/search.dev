@@ -6,8 +6,10 @@ import {
 } from "../../helpers/enums/JobOfferEnums";
 
 export interface JobOfferCreateDto {
+  id?: string;
   title: string;
   description: string;
+  city: string;
   country: string;
   jobType: JobTypeEnum | string;
   remote: RemoteEnum | string;
@@ -23,7 +25,7 @@ export interface JobOfferCreateDto {
 
 export interface QuizI {
   title: string;
-  questions?: QuestionI[];
+  questions: QuestionI[];
 }
 export interface QuestionChoiceI {
   choiceText: string;
@@ -32,7 +34,6 @@ export interface QuestionChoiceI {
 
 export interface QuestionI {
   questionText: string;
-  questionType: AnswerTypeEnum | string;
-  questionChoices?: QuestionChoiceI[];
-  isActive: boolean;
+  questionType: AnswerTypeEnum;
+  questionChoices: QuestionChoiceI[];
 }

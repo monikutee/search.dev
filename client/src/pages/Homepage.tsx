@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Layout } from "../containers";
+import { useGlobalModalContext } from "../components/Global/GlobalModal";
+import { UserContext } from "../helpers/UserStore";
+import { LoginSignUpModal } from "../components/LoginSignup";
+import { Link } from "react-router-dom";
+
 import LAPTOP from "../assets/images/laptop.jpg";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import { RouteList } from "../routes";
 
 export const Homepage = () => {
+  const { showModal } = useGlobalModalContext();
+  const { userId } = useContext(UserContext);
+
   return (
     <Layout>
       <Grid container spacing={5}>
@@ -24,6 +34,25 @@ export const Homepage = () => {
             that combines the power of quizzes and programming challenges to
             help you identify the best candidates quickly and efficiently.
           </Typography>
+          <div className="mt-3 d-flex gap-3 flex-wrap">
+            {userId ? (
+              <Link to={RouteList.CREATE_JOB_OFFER}>
+                <Button variant="contained">Create job offer</Button>
+              </Link>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  showModal(<LoginSignUpModal />);
+                }}
+              >
+                Create job offer
+              </Button>
+            )}
+            <Link to={RouteList.ALL_JOB_OFFERS}>
+              <Button variant="outlined">View job offers</Button>
+            </Link>
+          </div>
         </Grid>
         <Grid item xs={12} md={6}>
           <div>

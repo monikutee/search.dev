@@ -5,15 +5,18 @@ import Api from "../../api";
 import { LoginDto } from "../../api/types/user";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useGlobalModalContext } from "../GlobalModal";
+import { useGlobalModalContext } from "../Global/GlobalModal";
 import FormHelperText from "@mui/material/FormHelperText";
 import { ErrorMessages } from "../../helpers/constants/ErrorMessages";
 import { UserContext } from "../../helpers/UserStore";
+import { useNavigate } from "react-router-dom";
+import { RouteList } from "../../routes";
 
 export const Login = () => {
   const { hideModal } = useGlobalModalContext();
   const [error, setError] = React.useState<string | null>(null);
   const { setUserId } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const [initialValues] = React.useState({
     email: "",
@@ -31,6 +34,7 @@ export const Login = () => {
         setUserId(res.data.id);
       });
       hideModal();
+      navigate(RouteList.MY_JOB_OFFERS_LIST);
     } catch (e: any) {
       setError(ErrorMessages[e.definedMessage]);
     }
@@ -51,6 +55,7 @@ export const Login = () => {
             onChange={handleChange}
             label="Email"
             error={touched.email && !!errors.email}
+            helperText={errors.email}
           />
           <TextField
             name="password"
@@ -58,6 +63,7 @@ export const Login = () => {
             label="Password"
             type="password"
             error={touched.password && !!errors.password}
+            helperText={errors.password}
           />
           {error && <FormHelperText error>{error}</FormHelperText>}
           <Button type="submit" variant="contained">

@@ -5,15 +5,18 @@ import Api from "../../api";
 import { SignUpDto } from "../../api/types/user";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useGlobalModalContext } from "../GlobalModal";
+import { useGlobalModalContext } from "../Global/GlobalModal";
 import FormHelperText from "@mui/material/FormHelperText";
 import { UserContext } from "../../helpers/UserStore";
 import { ErrorMessages } from "../../helpers/constants/ErrorMessages";
+import { useNavigate } from "react-router-dom";
+import { RouteList } from "../../routes";
 
 export const SignUp = () => {
   const { hideModal } = useGlobalModalContext();
   const [error, setError] = React.useState<string | null>(null);
   const { setUserId } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const [initialValues] = React.useState({
     email: "",
@@ -28,10 +31,9 @@ export const SignUp = () => {
   const schema = Yup.object().shape({
     email: Yup.string().required("Required"),
     password: Yup.string().required("Required"),
-    repeat_password: Yup.string().oneOf(
-      [Yup.ref("password"), ""],
-      "Passwords must match"
-    ),
+    repeat_password: Yup.string()
+      .oneOf([Yup.ref("password"), ""], "Passwords must match")
+      .required("Required"),
     name: Yup.string().required("Required"),
     phoneNumber: Yup.string().required("Required"),
     country: Yup.string().required("Required"),
@@ -44,6 +46,7 @@ export const SignUp = () => {
         setUserId(res.data.id);
       });
       hideModal();
+      navigate(RouteList.MY_JOB_OFFERS_LIST);
     } catch (e: any) {
       setError(ErrorMessages[e.definedMessage]);
     }
