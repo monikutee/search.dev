@@ -13,6 +13,8 @@ import {
 import Button from "@mui/material/Button";
 import { RouteList } from "../../routes";
 import { generatePath, Link } from "react-router-dom";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export const JobOfferList = () => {
   const [list, setList] = React.useState<any>(null);
@@ -41,9 +43,12 @@ export const JobOfferList = () => {
       {list.map((item: any, index: number) => (
         <StyledJobOfferItem key={index}>
           <div className="d-flex justify-content-between gap-2">
-            <Typography variant="h5" color="primary">
-              {item.title}
-            </Typography>
+            <div className="d-flex align-items-center gap-1">
+              {item.isActive ? <VisibilityIcon /> : <VisibilityOffIcon />}
+              <Typography variant="h5" color="primary">
+                {item.title}
+              </Typography>
+            </div>
             <Typography variant="body1" color="primary" align="right">
               {new Date(item.updatedAt).toLocaleString("lt", {
                 year: "numeric",
@@ -68,7 +73,14 @@ export const JobOfferList = () => {
           >
             {item.description}
           </Typography>
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end gap-3">
+            <Link
+              to={generatePath(RouteList.EDIT_JOB_OFFER, {
+                jobOfferId: item.id,
+              })}
+            >
+              <Button variant="outlined">View applicants</Button>
+            </Link>
             <Link
               to={generatePath(RouteList.EDIT_JOB_OFFER, {
                 jobOfferId: item.id,

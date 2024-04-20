@@ -8,7 +8,6 @@ import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import { UserContext } from "../helpers/UserStore";
 import Loader from "./Global/Loader";
-import { useNavigate } from "react-router-dom";
 
 export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   const [error, setError] = React.useState(null);
