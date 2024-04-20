@@ -6,7 +6,7 @@ export function getAccessToken(id: string, email: string) {
     { email, userId: id },
     process.env.ACCESS_TOKEN_SECRET as string,
     {
-      expiresIn: "1h",
+      expiresIn: "2h",
     }
   );
   return accessToken;

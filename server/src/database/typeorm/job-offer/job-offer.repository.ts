@@ -47,14 +47,6 @@ export async function getSingleJobOfferById(id: string) {
     ],
   });
 
-  jobOffer.quizzes.forEach((quiz) => {
-    quiz.questions.forEach((question) => {
-      question.questionChoices.forEach((choice) => {
-        delete choice.isCorrect;
-      });
-    });
-  });
-
   return jobOffer || undefined;
 }
 
@@ -64,6 +56,7 @@ export async function getAllUserJobOffers(userId: string) {
   return (
     (await jobOfferRepository.find({
       where: { user: { id: userId } },
+      order: { updatedAt: "DESC" },
     })) || []
   );
 }

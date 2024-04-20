@@ -38,6 +38,9 @@ export class JobOffer {
   @Column()
   country: string;
 
+  @Column()
+  city: string;
+
   @Column({
     type: "enum",
     enum: ["FULL_TIME", "PART_TIME", "CONTRACT"],
