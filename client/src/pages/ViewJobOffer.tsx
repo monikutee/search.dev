@@ -1,26 +1,26 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Layout } from "../containers";
 import Grid from "@mui/material/Grid";
-import { JobOffer } from "../components/JobOfferItemAuth";
-import { RouteList } from "../routes";
 import Button from "@mui/material/Button";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import Api from "../api";
-import { UserContext } from "../helpers/UserStore";
+import { RouteList } from "../routes";
 import Loader from "../components/Global/Loader";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Api from "../api";
+import { JobOfferApplyMiniDto } from "../api/types/jobOffer";
 
-export const EditJobOffer = () => {
-  const [jobOffer, setJobOffer] = React.useState<any>(null);
-  const { userId } = useContext(UserContext);
+export const ViewJobOffer = () => {
+  const [jobOffer, setJobOffer] = React.useState<JobOfferApplyMiniDto | null>(
+    null
+  );
   const { jobOfferId } = useParams<{ jobOfferId: string }>();
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (jobOfferId && userId) {
+    if (jobOfferId) {
       try {
         Api.jobOffer
-          .fetchOneJobOfferUsers(userId, jobOfferId)
+          .fetchOneJobOfferInfo(jobOfferId)
           .then((res) => setJobOffer(res.data));
       } catch {
         console.log("error");
@@ -36,7 +36,7 @@ export const EditJobOffer = () => {
     <Layout>
       <Grid container>
         <Grid item xs={12} md={3}>
-          <Link to={RouteList.MY_JOB_OFFERS_LIST}>
+          <Link to={RouteList.ALL_JOB_OFFERS}>
             <Button
               component="label"
               role={undefined}
@@ -50,7 +50,7 @@ export const EditJobOffer = () => {
         </Grid>
         <Grid item xs={12} md={9}>
           {jobOffer ? (
-            <JobOffer data={jobOffer} />
+            <div>{jobOffer.title}</div>
           ) : (
             <div className="d-flex align-items-center justify-content-center">
               <Loader />

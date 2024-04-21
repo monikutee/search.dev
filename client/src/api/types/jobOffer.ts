@@ -5,7 +5,7 @@ import {
   AnswerTypeEnum,
 } from "../../helpers/enums/JobOfferEnums";
 
-export interface JobOfferCreateDto {
+export interface JobOfferDto {
   id?: string;
   title: string;
   description: string;
@@ -21,6 +21,32 @@ export interface JobOfferCreateDto {
   createdAt?: Date;
   updatedAt?: Date;
   quizzes?: QuizI[];
+  applicants?: [];
+}
+
+export interface JobOfferApplyMiniDto {
+  id?: string;
+  title: string;
+  description: string;
+  city: string;
+  user: {
+    email: string;
+    phoneNumber: string;
+    name: string;
+    about: string;
+  };
+  country: string;
+  jobType: JobTypeEnum | string;
+  remote: RemoteEnum | string;
+  experienceLevel: ExperienceLevelEnum | string;
+  role: string;
+  benefits: string[];
+  commitments: string[];
+  isActive: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  quizzes?: QuizI[];
+  applicantCount?: number;
 }
 
 export interface QuizI {

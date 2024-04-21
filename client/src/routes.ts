@@ -6,4 +6,6 @@ export const RouteList = {
   MY_JOB_OFFERS_LIST: "/my-job-offers",
   EDIT_JOB_OFFER: "/my-job-offers/:jobOfferId",
   ALL_JOB_OFFERS: "/job-offers",
+  VIEW_JOB_OFFER: "/job-offers/:jobOfferId",
+  APPLY: "/apply/:jobOfferId",
 };

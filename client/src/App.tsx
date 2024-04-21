@@ -10,6 +10,9 @@ import { UserContextProvider } from "./helpers/UserStore";
 import GlobalLoader from "./components/Global/GlobalLoader";
 import { Profile } from "./pages/Profile";
 import { EditJobOffer } from "./pages/EditJobOffer";
+import { AllJobOffers } from "./pages/AllJobOffers";
+import { Apply } from "./pages/Apply";
+import { ViewJobOffer } from "./pages/ViewJobOffer";
 
 const App = () => {
   return (
@@ -33,6 +36,16 @@ const App = () => {
                 path={RouteList.EDIT_JOB_OFFER}
                 element={<EditJobOffer />}
               />
+              <Route
+                path={RouteList.ALL_JOB_OFFERS}
+                element={<AllJobOffers />}
+              />
+              <Route
+                path={RouteList.VIEW_JOB_OFFER}
+                element={<ViewJobOffer />}
+              />
+
+              <Route path={RouteList.APPLY} element={<Apply />} />
 
               <Route
                 path="*"

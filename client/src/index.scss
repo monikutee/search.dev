@@ -60,3 +60,20 @@ img {
     text-decoration: none;
   }
 }
+
+.job-offer-apply {
+  padding: 10px;
+  a {
+    text-decoration: none;
+  }
+
+  border-radius: 8px;
+  &:hover {
+    background-color: #eff2f6;
+  }
+}
+
+.step-icon {
+  height: 5rem !important;
+  width: 5rem !important;
+}

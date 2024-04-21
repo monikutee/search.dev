@@ -9,7 +9,7 @@ import {
   JobTypeEnum,
 } from "../../helpers/enums/JobOfferEnums";
 import { Formik } from "formik";
-import { JobOfferCreateDto } from "../../api/types/jobOffer";
+import { JobOfferDto } from "../../api/types/jobOffer";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
@@ -33,14 +33,12 @@ import { AnswerTypeEnum } from "../../helpers/enums/JobOfferEnums";
 import { useNavigate } from "react-router-dom";
 import { RouteList } from "../../routes";
 
-export const JobOffer: React.FC<{ data?: JobOfferCreateDto }> = ({
-  data = null,
-}) => {
+export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
   const [error, setError] = React.useState<string | null>(null);
   const { userId } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const [initialValues] = React.useState<JobOfferCreateDto>({
+  const [initialValues] = React.useState<JobOfferDto>({
     title: data?.title ?? "",
     description: data?.description ?? "",
     country: data?.country ?? "",
@@ -55,7 +53,7 @@ export const JobOffer: React.FC<{ data?: JobOfferCreateDto }> = ({
     quizzes: data?.quizzes ?? [],
   });
 
-  const onSubmit = async (req: JobOfferCreateDto) => {
+  const onSubmit = async (req: JobOfferDto) => {
     try {
       if (userId)
         if (data) {
@@ -142,7 +140,7 @@ export const JobOffer: React.FC<{ data?: JobOfferCreateDto }> = ({
               control={
                 <Checkbox
                   name="isActive"
-                  value={helpers.values.isActive}
+                  checked={helpers.values.isActive}
                   onChange={helpers.handleChange}
                 />
               }
