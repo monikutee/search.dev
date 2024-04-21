@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { AppErrors, handleErrorResponse } from "../helpers/app-errors";
-import { getAccessToken, verifyAccessToken } from "../helpers/util";
+import { handleErrorResponse } from "../helpers/app-errors";
+import { getAccessToken } from "../helpers/util";
 import { authService, userService } from "../services";
-import { ERROR_CODES } from "../types/errors.enum";
 
 export const getUserById =
   (

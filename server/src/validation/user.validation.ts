@@ -16,13 +16,22 @@ const emailShema = joi
     "any.required": ERROR_CODES.WRONG_EMAIL_UNDEFINED,
   });
 
-const passwordShema = joi.string().required().min(5).max(60).messages({
-  "string.base": ERROR_CODES.WRONG_PASSWORD_BASE,
-  "string.empty": ERROR_CODES.WRONG_PASSWORD_EMPTY,
-  "string.min": ERROR_CODES.WRONG_PASSWORD_SHORT,
-  "string.max": ERROR_CODES.WRONG_PASSWORD_LONG,
-  "any.required": ERROR_CODES.WRONG_PASSWORD_UNDEFINED,
-});
+const passwordShema = joi
+  .string()
+  .pattern(
+    new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
+  )
+  .required()
+  .min(5)
+  .max(60)
+  .messages({
+    "string.base": ERROR_CODES.WRONG_PASSWORD_BASE,
+    "string.empty": ERROR_CODES.WRONG_PASSWORD_EMPTY,
+    "string.pattern.base": ERROR_CODES.WRONG_PASSWORD_PATTERN,
+    "string.min": ERROR_CODES.WRONG_PASSWORD_SHORT,
+    "string.max": ERROR_CODES.WRONG_PASSWORD_LONG,
+    "any.required": ERROR_CODES.WRONG_PASSWORD_UNDEFINED,
+  });
 
 const schema = joi.object({
   email: emailShema,
@@ -40,13 +49,13 @@ function handleError(e: joi.ValidationError) {
 export async function validateUser(user: User) {
   return await schema
     .validateAsync(user, { allowUnknown: true })
-    .catch((e) => handleError);
+    .catch(handleError);
 }
 
 export async function validateEmail(email: string) {
-  return await emailShema.validateAsync(email).catch((e) => handleError);
+  return await emailShema.validateAsync(email).catch(handleError);
 }
 
 export async function validatePassword(password: string) {
-  return await passwordShema.validateAsync(password).catch((e) => handleError);
+  return await passwordShema.validateAsync(password).catch(handleError);
 }
