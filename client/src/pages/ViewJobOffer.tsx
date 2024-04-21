@@ -142,7 +142,7 @@ export const ViewJobOffer = () => {
               </div>
 
               {/* TODO add application process time from user input */}
-              {jobOffer.quizzes && (
+              {jobOffer.quizzes?.length ? (
                 <div>
                   <Typography variant="body1" color="primary" mt={3}>
                     Application process:
@@ -160,7 +160,7 @@ export const ViewJobOffer = () => {
                     <li>{jobOffer.totalQuestionCount} total questions</li>
                   </ul>
                 </div>
-              )}
+              ) : null}
 
               <div className={"d-md-none w-100"}>
                 <Link to={RouteList.ALL_JOB_OFFERS}>
