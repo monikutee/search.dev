@@ -6,7 +6,7 @@ import { ERROR_CODES } from "../types/errors.enum";
 export const verifyUser = async (req, res, next) => {
   try {
     if (!req.cookies.jwt) {
-      throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 501);
+      throw new AppErrors(ERROR_CODES.MISSING_TOKEN, undefined, 501);
     }
     const userData = verifyAccessToken(req.cookies.jwt);
 

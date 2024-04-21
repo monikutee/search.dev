@@ -1,4 +1,3 @@
-import { In } from "typeorm";
 import { AppDB } from "../../../connection";
 import { JobOfferType as JobOfferType } from "../../../types/jobOffer.type";
 import { Applicant as ApplicantEntity } from "../applicant/applicant.entity";
@@ -33,6 +32,30 @@ export async function getSingleJobOfferByIdApply(id: string) {
   return { ...jobOffer, applicantCount } || undefined;
 }
 
+export async function getSingleJobOfferByIdApplyInfo(id: string) {
+  const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
+  const applicantRepository = AppDB.getRepository(ApplicantEntity);
+
+  const jobOffer = await jobOfferRepository.findOne({
+    where: { id },
+    relations: ["quizzes"],
+  });
+
+  jobOffer.quizzes.forEach((quiz) => {
+    delete quiz.createdAt;
+    delete quiz.updatedAt;
+    delete quiz.id;
+  });
+  delete jobOffer.userId;
+
+  const applicantCount = await applicantRepository
+    .createQueryBuilder("applicant")
+    .where("applicant.jobOfferId = :id", { id })
+    .getCount();
+
+  return { ...jobOffer, applicantCount } || undefined;
+}
+
 export async function getSingleJobOfferById(id: string) {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
 
@@ -61,43 +84,30 @@ export async function getAllUserJobOffers(userId: string) {
   );
 }
 
-// ALL INFO
-// export async function getAllUserJobOffers(userId: string) {
-//   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
-//   const jobOffers = await jobOfferRepository.find({
-//     where: { user: { id: userId } },
-//     relations: [
-//       "user",
-//       "quizzes",
-//       "quizzes.questions",
-//       "quizzes.questions.questionChoices",
-//     ],
-//   });
-
-//   jobOffers.forEach((jobOffer) => {
-//     jobOffer.quizzes.forEach((quiz) => {
-//       quiz.questions.forEach((question) => {
-//         question.questionChoices.forEach((choice) => {
-//           delete choice.isCorrect;
-//         });
-//       });
-//     });
-//   });
-
-//   return jobOffers || [];
-// }
-
-export async function disableJobOffer(id: string) {
+export async function getAllJobOffersApply() {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
-  const disabledJobOffer = await jobOfferRepository.findOne({
-    where: { id },
-    relations: ["user", "quiz"],
+  const jobOffers = await jobOfferRepository.find({
+    where: { isActive: true },
+    relations: ["user", "quizzes"],
+    order: { updatedAt: "DESC" },
   });
-  if (disabledJobOffer) {
-    disabledJobOffer.isActive = false;
-    return await jobOfferRepository.save(disabledJobOffer);
-  }
-  return await jobOfferRepository.save(disabledJobOffer);
+
+  jobOffers.forEach((jobOffer) => {
+    delete jobOffer.userId;
+    delete jobOffer.user.password;
+    delete jobOffer.user.createdAt;
+    delete jobOffer.user.updatedAt;
+    delete jobOffer.user.id;
+    delete jobOffer.user.city;
+    delete jobOffer.user.country;
+    jobOffer.quizzes.forEach((quiz) => {
+      delete quiz.createdAt;
+      delete quiz.updatedAt;
+      delete quiz.id;
+    });
+  });
+
+  return jobOffers;
 }
 
 export async function upsertJobOffer(jobOffer: JobOfferType) {
@@ -108,8 +118,9 @@ export async function upsertJobOffer(jobOffer: JobOfferType) {
 
 export default {
   getSingleJobOfferByIdApply,
+  getSingleJobOfferByIdApplyInfo,
   getSingleJobOfferById,
   getAllUserJobOffers,
+  getAllJobOffersApply,
   upsertJobOffer,
-  disableJobOffer,
 };

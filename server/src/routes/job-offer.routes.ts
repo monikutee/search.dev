@@ -23,6 +23,12 @@ app.get(
   jobOfferController.getSingleJobOfferById
 );
 
+app.get(`${apiRoot}/job-offers/all`, jobOfferController.getAllJobOffersApply);
+app.get(
+  `${apiRoot}/job-offers/:jobOfferId`,
+  jobOfferController.getSingleJobOfferByIdApplyInfo
+);
+
 app.get(
   `${apiRoot}/apply/:jobOfferId`,
   jobOfferController.getSingleJobOfferByIdApply

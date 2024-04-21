@@ -88,9 +88,50 @@ export const getSingleJobOfferByIdApply =
     }
   };
 
+export const getSingleJobOfferByIdApplyInfo =
+  (
+    dependencies = {
+      getSingleJobOfferByIdApplyInfo:
+        jobOfferService.getSingleJobOfferByIdApplyInfo,
+    }
+  ) =>
+  async (req: Request, res: Response) => {
+    try {
+      const { jobOfferId } = req.params;
+
+      const getJobOffer = await dependencies.getSingleJobOfferByIdApplyInfo(
+        jobOfferId
+      );
+
+      res.status(200);
+      res.json(getJobOffer);
+    } catch (e) {
+      handleErrorResponse(e, res);
+    }
+  };
+
+export const getAllJobOffersApply =
+  (
+    dependencies = {
+      getAllJobOffersApply: jobOfferService.getAllJobOffersApply,
+    }
+  ) =>
+  async (_req: Request, res: Response) => {
+    try {
+      const getAllJobOffers = await dependencies.getAllJobOffersApply();
+
+      res.status(200);
+      res.json(getAllJobOffers);
+    } catch (e) {
+      handleErrorResponse(e, res);
+    }
+  };
+
 export default {
   createJobOffer: createJobOffer(),
   getAllUserJobOffers: getAllUserJobOffers(),
   getSingleJobOfferById: getSingleJobOfferById(),
   getSingleJobOfferByIdApply: getSingleJobOfferByIdApply(),
+  getSingleJobOfferByIdApplyInfo: getSingleJobOfferByIdApplyInfo(),
+  getAllJobOffersApply: getAllJobOffersApply(),
 };

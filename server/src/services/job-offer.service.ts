@@ -47,8 +47,20 @@ export const getAllUserJobOffers =
     }
   ) =>
   async (userId: string) => {
-    const newUser = await dependencies.getAllUserJobOffers(userId);
-    return newUser;
+    const jobOffers = await dependencies.getAllUserJobOffers(userId);
+    return jobOffers;
+  };
+
+export const getAllJobOffersApply =
+  (
+    dependencies = {
+      getAllJobOffersApply:
+        typeormDatabase.jobOfferRepository.getAllJobOffersApply,
+    }
+  ) =>
+  async () => {
+    const jobOffers = await dependencies.getAllJobOffersApply();
+    return jobOffers;
   };
 
 export const getSingleJobOfferById =
@@ -75,9 +87,25 @@ export const getSingleJobOfferByIdApply =
     return jobOffer;
   };
 
+export const getSingleJobOfferByIdApplyInfo =
+  (
+    dependencies = {
+      getSingleJobOfferByIdApplyInfo:
+        typeormDatabase.jobOfferRepository.getSingleJobOfferByIdApplyInfo,
+    }
+  ) =>
+  async (jobOfferId: string) => {
+    const jobOffer = await dependencies.getSingleJobOfferByIdApplyInfo(
+      jobOfferId
+    );
+    return jobOffer;
+  };
+
 export default {
   createJobOffer: createJobOffer(),
+  getAllJobOffersApply: getAllJobOffersApply(),
   getAllUserJobOffers: getAllUserJobOffers(),
   getSingleJobOfferById: getSingleJobOfferById(),
   getSingleJobOfferByIdApply: getSingleJobOfferByIdApply(),
+  getSingleJobOfferByIdApplyInfo: getSingleJobOfferByIdApplyInfo(),
 };
