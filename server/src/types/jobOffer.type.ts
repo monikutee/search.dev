@@ -30,7 +30,7 @@ export type JobOfferType = {
 };
 
 export enum AnswerTypeEnum {
-  ONE = "ONE",
+  CODE = "CODE",
   MULTI = "MCQ",
   OPEN = "OPEN",
 }

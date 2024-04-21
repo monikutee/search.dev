@@ -16,13 +16,13 @@ export const createJobOffer =
           for (const question of quiz.questions) {
             switch (question.questionType) {
               case AnswerTypeEnum.OPEN:
+              case AnswerTypeEnum.CODE:
                 if (question.questionChoices.length !== 0) {
                   throw new AppErrors(
                     ERROR_CODES.OPEN_QUESTIONS_DOES_NEED_CHOICE
                   );
                 }
                 break;
-              case AnswerTypeEnum.ONE:
               case AnswerTypeEnum.MULTI:
               default:
                 if (
