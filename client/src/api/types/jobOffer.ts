@@ -47,6 +47,10 @@ export interface JobOfferApplyMiniDto {
   updatedAt?: Date;
   quizzes?: QuizI[];
   applicantCount?: number;
+  totalQuestionCount?: number;
+  openTypeCount?: number;
+  choiceTypeCount?: number;
+  codeTypeCount?: number;
 }
 
 export interface QuizI {

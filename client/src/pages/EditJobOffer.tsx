@@ -36,7 +36,7 @@ export const EditJobOffer = () => {
     <Layout>
       <Grid container>
         <Grid item xs={12} md={3}>
-          <Link to={RouteList.MY_JOB_OFFERS_LIST}>
+          <Link to={RouteList.MY_JOB_OFFERS_LIST} className="sidebar">
             <Button
               component="label"
               role={undefined}

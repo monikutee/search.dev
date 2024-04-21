@@ -75,7 +75,7 @@ export const Header = () => {
                   showModal(<LoginSignUpModal />);
                 }}
               >
-                Login
+                Hire
               </Button>
             </div>
           )}

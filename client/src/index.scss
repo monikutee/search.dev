@@ -6,7 +6,7 @@
 body {
   margin: 0;
   font-family: "DM Sans", sans-serif;
-  font-weight: 100;
+  font-weight: 200;
   font-style: normal;
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
@@ -76,4 +76,31 @@ img {
 .step-icon {
   height: 5rem !important;
   width: 5rem !important;
+}
+
+a {
+  color: rgb(18 50 96);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+
+  button {
+    width: 150px;
+  }
+
+  @media screen and (min-width: 900px) {
+    position: fixed;
+    flex-direction: column;
+
+    a,
+    button {
+      width: 100%;
+    }
+  }
 }
