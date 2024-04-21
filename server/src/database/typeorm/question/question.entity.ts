@@ -32,7 +32,7 @@ export class Question {
 
   @Column({
     type: "enum",
-    enum: ["MCQ", "ONE", "OPEN"],
+    enum: ["MCQ", "CODE", "OPEN"],
     default: "MCQ",
   })
   questionType: string;
