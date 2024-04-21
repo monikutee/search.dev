@@ -30,7 +30,14 @@ export const SignUp = () => {
 
   const schema = Yup.object().shape({
     email: Yup.string().required("Required"),
-    password: Yup.string().required("Required"),
+    password: Yup.string()
+      .required("Required")
+      .matches(
+        new RegExp(
+          "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+        ),
+        "Password should contain at least 8 characters, one upper case letter, and one lower case letter, special symbol and number"
+      ),
     repeat_password: Yup.string()
       .oneOf([Yup.ref("password"), ""], "Passwords must match")
       .required("Required"),

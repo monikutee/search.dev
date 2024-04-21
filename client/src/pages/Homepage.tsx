@@ -20,7 +20,7 @@ export const Homepage = () => {
 
   const steps = [
     {
-      title: "Choose appealing offer",
+      title: "Job offers",
       description:
         "At the outset, applicants take the initiative to search for job opportunities that match their expertise and ambitions. ",
       icon: <ScreenSearchDesktopIcon className="step-icon" color="primary" />,
