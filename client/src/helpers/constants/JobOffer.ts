@@ -33,6 +33,7 @@ export const ExperienceLevelText: { [key: string]: string } = {
 export const AnswerTypeText: { [key: string]: string } = {
   [AnswerTypeEnum.MULTI]: "Choice",
   [AnswerTypeEnum.OPEN]: "Open",
+  [AnswerTypeEnum.CODE]: "Code",
 };
 
 export const RoleText: { [key: string]: string } = {

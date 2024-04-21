@@ -152,9 +152,7 @@ export const SingleQuestion: React.FC<{
             const newType = event.target.value;
             formikHelpers.handleChange(event);
 
-            if (newType === AnswerTypeEnum.OPEN) {
-              formikHelpers.setFieldValue(questionChoices, []);
-            } else {
+            if (newType === AnswerTypeEnum.MULTI) {
               formikHelpers.setFieldValue(questionChoices, [
                 {
                   choiceText: "",
@@ -165,6 +163,8 @@ export const SingleQuestion: React.FC<{
                   isCorrect: false,
                 },
               ]);
+            } else {
+              formikHelpers.setFieldValue(questionChoices, []);
             }
           }}
           error={

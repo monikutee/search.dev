@@ -97,9 +97,8 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
                 (questionType) => {
                   // eslint-disable-next-line
                   return (questionType as unknown as string) ==
-                    AnswerTypeEnum.OPEN
-                    ? Yup.array().nullable()
-                    : Yup.array()
+                    AnswerTypeEnum.MULTI
+                    ? Yup.array()
                         .min(2, "At least two choices are required")
                         .of(
                           Yup.object().shape({
@@ -113,7 +112,8 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
                           (choices) =>
                             choices?.some((choice) => choice.isCorrect)
                         )
-                        .required("Required");
+                        .required("Required")
+                    : Yup.array().nullable();
                 }
               ),
             })
