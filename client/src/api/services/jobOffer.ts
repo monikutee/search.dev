@@ -19,6 +19,9 @@ class JobOffer extends Client {
       FETCH_ONE_JOB_OFFER_INFO: this.defaultUrl(
         `${this.http.baseUrl}/job-offers/{jobOfferId}`
       ),
+      FETCH_ONE_JOB_OFFER_APPLY: this.defaultUrl(
+        `${this.http.baseUrl}/apply/{jobOfferId}`
+      ),
     };
   }
 
@@ -53,6 +56,15 @@ class JobOffer extends Client {
     jobOfferId: string
   ): Promise<AxiosResponse<JobOfferApplyMiniDto>> => {
     const url = this.buildUrl(this.api.FETCH_ONE_JOB_OFFER_INFO, {
+      jobOfferId,
+    });
+    return this.http.get(url);
+  };
+
+  fetchOneJobOfferApply = (
+    jobOfferId: string
+  ): Promise<AxiosResponse<JobOfferApplyMiniDto>> => {
+    const url = this.buildUrl(this.api.FETCH_ONE_JOB_OFFER_APPLY, {
       jobOfferId,
     });
     return this.http.get(url);

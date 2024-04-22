@@ -12,10 +12,11 @@ class User extends Client {
       LOGOUT: this.defaultUrl(`${this.http.baseUrl}/user/logout`),
       SIGNUP: this.defaultUrl(`${this.http.baseUrl}/user/signup`),
       FETCH_USER: this.defaultUrl(`${this.http.baseUrl}/user/{id}`),
+      VERIFY_EMAIL: this.defaultUrl(`${this.http.baseUrl}/user/verify/{token}`),
     };
   }
 
-  login = (data: LoginDto): Promise<AxiosResponse<{ id: string }>> => {
+  login = (data: LoginDto): Promise<AxiosResponse<{ id?: string }>> => {
     return this.http.post(this.api.LOGIN, data);
   };
 
@@ -23,9 +24,7 @@ class User extends Client {
     return this.http.post(this.api.LOGOUT);
   };
 
-  signUp = (
-    data: Omit<SignUpDto, "id">
-  ): Promise<AxiosResponse<{ id: string }>> => {
+  signUp = (data: Omit<SignUpDto, "id">) => {
     return this.http.post(this.api.SIGNUP, data);
   };
 
@@ -36,6 +35,11 @@ class User extends Client {
   fetchUser = (id: string) => {
     const url = this.buildUrl(this.api.FETCH_USER, { id });
     return this.http.get(url);
+  };
+
+  verifyEmail = (token: string) => {
+    const url = this.buildUrl(this.api.VERIFY_EMAIL, { token });
+    return this.http.post(url);
   };
 }
 

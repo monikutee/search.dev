@@ -1,6 +1,8 @@
 export const RouteList = {
   HOME: "/",
   PROFILE: "/profile",
+  EMAIL_VERIFICATION: "/email-verification",
+  EMAIL_VERIFICATION_PROCESS: "/verify/:token",
   PAGE_NOT_FOUND: "/404",
   CREATE_JOB_OFFER: "/create-job-offer",
   MY_JOB_OFFERS_LIST: "/my-job-offers",

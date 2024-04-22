@@ -15,7 +15,6 @@ import { RouteList } from "../../routes";
 export const SignUp = () => {
   const { hideModal } = useGlobalModalContext();
   const [error, setError] = React.useState<string | null>(null);
-  const { setUserId } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [initialValues] = React.useState({
@@ -49,11 +48,10 @@ export const SignUp = () => {
 
   const onSubmit = async (req: SignUpDto) => {
     try {
-      await Api.user.signUp(req).then((res) => {
-        setUserId(res.data.id);
+      await Api.user.signUp(req).then(() => {
+        navigate(RouteList.EMAIL_VERIFICATION);
       });
       hideModal();
-      navigate(RouteList.MY_JOB_OFFERS_LIST);
     } catch (e: any) {
       setError(ErrorMessages[e.definedMessage]);
     }

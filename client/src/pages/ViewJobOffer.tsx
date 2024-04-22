@@ -2,7 +2,7 @@ import React from "react";
 import { Layout } from "../containers";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, generatePath } from "react-router-dom";
 import { RouteList } from "../routes";
 import Loader from "../components/Global/Loader";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -62,9 +62,15 @@ export const ViewJobOffer = () => {
               </Button>
             </Link>
 
-            <Link to={RouteList.ALL_JOB_OFFERS}>
-              <Button variant="contained">Apply</Button>
-            </Link>
+            {jobOffer && (
+              <Link
+                to={generatePath(RouteList.APPLY, {
+                  jobOfferId: jobOffer.id,
+                })}
+              >
+                <Button variant="contained">Apply</Button>
+              </Link>
+            )}
           </div>
         </Grid>
         <Grid item xs={12} md={9}>
@@ -171,13 +177,19 @@ export const ViewJobOffer = () => {
                 </div>
               ) : null}
 
-              <div className={"d-md-none w-100"}>
-                <Link to={RouteList.ALL_JOB_OFFERS}>
-                  <Button variant="contained" className={"w-100"}>
-                    Apply
-                  </Button>
-                </Link>
-              </div>
+              {jobOffer && (
+                <div className={"d-md-none w-100"}>
+                  <Link
+                    to={generatePath(RouteList.APPLY, {
+                      jobOfferId: jobOffer.id,
+                    })}
+                  >
+                    <Button variant="contained" className={"w-100"}>
+                      Apply
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </>
           ) : (
             <div className="d-flex align-items-center justify-content-center">

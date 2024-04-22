@@ -31,10 +31,15 @@ export const Login = () => {
   const onSubmit = async (req: LoginDto) => {
     try {
       await Api.user.login(req).then((res) => {
-        setUserId(res.data.id);
+        if (res.data.id) {
+          setUserId(res.data.id);
+          hideModal();
+          navigate(RouteList.MY_JOB_OFFERS_LIST);
+        } else {
+          hideModal();
+          navigate(RouteList.EMAIL_VERIFICATION);
+        }
       });
-      hideModal();
-      navigate(RouteList.MY_JOB_OFFERS_LIST);
     } catch (e: any) {
       setError(ErrorMessages[e.definedMessage]);
     }

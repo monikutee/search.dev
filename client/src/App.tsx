@@ -11,8 +11,10 @@ import GlobalLoader from "./components/Global/GlobalLoader";
 import { Profile } from "./pages/Profile";
 import { EditJobOffer } from "./pages/EditJobOffer";
 import { AllJobOffers } from "./pages/AllJobOffers";
-import { Apply } from "./pages/Apply";
 import { ViewJobOffer } from "./pages/ViewJobOffer";
+import { ApplyForJobOffer } from "./pages/ApplyForJobOffer";
+import { EmailVerification } from "./pages/EmailVerification";
+import { EmailVerificationCheck } from "./pages/EmailVerificationCheck";
 
 const App = () => {
   return (
@@ -24,6 +26,14 @@ const App = () => {
             <Routes>
               <Route path={RouteList.HOME} element={<Homepage />} />
               <Route path={RouteList.PROFILE} element={<Profile />} />
+              <Route
+                path={RouteList.EMAIL_VERIFICATION}
+                element={<EmailVerification />}
+              />
+              <Route
+                path={RouteList.EMAIL_VERIFICATION_PROCESS}
+                element={<EmailVerificationCheck />}
+              />
               <Route
                 path={RouteList.MY_JOB_OFFERS_LIST}
                 element={<Profile value={1} />}
@@ -44,8 +54,7 @@ const App = () => {
                 path={RouteList.VIEW_JOB_OFFER}
                 element={<ViewJobOffer />}
               />
-
-              <Route path={RouteList.APPLY} element={<Apply />} />
+              <Route path={RouteList.APPLY} element={<ApplyForJobOffer />} />
 
               <Route
                 path="*"

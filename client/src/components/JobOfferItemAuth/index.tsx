@@ -72,8 +72,14 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
   };
 
   const schema = Yup.object().shape({
-    title: Yup.string().required("Required"),
-    description: Yup.string().required("Required"),
+    title: Yup.string()
+      .min(3, "Too short")
+      .max(100, "Too long")
+      .required("Required"),
+    description: Yup.string()
+      .min(10, "Too short")
+      .max(5000, "Too long")
+      .required("Required"),
     city: Yup.string().required("Required"),
     country: Yup.string().required("Required"),
     jobType: Yup.string().required("Required"),
@@ -82,7 +88,7 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
     role: Yup.string().required("Required"),
     benefits: Yup.array().of(Yup.string()),
     commitments: Yup.array().of(Yup.string()),
-    isActive: Yup.boolean(),
+    isActive: Yup.boolean().required(),
     quizzes: Yup.array().of(
       Yup.object().shape({
         title: Yup.string().required("Required"),

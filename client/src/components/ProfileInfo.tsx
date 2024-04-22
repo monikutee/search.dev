@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import { UserContext } from "../helpers/UserStore";
 import Loader from "./Global/Loader";
+import Typography from "@mui/material/Typography";
 
 export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   const [error, setError] = React.useState(null);
@@ -56,6 +57,7 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
       {({ handleSubmit, handleChange, touched, errors, values }) => (
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
           <TextField
+            disabled
             value={values.name}
             name="name"
             onChange={handleChange}
@@ -74,6 +76,7 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
             error={touched.about && !!errors.about}
           />
           <TextField
+            disabled
             name="email"
             value={values.email}
             onChange={handleChange}
@@ -82,6 +85,7 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
             error={touched.email && !!errors.email}
           />
           <TextField
+            disabled
             value={values.phoneNumber}
             name="phoneNumber"
             onChange={handleChange}
@@ -90,6 +94,7 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
             error={touched.phoneNumber && !!errors.phoneNumber}
           />
           <TextField
+            disabled
             name="country"
             value={values.country}
             onChange={handleChange}
@@ -98,6 +103,7 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
             error={touched.country && !!errors.country}
           />
           <TextField
+            disabled
             name="city"
             value={values.city}
             onChange={handleChange}
@@ -106,6 +112,10 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
             error={touched.city && !!errors.city}
           />
           {error && <FormHelperText error>{error}</FormHelperText>}
+          <Typography variant="body1" color="secondary">
+            *If you want to update any of the disabled fields, please contact{" "}
+            <a href="mailto:petrulevicmonika@gmail.com">our support</a>
+          </Typography>
           <Button type="submit" variant="contained">
             Update
           </Button>
