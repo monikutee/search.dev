@@ -95,7 +95,12 @@ export const ViewJobOffer = () => {
                   })`}
                 />
               </div>
-              <Typography variant="body1" color="primary" mt={3}>
+              <Typography
+                variant="body1"
+                color="primary"
+                mt={3}
+                style={{ whiteSpace: "pre-line" }}
+              >
                 {jobOffer.description}
               </Typography>
 
@@ -124,7 +129,11 @@ export const ViewJobOffer = () => {
                 <Typography variant="body1" color="secondary" mt={2}>
                   {jobOffer.user.name}
                 </Typography>
-                <Typography variant="body1" color="secondary">
+                <Typography
+                  variant="body1"
+                  color="secondary"
+                  style={{ whiteSpace: "pre-line" }}
+                >
                   {jobOffer.user.about}
                 </Typography>
                 <Typography variant="body1" color="secondary">
