@@ -27,9 +27,6 @@ export const editUser =
     }
   ) =>
   async (user) => {
-    if (user.email) {
-      await validateEmail(user.email);
-    }
     const updatedUser = await dependencies.upsertUser(user);
     return updatedUser;
   };

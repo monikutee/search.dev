@@ -63,16 +63,9 @@ export const edit =
       const editedUser = await dependencies.editUser({
         id: user.id,
         about: user.about,
-        email: user.email,
       });
-      const accessToken = getAccessToken(editedUser.id, editedUser.email);
 
-      res
-        .cookie("jwt", accessToken, {
-          httpOnly: true,
-          secure: false,
-        })
-        .status(200);
+      res.status(200).json(editedUser);
     } catch (e) {
       handleErrorResponse(e, res);
     }
@@ -241,11 +234,10 @@ export const checkVerification =
       await dependencies.authJwt(userData);
 
       const user = await dependencies.getUserById(userData.userId);
-
-      delete user.password;
-      user.isVerified = true;
-
-      const edited = await dependencies.editUser(user);
+      const edited = await dependencies.editUser({
+        id: user,
+        isVerified: true,
+      });
       const accessToken = getAccessToken(edited.id, edited.email);
 
       return res
