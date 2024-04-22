@@ -35,4 +35,9 @@ export const StyledFooter = styled.div`
   padding: 15px;
   max-width: 1200px;
   margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
 `;
