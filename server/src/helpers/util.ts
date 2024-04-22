@@ -12,6 +12,17 @@ export function getAccessToken(id: string, email: string) {
   return accessToken;
 }
 
+export function getVerificationAccessToken(id: string, email: string) {
+  const accessToken = jwt.sign(
+    { email, userId: id },
+    process.env.ACCESS_TOKEN_SECRET as string,
+    {
+      expiresIn: "10min",
+    }
+  );
+  return accessToken;
+}
+
 export function verifyAccessToken(jwtString: string) {
   const verify = jwt.verify(
     jwtString,

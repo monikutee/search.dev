@@ -26,7 +26,6 @@ export const verifyUser = async (req, res, next) => {
     if (error.code === "INVALID_TOKEN") {
       res.status(401).send({ error: "Invalid token" });
     } else {
-      console.log(error);
       res.status(500).send({ error: "An unexpected error occurred" });
     }
   }

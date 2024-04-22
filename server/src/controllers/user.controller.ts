@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { handleErrorResponse } from "../helpers/app-errors";
-import { getAccessToken } from "../helpers/util";
+import {
+  getAccessToken,
+  getVerificationAccessToken,
+  verifyAccessToken,
+} from "../helpers/util";
 import { authService, userService } from "../services";
 
 export const getUserById =
@@ -55,9 +59,12 @@ export const edit =
   async (req: Request, res: Response) => {
     try {
       const user = req.body;
-      delete user.password;
 
-      const editedUser = await dependencies.editUser(user);
+      const editedUser = await dependencies.editUser({
+        id: user.id,
+        about: user.about,
+        email: user.email,
+      });
       const accessToken = getAccessToken(editedUser.id, editedUser.email);
 
       res
@@ -65,8 +72,7 @@ export const edit =
           httpOnly: true,
           secure: false,
         })
-        .status(200)
-        .json(editedUser);
+        .status(200);
     } catch (e) {
       handleErrorResponse(e, res);
     }
@@ -89,6 +95,7 @@ export const signup =
   (
     dependencies = {
       createUser: userService.createUser,
+      verifyEmail: userService.verifyEmail,
     }
   ) =>
   async (req: Request, res: Response) => {
@@ -102,14 +109,12 @@ export const signup =
         country,
         phoneNumber,
       });
-      const accessToken = getAccessToken(user.id, user.email);
+      const accessToken = getVerificationAccessToken(user.id, user.email);
+      await dependencies.verifyEmail(user.email, accessToken);
 
-      res.cookie("jwt", accessToken, {
-        httpOnly: true,
-        secure: false,
-      });
-      res.status(200);
-      res.json({ id: user.id });
+      res.send(
+        "An e-mail has been sent to " + email + " with further instructions."
+      );
     } catch (e) {
       handleErrorResponse(e, res);
     }
@@ -170,6 +175,7 @@ export const loginLocal =
     dependencies = {
       getUser: userService.getUser,
       authLocal: authService.authLocal,
+      verifyEmail: userService.verifyEmail,
     }
   ) =>
   async (req: Request, res: Response) => {
@@ -177,15 +183,62 @@ export const loginLocal =
     try {
       const user = await dependencies.getUser(email);
       await dependencies.authLocal(password, user);
-      const accessToken = getAccessToken(user.id, email);
 
-      res
+      if (user.isVerified) {
+        const accessToken = getAccessToken(user.id, email);
+
+        res
+          .cookie("jwt", accessToken, {
+            httpOnly: true,
+            secure: false,
+          })
+          .status(200)
+          .json({ id: user.id });
+      } else {
+        const verificationAccessToken = getVerificationAccessToken(
+          user.id,
+          user.email
+        );
+        await dependencies.verifyEmail(user.email, verificationAccessToken);
+        res.send(
+          "An e-mail has been sent to " + email + " with further instructions."
+        );
+      }
+    } catch (e) {
+      handleErrorResponse(e, res);
+    }
+  };
+
+export const checkVerification =
+  (
+    dependencies = {
+      getUserById: userService.getUserById,
+      editUser: userService.editUser,
+      authJwt: authService.authJwt,
+    }
+  ) =>
+  async (req: Request, res: Response) => {
+    const { token } = req.params;
+
+    try {
+      const userData = verifyAccessToken(token);
+      await dependencies.authJwt(userData);
+
+      const user = await dependencies.getUserById(userData.userId);
+
+      delete user.password;
+      user.isVerified = true;
+
+      const edited = await dependencies.editUser(user);
+      const accessToken = getAccessToken(edited.id, edited.email);
+
+      return res
         .cookie("jwt", accessToken, {
           httpOnly: true,
           secure: false,
         })
         .status(200)
-        .json({ id: user.id });
+        .json({ id: edited.id });
     } catch (e) {
       handleErrorResponse(e, res);
     }
@@ -201,4 +254,5 @@ export default {
   startPasswordReset: startPasswordReset(),
   finishPasswordReset: finishPasswordReset(),
   logout: logout(),
+  checkVerification: checkVerification(),
 };

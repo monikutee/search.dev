@@ -34,6 +34,37 @@ export const resetPassword = () => async (email: string, token: string) => {
     });
 };
 
+export const verifyEmail = () => async (email: string, token: string) => {
+  const request = mailjet.post("send", { version: "v3.1" }).request({
+    Messages: [
+      {
+        From: {
+          Email: "petrulevicmonika@gmail.com",
+          Name: "MONIKA SEARCH.DEV",
+        },
+        To: [
+          {
+            Email: email,
+          },
+        ],
+        Subject: "Verify your email",
+        TextPart:
+          "Dear user, You have recently visited our website and entered your email. Please follow the given link to verify your email, thanks",
+        HTMLPart: `<h3>Dear user,</h3><p>You have recently visited our website and entered your email.</p><p>Please follow the given link to verify your email: http://localhost:3000/verify/${token}</p><p>Thanks</p>`,
+      },
+    ],
+  });
+
+  return request
+    .then((result) => {
+      return result.body;
+    })
+    .catch((err) => {
+      return undefined;
+    });
+};
+
 export default {
   resetPassword: resetPassword(),
+  verifyEmail: verifyEmail(),
 };

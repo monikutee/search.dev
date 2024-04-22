@@ -22,7 +22,7 @@ const passwordShema = joi
     new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
   )
   .required()
-  .min(5)
+  .min(8)
   .max(60)
   .messages({
     "string.base": ERROR_CODES.WRONG_PASSWORD_BASE,

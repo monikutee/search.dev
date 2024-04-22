@@ -2,6 +2,7 @@ import typeormDatabase from "../database/typeorm";
 import { AppErrors } from "../helpers/app-errors";
 import { ERROR_CODES } from "../types/errors.enum";
 import { AnswerTypeEnum, JobOfferType } from "../types/jobOffer.type";
+import { validateJobOffer } from "../validation/jobOffer.validation";
 
 export const createJobOffer =
   (
@@ -10,31 +11,7 @@ export const createJobOffer =
     }
   ) =>
   async (jobOffer: JobOfferType) => {
-    if (jobOffer.quizzes)
-      for (const quiz of jobOffer.quizzes) {
-        if (quiz.questions)
-          for (const question of quiz.questions) {
-            switch (question.questionType) {
-              case AnswerTypeEnum.OPEN:
-              case AnswerTypeEnum.CODE:
-                if (question.questionChoices.length !== 0) {
-                  throw new AppErrors(
-                    ERROR_CODES.OPEN_QUESTIONS_DOES_NEED_CHOICE
-                  );
-                }
-                break;
-              case AnswerTypeEnum.MULTI:
-              default:
-                if (
-                  !question.questionChoices ||
-                  question.questionChoices.length === 0
-                ) {
-                  throw new AppErrors(ERROR_CODES.QUESTION_CHOICES_MUST);
-                }
-                break;
-            }
-          }
-      }
+    await validateJobOffer(jobOffer);
     const newJobOffer = await dependencies.upsertJobOffer(jobOffer);
     return newJobOffer;
   };

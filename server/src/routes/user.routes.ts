@@ -22,5 +22,6 @@ app.post(
   verifyUser,
   userController.finishPasswordReset
 );
+app.post(`${apiRoot}/user/verify/:token`, userController.checkVerification);
 
 export default app;

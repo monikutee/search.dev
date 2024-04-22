@@ -9,13 +9,15 @@ export async function getSingleJobOfferByIdApply(id: string) {
   const applicantRepository = AppDB.getRepository(ApplicantEntity);
 
   const jobOffer = await jobOfferRepository.findOne({
-    where: { id },
+    where: { id, isActive: true },
     relations: [
       "quizzes",
       "quizzes.questions",
       "quizzes.questions.questionChoices",
     ],
   });
+
+  if (!jobOffer) return undefined;
 
   const applicantCount = await applicantRepository
     .createQueryBuilder("applicant")
@@ -42,6 +44,8 @@ export async function getSingleJobOfferByIdApplyInfo(id: string) {
     where: { id, isActive: true },
     relations: ["user", "quizzes"],
   });
+
+  if (!jobOffer) return undefined;
 
   delete jobOffer.userId;
   delete jobOffer.user.password;

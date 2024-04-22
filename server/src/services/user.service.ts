@@ -26,7 +26,7 @@ export const editUser =
       upsertUser: typeormDatabase.userRepository.upsertUser,
     }
   ) =>
-  async (user: User) => {
+  async (user) => {
     if (user.email) {
       await validateEmail(user.email);
     }
@@ -160,6 +160,21 @@ export const finishPasswordReset =
     await dependencies.upsertUser(user);
   };
 
+export const verifyEmail =
+  (
+    dependencies = {
+      getUserById: getUserById(),
+      verifyEmail: mailerService.verifyEmail,
+    }
+  ) =>
+  async (email: string, token: string) => {
+    if (!email || !token) {
+      throw new AppErrors(ERROR_CODES.INVALID_DATA);
+    }
+
+    await dependencies.verifyEmail(email, token);
+  };
+
 export default {
   createUser: createUser(),
   editUser: editUser(),
@@ -169,4 +184,5 @@ export default {
   getUserCompact: getUserCompact(),
   startPasswordReset: startPasswordReset(),
   finishPasswordReset: finishPasswordReset(),
+  verifyEmail: verifyEmail(),
 };
