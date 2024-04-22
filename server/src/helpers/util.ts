@@ -17,7 +17,7 @@ export function getVerificationAccessToken(id: string, email: string) {
     { email, userId: id },
     process.env.ACCESS_TOKEN_SECRET as string,
     {
-      expiresIn: "10min",
+      expiresIn: "30min",
     }
   );
   return accessToken;

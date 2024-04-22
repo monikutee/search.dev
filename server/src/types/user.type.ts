@@ -9,4 +9,6 @@ export interface User {
   createdBy?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  verificationExpires?: Date;
+  isVerified?: boolean;
 }

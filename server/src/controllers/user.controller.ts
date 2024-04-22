@@ -108,6 +108,7 @@ export const signup =
         city,
         country,
         phoneNumber,
+        verificationExpires: new Date(new Date().getTime() + 30 * 60 * 1000),
       });
       const accessToken = getVerificationAccessToken(user.id, user.email);
       await dependencies.verifyEmail(user.email, accessToken);
@@ -176,6 +177,7 @@ export const loginLocal =
       getUser: userService.getUser,
       authLocal: authService.authLocal,
       verifyEmail: userService.verifyEmail,
+      editUser: userService.editUser,
     }
   ) =>
   async (req: Request, res: Response) => {
@@ -195,14 +197,28 @@ export const loginLocal =
           .status(200)
           .json({ id: user.id });
       } else {
-        const verificationAccessToken = getVerificationAccessToken(
-          user.id,
-          user.email
-        );
-        await dependencies.verifyEmail(user.email, verificationAccessToken);
-        res.send(
-          "An e-mail has been sent to " + email + " with further instructions."
-        );
+        if (
+          new Date().getTime() > new Date(user.verificationExpires).getTime()
+        ) {
+          const verificationAccessToken = getVerificationAccessToken(
+            user.id,
+            user.email
+          );
+          await dependencies.verifyEmail(user.email, verificationAccessToken);
+          await dependencies.editUser({
+            id: user.id,
+            verificationExpires: new Date(
+              new Date().getTime() + 30 * 60 * 1000
+            ),
+          });
+        }
+        res
+          .status(200)
+          .send(
+            "An e-mail has been sent to " +
+              email +
+              " with further instructions."
+          );
       }
     } catch (e) {
       handleErrorResponse(e, res);

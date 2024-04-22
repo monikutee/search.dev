@@ -19,6 +19,14 @@ export class User {
   @Column({ default: false })
   isVerified: boolean;
 
+  @CreateDateColumn({
+    name: "verification_expires",
+    type: "timestamp with time zone",
+    select: true,
+    nullable: true,
+  })
+  verificationExpires: Date;
+
   @Column()
   password: string;
 
