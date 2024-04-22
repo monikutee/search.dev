@@ -9,6 +9,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { UserContext } from "../helpers/UserStore";
 import Loader from "./Global/Loader";
 import Typography from "@mui/material/Typography";
+import { toast } from "react-toastify";
 
 export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   const [error, setError] = React.useState(null);
@@ -41,6 +42,16 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
       if (!user) return;
       await Api.user.editUser(req).then((res) => {
         setUserId(res.data.id);
+        toast.success("Successfully updated your profile", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
     } catch (e: any) {
       setError(e.definedMessage);
