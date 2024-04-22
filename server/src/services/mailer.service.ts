@@ -50,7 +50,7 @@ export const verifyEmail = () => async (email: string, token: string) => {
         Subject: "Verify your email",
         TextPart:
           "Dear user, You have recently visited our website and entered your email. Please follow the given link to verify your email, thanks",
-        HTMLPart: `<h3>Dear user,</h3><p>You have recently visited our website and entered your email.</p><p>Please follow the given link to verify your email: http://localhost:3000/verify/${token}</p><p>Thanks</p>`,
+        HTMLPart: `<h3>Dear user,</h3><p>You have recently visited our website and entered your email.</p><p>Please follow the given link to verify your email: https://monikapetrulevic.lt/verify/${token}</p><p>Thanks</p>`,
       },
     ],
   });
