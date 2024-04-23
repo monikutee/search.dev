@@ -15,6 +15,11 @@ import { ViewJobOffer } from "./pages/ViewJobOffer";
 import { ApplyForJobOffer } from "./pages/ApplyForJobOffer";
 import { EmailVerification } from "./pages/EmailVerification";
 import { EmailVerificationCheck } from "./pages/EmailVerificationCheck";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+
+TimeAgo.addDefaultLocale(en);
 
 const App = () => {
   return (
@@ -26,6 +31,10 @@ const App = () => {
             <Routes>
               <Route path={RouteList.HOME} element={<Homepage />} />
               <Route path={RouteList.PROFILE} element={<Profile />} />
+              <Route
+                path={RouteList.PRIVACY_POLICY}
+                element={<PrivacyPolicy />}
+              />
               <Route
                 path={RouteList.EMAIL_VERIFICATION}
                 element={<EmailVerification />}

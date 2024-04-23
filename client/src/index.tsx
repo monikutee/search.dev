@@ -9,6 +9,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import ScrollToTop from "./helpers/ScrollToTop";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,6 +20,7 @@ export const history = createBrowserHistory();
 root.render(
   <ThemeProvider theme={theme}>
     <BrowserRouter>
+      <ScrollToTop />
       <App />
       <ToastContainer
         position="top-right"

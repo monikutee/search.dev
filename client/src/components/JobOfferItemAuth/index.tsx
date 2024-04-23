@@ -32,6 +32,7 @@ import TextInput from "../Global/TextInputFormik";
 import { AnswerTypeEnum } from "../../helpers/enums/JobOfferEnums";
 import { useNavigate } from "react-router-dom";
 import { RouteList } from "../../routes";
+import { CountryCitySelect } from "../Global/CountryCitySelect";
 
 export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
   const [error, setError] = React.useState<string | null>(null);
@@ -159,8 +160,8 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
               multiline
               label="Thoroughly write job description with desirable applicant skill set ant etc."
             />
-            <TextInput name="country" label="Country" />
-            <TextInput name="city" label="City" />
+            <CountryCitySelect helpers={helpers} />
+
             <FormControl fullWidth>
               <InputLabel id="job-type-label">Job type</InputLabel>
               <Select

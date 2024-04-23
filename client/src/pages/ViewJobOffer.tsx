@@ -2,7 +2,7 @@ import React from "react";
 import { Layout } from "../containers";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import { useParams, useNavigate, Link, generatePath } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { RouteList } from "../routes";
 import Loader from "../components/Global/Loader";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -18,14 +18,14 @@ import {
 import Chip from "@mui/material/Chip";
 
 import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
-
-TimeAgo.addDefaultLocale(en);
+import { useGlobalModalContext } from "../components/Global/GlobalModal";
+import { ApplicantContactInfoModal } from "../components/ApplicantContactInfoModal";
 
 export const ViewJobOffer = () => {
   const [jobOffer, setJobOffer] = React.useState<JobOfferApplyMiniDto | null>(
     null
   );
+  const { showModal } = useGlobalModalContext();
   const { jobOfferId } = useParams<{ jobOfferId: string }>();
   const navigate = useNavigate();
   const timeAgo = new TimeAgo("en-US");
@@ -63,13 +63,14 @@ export const ViewJobOffer = () => {
             </Link>
 
             {jobOffer && (
-              <Link
-                to={generatePath(RouteList.APPLY, {
-                  jobOfferId: jobOffer.id,
-                })}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  showModal(<ApplicantContactInfoModal />);
+                }}
               >
-                <Button variant="contained">Apply</Button>
-              </Link>
+                Apply
+              </Button>
             )}
           </div>
         </Grid>
@@ -179,15 +180,15 @@ export const ViewJobOffer = () => {
 
               {jobOffer && (
                 <div className={"d-md-none w-100"}>
-                  <Link
-                    to={generatePath(RouteList.APPLY, {
-                      jobOfferId: jobOffer.id,
-                    })}
+                  <Button
+                    variant="contained"
+                    className={"w-100"}
+                    onClick={() => {
+                      showModal(<ApplicantContactInfoModal />);
+                    }}
                   >
-                    <Button variant="contained" className={"w-100"}>
-                      Apply
-                    </Button>
-                  </Link>
+                    Apply
+                  </Button>
                 </div>
               )}
             </>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Api from "../../api";
@@ -7,10 +7,10 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useGlobalModalContext } from "../Global/GlobalModal";
 import FormHelperText from "@mui/material/FormHelperText";
-import { UserContext } from "../../helpers/UserStore";
 import { ErrorMessages } from "../../helpers/constants/ErrorMessages";
 import { useNavigate } from "react-router-dom";
 import { RouteList } from "../../routes";
+import { CountryCitySelect } from "../Global/CountryCitySelect";
 
 export const SignUp = () => {
   const { hideModal } = useGlobalModalContext();
@@ -28,7 +28,7 @@ export const SignUp = () => {
   });
 
   const schema = Yup.object().shape({
-    email: Yup.string().required("Required"),
+    email: Yup.string().email().required("Required"),
     password: Yup.string()
       .required("Required")
       .matches(
@@ -40,8 +40,11 @@ export const SignUp = () => {
     repeat_password: Yup.string()
       .oneOf([Yup.ref("password"), ""], "Passwords must match")
       .required("Required"),
-    name: Yup.string().required("Required"),
-    phoneNumber: Yup.string().required("Required"),
+    name: Yup.string().max(100, "Too long").required("Required"),
+    phoneNumber: Yup.string()
+      .min(8, "Too short")
+      .max(21, "Too long")
+      .required("Required"),
     country: Yup.string().required("Required"),
     city: Yup.string().required("Required"),
   });
@@ -65,58 +68,51 @@ export const SignUp = () => {
       onSubmit={onSubmit}
       enableReinitialize={true}
     >
-      {({ handleSubmit, handleChange, touched, errors }) => (
-        <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
+      {(helpers) => (
+        <form
+          onSubmit={helpers.handleSubmit}
+          className="d-flex flex-column gap-3"
+        >
           <TextField
             name="name"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             label="Company name"
-            helperText={errors.name}
-            error={touched.name && !!errors.name}
+            helperText={helpers.errors.name}
+            error={helpers.touched.name && !!helpers.errors.name}
           />
           <TextField
             name="email"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             label="Email"
-            helperText={errors.email}
-            error={touched.email && !!errors.email}
+            helperText={helpers.errors.email}
+            error={helpers.touched.email && !!helpers.errors.email}
           />
           <TextField
             name="phoneNumber"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             label="Phone number"
-            helperText={errors.phoneNumber}
-            error={touched.phoneNumber && !!errors.phoneNumber}
+            helperText={helpers.errors.phoneNumber}
+            error={helpers.touched.phoneNumber && !!helpers.errors.phoneNumber}
           />
-          <TextField
-            name="country"
-            onChange={handleChange}
-            label="Country"
-            helperText={errors.country}
-            error={touched.country && !!errors.country}
-          />
-          <TextField
-            name="city"
-            onChange={handleChange}
-            label="City"
-            helperText={errors.city}
-            error={touched.city && !!errors.city}
-          />
+          <CountryCitySelect helpers={helpers} />
           <TextField
             name="password"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             label="Password"
             type="password"
-            helperText={errors.password}
-            error={touched.password && !!errors.password}
+            helperText={helpers.errors.password}
+            error={helpers.touched.password && !!helpers.errors.password}
           />
           <TextField
             name="repeat_password"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             type="password"
             label="Repeat password"
-            helperText={errors.repeat_password}
-            error={touched.repeat_password && !!errors.repeat_password}
+            helperText={helpers.errors.repeat_password}
+            error={
+              helpers.touched.repeat_password &&
+              !!helpers.errors.repeat_password
+            }
           />
           {error && <FormHelperText error>{error}</FormHelperText>}
           <Button type="submit" variant="contained">

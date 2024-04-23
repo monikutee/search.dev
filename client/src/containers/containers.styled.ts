@@ -40,4 +40,13 @@ export const StyledFooter = styled.div`
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
+
+  a {
+    text-decoration: none;
+    color: #486284;
+
+    &:hover {
+      color: #89a1bf;
+    }
+  }
 `;

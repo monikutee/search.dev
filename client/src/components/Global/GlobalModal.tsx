@@ -18,6 +18,7 @@ export const GlobalModal: React.FC<{ children: React.ReactElement }> = ({
 }) => {
   const [modal, setModal] = React.useState<JSX.Element>();
   const showModal = (Modal: JSX.Element) => {
+    // eslint-disable-next-line
     setModal(<Modal.type {...Modal?.props} />);
   };
 

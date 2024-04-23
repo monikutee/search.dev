@@ -10,4 +10,5 @@ export const RouteList = {
   ALL_JOB_OFFERS: "/job-offers",
   VIEW_JOB_OFFER: "/job-offers/:jobOfferId",
   APPLY: "/apply/:jobOfferId",
+  PRIVACY_POLICY: "/privacy-policy",
 };
