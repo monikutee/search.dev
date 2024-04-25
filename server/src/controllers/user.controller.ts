@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { handleErrorResponse } from "../helpers/app-errors";
+import { AppErrors, handleErrorResponse } from "../helpers/app-errors";
 import {
   getAccessToken,
   getVerificationAccessToken,
   verifyAccessToken,
 } from "../helpers/util";
 import { authService, userService } from "../services";
+import { ERROR_CODES } from "../types/errors.enum";
 
 export const getUserById =
   (
@@ -71,7 +72,7 @@ export const edit =
     }
   };
 
-export const logout = () => async (req: Request, res: Response) => {
+export const logout = () => async (_req: Request, res: Response) => {
   try {
     res.cookie("jwt", "", {
       httpOnly: true,
@@ -93,7 +94,13 @@ export const signup =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const { email, password, name, city, country, phoneNumber } = req.body;
+      const { email, password, name, city, country, phoneNumber, consent } =
+        req.body;
+
+      if (!consent) {
+        throw new AppErrors(ERROR_CODES.CONSENT);
+      }
+
       const user = await dependencies.createUser({
         email,
         password,
@@ -235,7 +242,7 @@ export const checkVerification =
 
       const user = await dependencies.getUserById(userData.userId);
       const edited = await dependencies.editUser({
-        id: user,
+        id: user.id,
         isVerified: true,
       });
       const accessToken = getAccessToken(edited.id, edited.email);

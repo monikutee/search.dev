@@ -16,8 +16,26 @@ export class Applicant {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ nullable: true })
-  fullName?: string;
+  @Column()
+  name: string;
+
+  @Column()
+  surname: string;
+
+  @Column()
+  email: string;
+
+  @Column({ name: "phone_number" })
+  phoneNumber: string;
+
+  @Column()
+  country: string;
+
+  @Column({ type: "text" })
+  about: string;
+
+  @Column()
+  city: string;
 
   @ManyToOne(() => JobOffer, (jobOffer) => jobOffer.applicants)
   jobOffer: JobOffer;
@@ -29,9 +47,6 @@ export class Applicant {
     cascade: true,
   })
   answers: ApplicantAnswer[];
-
-  @Column()
-  email: string;
 
   @CreateDateColumn({
     name: "apply_date",
