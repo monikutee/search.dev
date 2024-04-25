@@ -137,7 +137,7 @@ export const SingleQuestion: React.FC<{
   return (
     <div className="d-flex flex-column gap-2 mt-2">
       <span> No. {index + 1}</span>
-      <TextInput name={questionText} label="Question" />
+      <TextInput name={questionText} label="Question" rows={3} multiline />
       <FormControl fullWidth>
         <InputLabel id={`${questionType}-label`}>Question type</InputLabel>
         <Select

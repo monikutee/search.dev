@@ -11,6 +11,10 @@ import { ErrorMessages } from "../../helpers/constants/ErrorMessages";
 import { useNavigate } from "react-router-dom";
 import { RouteList } from "../../routes";
 import { CountryCitySelect } from "../Global/CountryCitySelect";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 
 export const SignUp = () => {
   const { hideModal } = useGlobalModalContext();
@@ -25,6 +29,7 @@ export const SignUp = () => {
     phoneNumber: "",
     country: "",
     city: "",
+    consent: false,
   });
 
   const schema = Yup.object().shape({
@@ -45,8 +50,11 @@ export const SignUp = () => {
       .min(8, "Too short")
       .max(21, "Too long")
       .required("Required"),
-    country: Yup.string().required("Required"),
-    city: Yup.string().required("Required"),
+    country: Yup.string().max(50, "Too long").required("Required"),
+    city: Yup.string().max(50, "Too long").required("Required"),
+    consent: Yup.boolean()
+      .required("Required")
+      .isTrue("This field must be checked"),
   });
 
   const onSubmit = async (req: SignUpDto) => {
@@ -114,6 +122,27 @@ export const SignUp = () => {
               !!helpers.errors.repeat_password
             }
           />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="consent"
+                checked={helpers.values.consent}
+                onChange={helpers.handleChange}
+              />
+            }
+            label={
+              <Typography color="primary" variant="body1">
+                I have read{" "}
+                <Link to={RouteList.PRIVACY_POLICY} target="_blank">
+                  privacy policy
+                </Link>
+              </Typography>
+            }
+          />
+          {helpers.touched.consent && (
+            <FormHelperText error>{helpers.errors.consent}</FormHelperText>
+          )}
           {error && <FormHelperText error>{error}</FormHelperText>}
           <Button type="submit" variant="contained">
             Sign up

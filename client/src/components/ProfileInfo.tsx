@@ -32,6 +32,7 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   const schema = Yup.object().shape({
     email: Yup.string().required("Required"),
     name: Yup.string().required("Required"),
+    about: Yup.string().max(5000).required("Required"),
     phoneNumber: Yup.string().required("Required"),
     country: Yup.string().required("Required"),
     city: Yup.string().required("Required"),

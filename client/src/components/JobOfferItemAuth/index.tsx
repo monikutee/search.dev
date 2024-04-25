@@ -81,14 +81,18 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
       .min(10, "Too short")
       .max(5000, "Too long")
       .required("Required"),
-    city: Yup.string().required("Required"),
-    country: Yup.string().required("Required"),
-    jobType: Yup.string().required("Required"),
-    remote: Yup.string().required("Required"),
-    experienceLevel: Yup.string().required("Required"),
-    role: Yup.string().required("Required"),
-    benefits: Yup.array().of(Yup.string()),
-    commitments: Yup.array().of(Yup.string()),
+    city: Yup.string().max(50, "Too long").required("Required"),
+    country: Yup.string().max(50, "Too long").required("Required"),
+    jobType: Yup.string().max(30, "Too long").required("Required"),
+    remote: Yup.string().max(30, "Too long").required("Required"),
+    experienceLevel: Yup.string().max(100, "Too long").required("Required"),
+    role: Yup.string().max(100, "Too long").required("Required"),
+    benefits: Yup.array()
+      .max(50, "Too much")
+      .of(Yup.string().max(100, "Too long")),
+    commitments: Yup.array()
+      .max(50, "Too much")
+      .of(Yup.string().max(100, "Too long")),
     isActive: Yup.boolean().required(),
     quizzes: Yup.array().of(
       Yup.object().shape({
@@ -97,7 +101,9 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
           .min(1)
           .of(
             Yup.object().shape({
-              questionText: Yup.string().required("Required"),
+              questionText: Yup.string()
+                .max(300, "Too long")
+                .required("Required"),
               questionType: Yup.string().required("Required"),
               questionChoices: Yup.array().when(
                 "questionType",
@@ -109,7 +115,9 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
                         .min(2, "At least two choices are required")
                         .of(
                           Yup.object().shape({
-                            choiceText: Yup.string().required("Required"),
+                            choiceText: Yup.string()
+                              .max(100, "Too long")
+                              .required("Required"),
                             isCorrect: Yup.boolean().required("Required"),
                           })
                         )

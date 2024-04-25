@@ -8,13 +8,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import TextField from "@mui/material/TextField";
 import { CountryCitySelect } from "./Global/CountryCitySelect";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import { Link } from "react-router-dom";
 import { RouteList } from "../routes";
+import TextInput from "./Global/TextInputFormik";
 
 export const ApplicantContactInfoModal = () => {
   const { hideModal } = useGlobalModalContext();
@@ -24,6 +24,7 @@ export const ApplicantContactInfoModal = () => {
     name: "",
     surname: "",
     phoneNumber: "",
+    about: "",
     country: "",
     city: "",
     consent: false,
@@ -39,8 +40,9 @@ export const ApplicantContactInfoModal = () => {
       .min(8, "Too short")
       .max(21, "Too long")
       .required("Required"),
-    country: Yup.string().required("Required"),
-    city: Yup.string().required("Required"),
+    country: Yup.string().max(50, "Too long").required("Required"),
+    about: Yup.string().max(5000, "Too long").required("Required"),
+    city: Yup.string().max(50, "Too long").required("Required"),
     consent: Yup.boolean()
       .required("Required")
       .isTrue("This field must be checked"),
@@ -50,6 +52,7 @@ export const ApplicantContactInfoModal = () => {
     email: string;
     name: string;
     surname: string;
+    about: string;
     phoneNumber: string;
     country: string;
     city: string;
@@ -73,7 +76,7 @@ export const ApplicantContactInfoModal = () => {
       aria-describedby="modal-modal-description"
       className="modal"
     >
-      <Box className="view">
+      <Box className="view big">
         <div className="d-flex justify-content-between align-items-center">
           <Typography variant="body1" mb={2}>
             Please fill the info below to apply, if there is a quiz, we will
@@ -100,37 +103,11 @@ export const ApplicantContactInfoModal = () => {
               onSubmit={helpers.handleSubmit}
               className="d-flex flex-column gap-3"
             >
-              <TextField
-                name="name"
-                onChange={helpers.handleChange}
-                label="Name"
-                helperText={helpers.errors.name}
-                error={helpers.touched.name && !!helpers.errors.name}
-              />
-              <TextField
-                name="surname"
-                onChange={helpers.handleChange}
-                label="Surname"
-                helperText={helpers.errors.surname}
-                error={helpers.touched.surname && !!helpers.errors.surname}
-              />
-              <TextField
-                name="email"
-                onChange={helpers.handleChange}
-                label="Email"
-                helperText={helpers.errors.email}
-                error={helpers.touched.email && !!helpers.errors.email}
-              />
-              <TextField
-                name="phoneNumber"
-                onChange={helpers.handleChange}
-                label="Phone number"
-                helperText={helpers.errors.phoneNumber}
-                error={
-                  helpers.touched.phoneNumber && !!helpers.errors.phoneNumber
-                }
-              />
-
+              <TextInput name="name" label="Name" />
+              <TextInput name="surname" label="Surname" />
+              <TextInput name="email" label="Email" />
+              <TextInput name="phoneNumber" label="Phone number" />
+              <TextInput name="about" rows={10} multiline label="About me" />
               <CountryCitySelect helpers={helpers} />
 
               <FormControlLabel
