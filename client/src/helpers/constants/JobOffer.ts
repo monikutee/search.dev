@@ -4,6 +4,7 @@ import {
   RemoteEnum,
   ExperienceLevelEnum,
   AnswerTypeEnum,
+  CodeLanguageEnum,
 } from "../enums/JobOfferEnums";
 
 export const JobTypeText: { [key: string]: string } = {
@@ -34,6 +35,11 @@ export const AnswerTypeText: { [key: string]: string } = {
   [AnswerTypeEnum.MULTI]: "Choice",
   [AnswerTypeEnum.OPEN]: "Open",
   [AnswerTypeEnum.CODE]: "Code",
+};
+
+export const CodeLanguageText: { [key: string]: string } = {
+  [CodeLanguageEnum.PYTHON]: "Python",
+  [CodeLanguageEnum.JAVASCRIPT]: "Javascript",
 };
 
 export const RoleText: { [key: string]: string } = {
@@ -73,4 +79,5 @@ export const INITIAL_QUESTION: QuestionI = {
   questionText: "",
   questionType: AnswerTypeEnum.MULTI,
   questionChoices: [INITIAL_QUESTION_CHOICE, INITIAL_QUESTION_CHOICE],
+  codeLanguage: null,
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Layout } from "../containers";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -16,6 +16,7 @@ import {
   RoleText,
 } from "../helpers/constants/JobOffer";
 import Chip from "@mui/material/Chip";
+import { UserContext } from "../helpers/UserStore";
 
 import TimeAgo from "javascript-time-ago";
 import { useGlobalModalContext } from "../components/Global/GlobalModal";
@@ -25,6 +26,7 @@ export const ViewJobOffer = () => {
   const [jobOffer, setJobOffer] = React.useState<JobOfferApplyMiniDto | null>(
     null
   );
+  const { userId } = useContext(UserContext);
   const { showModal } = useGlobalModalContext();
   const { jobOfferId } = useParams<{ jobOfferId: string }>();
   const navigate = useNavigate();
@@ -62,11 +64,18 @@ export const ViewJobOffer = () => {
               </Button>
             </Link>
 
-            {jobOffer && (
+            {jobOffer && jobOfferId && !userId && (
               <Button
                 variant="contained"
                 onClick={() => {
-                  showModal(<ApplicantContactInfoModal />);
+                  showModal(
+                    <ApplicantContactInfoModal
+                      id={jobOfferId}
+                      haveQuiz={
+                        jobOffer.quizzes ? jobOffer.quizzes.length > 0 : false
+                      }
+                    />
+                  );
                 }}
               >
                 Apply
@@ -178,13 +187,22 @@ export const ViewJobOffer = () => {
                 </div>
               ) : null}
 
-              {jobOffer && (
+              {jobOffer && jobOfferId && !userId && (
                 <div className={"d-md-none w-100"}>
                   <Button
                     variant="contained"
                     className={"w-100"}
                     onClick={() => {
-                      showModal(<ApplicantContactInfoModal />);
+                      showModal(
+                        <ApplicantContactInfoModal
+                          id={jobOfferId}
+                          haveQuiz={
+                            jobOffer.quizzes
+                              ? jobOffer.quizzes.length > 0
+                              : false
+                          }
+                        />
+                      );
                     }}
                   >
                     Apply

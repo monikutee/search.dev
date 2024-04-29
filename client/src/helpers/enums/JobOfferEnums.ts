@@ -10,6 +10,11 @@ export enum RemoteEnum {
   HYBRID = "HYBRID",
 }
 
+export enum CodeLanguageEnum {
+  PYTHON = "python",
+  JAVASCRIPT = "javascript",
+}
+
 export enum JobTypeEnum {
   FULL_TIME = "FULL_TIME",
   PART_TIME = "PART_TIME",

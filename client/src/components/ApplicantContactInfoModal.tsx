@@ -15,8 +15,15 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { Link } from "react-router-dom";
 import { RouteList } from "../routes";
 import TextInput from "./Global/TextInputFormik";
+import Api from "../api";
+import { ApplicantEntryI } from "../api/types/applicant";
+import { toast } from "react-toastify";
+import { ErrorCodeEnum } from "../helpers/enums/ErrorCodeEnum";
 
-export const ApplicantContactInfoModal = () => {
+export const ApplicantContactInfoModal: React.FC<{
+  id: string;
+  haveQuiz: boolean;
+}> = ({ id, haveQuiz }) => {
   const { hideModal } = useGlobalModalContext();
 
   const [initialValues] = React.useState({
@@ -48,23 +55,58 @@ export const ApplicantContactInfoModal = () => {
       .isTrue("This field must be checked"),
   });
 
-  const onSubmit = async (req: {
-    email: string;
-    name: string;
-    surname: string;
-    about: string;
-    phoneNumber: string;
-    country: string;
-    city: string;
-  }) => {
+  const onSubmit = async (req: ApplicantEntryI) => {
     try {
-      //   await Api.user.signUp(req).then(() => {
-      //     navigate(RouteList.EMAIL_VERIFICATION);
-      //   });
-      console.log(req);
-      //   hideModal();
+      await Api.applicant.createApplicantEntry(id, req).then(() => {
+        if (haveQuiz) {
+          toast.success("Please check your email for the further information", {
+            position: "top-right",
+            autoClose: 10000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.success("Successfully applied!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+      hideModal();
     } catch (e: any) {
-      //   setError(ErrorMessages[e.definedMessage]);
+      if (e.definedMessage === ErrorCodeEnum.RECORD_EXIST) {
+        toast.error("You already applied for this role", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.error("Error occurred, please try again later", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     }
   };
 
@@ -79,8 +121,9 @@ export const ApplicantContactInfoModal = () => {
       <Box className="view big">
         <div className="d-flex justify-content-between align-items-center">
           <Typography variant="body1" mb={2}>
-            Please fill the info below to apply, if there is a quiz, we will
-            send you the link to given email for applying further
+            {haveQuiz
+              ? " Please fill the info below to apply,  we will send you the link to given email for applying further"
+              : " Please fill the info below to apply"}
           </Typography>
           <IconButton
             color="primary"

@@ -1,76 +1,118 @@
 import React from "react";
 import { Country, City } from "country-state-city";
-import { ICountry, ICity } from "country-state-city";
 
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import FormHelperText from "@mui/material/FormHelperText";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: 250,
-    },
-  },
-};
-
-export const CountryCitySelect: React.FC<{ helpers: any }> = ({ helpers }) => {
-  const [countryCode, setCountryCode] = React.useState("");
-  const [cities, setCities] = React.useState<ICity[] | undefined>(undefined);
+export const CountryCitySelect: React.FC<{
+  helpers: any;
+  disabled?: boolean;
+}> = ({ helpers, disabled = false }) => {
+  const [countryCode, setCountryCode] = React.useState(
+    helpers.values.country ?? ""
+  );
   const countries = Country.getAllCountries();
+  const cities = React.useMemo(
+    () => City.getCitiesOfCountry(countryCode),
+    [countryCode]
+  );
 
-  React.useEffect(() => {
-    setCities(City.getCitiesOfCountry(countryCode));
-  }, [countryCode]);
+  const handleCountryChange = (event: any) => {
+    if (event) {
+      const newCountryCode = event.code as string;
+      if (newCountryCode !== countryCode) {
+        setCountryCode(newCountryCode);
+        helpers.setFieldValue("country", event.label);
+        helpers.setFieldValue("city", "");
+      }
+    } else {
+      helpers.setFieldValue("country", "");
+    }
+  };
+
+  const handleCityChange = (event: any) => {
+    if (event) {
+      helpers.setFieldValue("city", event.label);
+    } else {
+      helpers.setFieldValue("city", "");
+    }
+  };
 
   return (
     <>
       <FormControl fullWidth>
-        <InputLabel id="country-select-label">Country</InputLabel>
-        <Select
-          labelId="country-select-label"
-          name="country"
-          label="Country"
-          onChange={(e) => {
-            setCountryCode(e.target.value as string);
-            helpers.handleChange(e);
+        <Autocomplete
+          disabled={disabled}
+          disablePortal
+          renderOption={(props, option) => {
+            return (
+              <li {...props} key={option.code}>
+                {option.flag} {option.label}
+              </li>
+            );
           }}
-          MenuProps={MenuProps}
-          error={helpers.touched.country && !!helpers.errors.country}
-        >
-          {countries.map((country: ICountry, i) => (
-            <MenuItem value={country.isoCode} key={i}>
-              {country.name} {country.flag}
-            </MenuItem>
-          ))}
-        </Select>
+          value={helpers.values.country}
+          options={countries.map((country) => {
+            return {
+              label: `${country.name}`,
+              code: country.isoCode,
+              flag: country.flag,
+            };
+          })}
+          onChange={(_e, value) => handleCountryChange(value)}
+          fullWidth
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              error={helpers.errors.country && helpers.touched.country}
+              label="Country"
+            />
+          )}
+        />
         {helpers.touched.country && (
           <FormHelperText error>{helpers.errors.country}</FormHelperText>
         )}
       </FormControl>
 
       <FormControl fullWidth>
-        <InputLabel id="city-select-label">City</InputLabel>
-        <Select
-          labelId="city-select-label"
-          name="city"
-          label="City"
-          onChange={helpers.handleChange}
-          MenuProps={MenuProps}
-          error={helpers.touched.city && !!helpers.errors.city}
-        >
-          {cities && cities.length > 0 ? (
-            cities.map((city: ICity, i) => (
-              <MenuItem value={city.name} key={i}>
-                {city.name}
-              </MenuItem>
-            ))
-          ) : (
-            <MenuItem value={"-"}>-</MenuItem>
+        <Autocomplete
+          disablePortal
+          disabled={disabled}
+          renderOption={(props, option) => {
+            return (
+              <li {...props} key={`${option.label}, ${option.state}`}>
+                {option.label}
+              </li>
+            );
+          }}
+          value={helpers.values.city}
+          options={
+            cities && cities.length > 0
+              ? cities.map((city) => {
+                  return {
+                    label: `${city.name}`,
+                    state: city.stateCode,
+                  };
+                })
+              : [
+                  {
+                    label: `-`,
+                    state: "-",
+                  },
+                ]
+          }
+          onChange={(_e, value) => handleCityChange(value)}
+          fullWidth
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              error={helpers.errors.city && helpers.touched.city}
+              label="City"
+            />
           )}
-        </Select>
+        />
         {helpers.touched.city && (
           <FormHelperText error>{helpers.errors.city}</FormHelperText>
         )}

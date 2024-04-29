@@ -10,6 +10,7 @@ import { UserContext } from "../helpers/UserStore";
 import Loader from "./Global/Loader";
 import Typography from "@mui/material/Typography";
 import { toast } from "react-toastify";
+import { CountryCitySelect } from "./Global/CountryCitySelect";
 
 export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   const [error, setError] = React.useState(null);
@@ -66,63 +67,49 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
       validationSchema={schema}
       onSubmit={onSubmit}
     >
-      {({ handleSubmit, handleChange, touched, errors, values }) => (
-        <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
+      {(helpers) => (
+        <form
+          onSubmit={helpers.handleSubmit}
+          className="d-flex flex-column gap-3"
+        >
           <TextField
             disabled
-            value={values.name}
+            value={helpers.values.name}
             name="name"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             label="Company name"
-            helperText={errors.name}
-            error={touched.name && !!errors.name}
+            helperText={helpers.errors.name}
+            error={helpers.touched.name && !!helpers.errors.name}
           />
           <TextField
-            value={values.about}
+            value={helpers.values.about}
             name="about"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             multiline
             rows={7}
             label="About company"
-            helperText={errors.about}
-            error={touched.about && !!errors.about}
+            helperText={helpers.errors.about}
+            error={helpers.touched.about && !!helpers.errors.about}
           />
           <TextField
             disabled
             name="email"
-            value={values.email}
-            onChange={handleChange}
+            value={helpers.values.email}
+            onChange={helpers.handleChange}
             label="Email"
-            helperText={errors.email}
-            error={touched.email && !!errors.email}
+            helperText={helpers.errors.email}
+            error={helpers.touched.email && !!helpers.errors.email}
           />
           <TextField
             disabled
-            value={values.phoneNumber}
+            value={helpers.values.phoneNumber}
             name="phoneNumber"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             label="Phone number"
-            helperText={errors.phoneNumber}
-            error={touched.phoneNumber && !!errors.phoneNumber}
+            helperText={helpers.errors.phoneNumber}
+            error={helpers.touched.phoneNumber && !!helpers.errors.phoneNumber}
           />
-          <TextField
-            disabled
-            name="country"
-            value={values.country}
-            onChange={handleChange}
-            label="Country"
-            helperText={errors.country}
-            error={touched.country && !!errors.country}
-          />
-          <TextField
-            disabled
-            name="city"
-            value={values.city}
-            onChange={handleChange}
-            label="City"
-            helperText={errors.city}
-            error={touched.city && !!errors.city}
-          />
+          <CountryCitySelect helpers={helpers} disabled />
           {error && <FormHelperText error>{error}</FormHelperText>}
           <Typography variant="body1" color="secondary">
             *If you want to update any of the disabled fields, please contact{" "}

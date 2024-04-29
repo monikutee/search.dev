@@ -131,6 +131,16 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
                     : Yup.array().nullable();
                 }
               ),
+              codeLanguage: Yup.string().when(
+                "questionType",
+                (questionType) => {
+                  // eslint-disable-next-line
+                  return (questionType as unknown as string) ==
+                    AnswerTypeEnum.CODE
+                    ? Yup.string().required()
+                    : Yup.string().nullable();
+                }
+              ),
             })
           ),
       })

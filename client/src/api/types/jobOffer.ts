@@ -3,6 +3,7 @@ import {
   ExperienceLevelEnum,
   RemoteEnum,
   AnswerTypeEnum,
+  CodeLanguageEnum,
 } from "../../helpers/enums/JobOfferEnums";
 
 export interface JobOfferDto {
@@ -66,4 +67,5 @@ export interface QuestionI {
   questionText: string;
   questionType: AnswerTypeEnum;
   questionChoices: QuestionChoiceI[];
+  codeLanguage: CodeLanguageEnum | null;
 }

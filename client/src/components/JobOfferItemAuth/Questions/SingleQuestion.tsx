@@ -7,8 +7,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { AnswerTypeEnum } from "../../../helpers/enums/JobOfferEnums";
-import { AnswerTypeText } from "../../../helpers/constants/JobOffer";
+import {
+  AnswerTypeEnum,
+  CodeLanguageEnum,
+} from "../../../helpers/enums/JobOfferEnums";
+import {
+  AnswerTypeText,
+  CodeLanguageText,
+} from "../../../helpers/constants/JobOffer";
 import { ChoicesBlock } from "../Choices/ChoicesBlock";
 import { useFormikContext } from "formik";
 import CheckIcon from "@mui/icons-material/Check";
@@ -39,6 +45,7 @@ export const SingleQuestion: React.FC<{
   const questionText = `${fieldName}[${index}].questionText`;
   const questionType = `${fieldName}[${index}].questionType`;
   const questionChoices = `${fieldName}[${index}].questionChoices`;
+  const codeLanguage = `${fieldName}[${index}].codeLanguage`;
 
   const setVisibility = React.useCallback(async () => {
     const errors = await formikHelpers.validateForm();
@@ -113,6 +120,13 @@ export const SingleQuestion: React.FC<{
                   </div>
                 )
               )}
+            </div>
+          )}
+
+          {question.codeLanguage && (
+            <div>
+              Code language: <br />
+              <b> {CodeLanguageText[question.codeLanguage]}</b>
             </div>
           )}
         </div>
@@ -205,6 +219,46 @@ export const SingleQuestion: React.FC<{
           quizIndex={parentIndex}
           questionIndex={index}
         />
+      )}
+
+      {formikHelpers.values.quizzes[parentIndex].questions[index]
+        .questionType === AnswerTypeEnum.CODE && (
+        <FormControl fullWidth>
+          <InputLabel id={`${codeLanguage}-label`}>Code language</InputLabel>
+          <Select
+            labelId={`${codeLanguage}-label`}
+            name={codeLanguage}
+            label="Code language"
+            value={
+              formikHelpers.values.quizzes[parentIndex].questions[index]
+                .codeLanguage
+            }
+            onChange={formikHelpers.handleChange}
+            error={
+              formikHelpers.touched.quizzes?.[parentIndex]?.questions?.[index]
+                ?.codeLanguage &&
+              !!formikHelpers.errors.quizzes?.[parentIndex]?.questions?.[index]
+                ?.codeLanguage
+            }
+          >
+            {Object.values(CodeLanguageEnum).map((value) => {
+              return (
+                <MenuItem value={value} key={value}>
+                  {CodeLanguageText[value]}
+                </MenuItem>
+              );
+            })}
+          </Select>
+          {formikHelpers.touched.quizzes?.[parentIndex]?.questions?.[index]
+            ?.questionType && (
+            <FormHelperText error>
+              {
+                formikHelpers.errors.quizzes?.[parentIndex]?.questions?.[index]
+                  ?.questionType
+              }
+            </FormHelperText>
+          )}
+        </FormControl>
       )}
 
       <div className="mt-1 d-flex justify-content-end">
