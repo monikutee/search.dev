@@ -37,6 +37,13 @@ export class Question {
   })
   questionType: string;
 
+  @Column({
+    type: "enum",
+    enum: ["python", "javascript"],
+    nullable: true,
+  })
+  codeLanguage: string;
+
   @Column({ default: true })
   isActive: boolean;
 

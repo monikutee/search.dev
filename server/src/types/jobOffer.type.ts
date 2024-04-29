@@ -35,6 +35,11 @@ export enum AnswerTypeEnum {
   OPEN = "OPEN",
 }
 
+export enum CodeLanguageEnum {
+  PYTHON = "python",
+  JAVASCRIPT = "javascript",
+}
+
 export enum ExperienceLevelEnum {
   INTERNSHIP = "INTERNSHIP",
   ENTRY_LEVEL = "ENTRY_LEVEL",

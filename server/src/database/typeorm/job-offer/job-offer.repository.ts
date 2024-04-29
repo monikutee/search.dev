@@ -54,6 +54,8 @@ export async function getSingleJobOfferByIdApplyInfo(id: string) {
   delete jobOffer.user.id;
   delete jobOffer.user.city;
   delete jobOffer.user.country;
+  delete jobOffer.user.isVerified;
+  delete jobOffer.user.verificationExpires;
 
   const questionsCountPromises = jobOffer.quizzes.map(async (quiz) => {
     const counts = await questionRepository
@@ -120,8 +122,10 @@ export async function getSingleJobOfferById(id: string) {
       "quizzes",
       "quizzes.questions",
       "quizzes.questions.questionChoices",
-      "applicants.answers",
-      "applicants.answers.questionChoice",
+      // "applicants.answers",
+      // "applicants.answers.question",
+      // "applicants.answers.question.questionChoices",
+      // "applicants.answers.questionChoices",
     ],
   });
 
@@ -153,8 +157,11 @@ export async function getAllJobOffersApply() {
     delete jobOffer.user.createdAt;
     delete jobOffer.user.updatedAt;
     delete jobOffer.user.id;
+    delete jobOffer.user.isVerified;
     delete jobOffer.user.city;
     delete jobOffer.user.country;
+    delete jobOffer.user.verificationExpires;
+
     jobOffer.quizzes.forEach((quiz) => {
       delete quiz.createdAt;
       delete quiz.updatedAt;

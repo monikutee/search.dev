@@ -1,11 +1,19 @@
 import express from "express";
 import { applicantController } from "../controllers";
-// import { verifyUser } from "../middleware/verify-user";
 
 const app = express();
 const apiRoot = process.env.API_ROOT;
 
-app.post(`${apiRoot}/applicant/create`, applicantController.createApplicant);
+app.post(
+  `${apiRoot}/applicant/create/:jobOfferId`,
+  applicantController.createApplicant
+);
+
+app.post(
+  `${apiRoot}/applicant/apply/:jobOfferId/:applicantId`,
+  applicantController.createApplication
+);
+
 app.get(
   `${apiRoot}/applicant/get-all`,
   applicantController.getApplicantsByJobOfferId

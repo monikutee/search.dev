@@ -1,7 +1,7 @@
 import joi from "joi";
 import { AppErrors } from "../helpers/app-errors";
 import { ERROR_CODES } from "../types/errors.enum";
-import { AnswerTypeEnum } from "../types/jobOffer.type";
+import { AnswerTypeEnum, CodeLanguageEnum } from "../types/jobOffer.type";
 
 // Assuming these are the main attributes of a job offer you want to validate
 const titleSchema = joi.string().min(3).max(100).required().messages({
@@ -53,6 +53,19 @@ const questionsSchema = joi
           )
           .message(ERROR_CODES.CHOICE_MUST),
         otherwise: joi.array().sparse(),
+      }),
+      codeLanguage: joi.alternatives().conditional("questionType", {
+        is: AnswerTypeEnum.CODE,
+        then: joi
+          .string()
+          .valid(...Object.values(CodeLanguageEnum))
+          .required()
+          .messages({
+            "string.empty": ERROR_CODES.INVALID_DATA,
+            "any.required": ERROR_CODES.FIELD_REQUIRED,
+            "any.only": ERROR_CODES.INVALID_DATA,
+          }),
+        otherwise: joi.allow(null),
       }),
     })
   );

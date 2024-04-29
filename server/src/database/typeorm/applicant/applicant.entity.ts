@@ -12,6 +12,7 @@ import { JobOffer } from "../job-offer/job-offer.entity";
 
 @Entity()
 @Unique(["email", "jobOfferId"])
+@Unique(["phoneNumber", "jobOfferId"])
 export class Applicant {
   @PrimaryGeneratedColumn("uuid")
   id: string;
