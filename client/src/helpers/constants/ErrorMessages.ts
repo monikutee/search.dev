@@ -9,4 +9,5 @@ export const ErrorMessages: { [key: string]: string } = {
     "Open questions should not have choices.",
   [ErrorCodeEnum.QUESTION_CHOICES_MUST]:
     "Questions of type ONE or MULTI should have choices.",
+  [ErrorCodeEnum.ALREADY_APPLIED]: "You already applied for this position",
 };

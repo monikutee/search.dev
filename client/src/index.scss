@@ -84,6 +84,10 @@ img {
   &:hover {
     background-color: #eff2f6;
   }
+
+  &.applicant {
+    background-color: #eff2f6;
+  }
 }
 
 .step-icon {
@@ -130,4 +134,18 @@ a {
 ::-webkit-scrollbar-thumb {
   background: #486284;
   border-radius: 20px;
+}
+
+.editor {
+  margin-top: 20px;
+  background: #eff2f6;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+
+  .editor-run {
+    position: absolute;
+    top: 4px;
+    right: 20px;
+  }
 }
