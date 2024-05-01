@@ -60,7 +60,7 @@ const runCodeInDocker = async (code, language) => {
   });
 
   await container.remove();
-  return output;
+  return output.replace(/[\x00-\x09\x0B-\x1F\x7F-\x9F]/g, "");
 };
 
 app.listen(9090, () => {
