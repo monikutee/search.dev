@@ -27,7 +27,7 @@ interface OptionFunctionContext {
   res?: Response;
 }
 
-const DEDAULT_OPTIONS: TrackerOptions = {
+const DEFAULT_OPTIONS: TrackerOptions = {
   preCallback: {
     trackIp: true,
     trackRequestData: false,
@@ -155,7 +155,7 @@ export function hookApiTracker(
     req: Request,
     res: Response,
     next: (req: Request, res: Response) => Promise<Response>,
-    options: TrackerOptions = DEDAULT_OPTIONS
+    options: TrackerOptions = DEFAULT_OPTIONS
   ) => {
     let apiData = {
       ...getEndpoint({ req }),

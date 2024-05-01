@@ -34,8 +34,11 @@ export const createApplication =
       id: string;
       answers: {
         question: { id: string };
-        questionChoices?: [{ id: string }];
+        questionChoices?: { id: string }[];
+        answerText?: string;
+        codeOutput?: string;
       }[];
+      applied: boolean;
     },
     jobOfferId: string
   ) => {
@@ -46,14 +49,12 @@ export const createApplication =
         throw new AppErrors(ERROR_CODES.QUESTION_DOES_NOT_BELONG);
       }
 
-      // Fetch all choices for the question
       if (answer.questionChoices && answer.questionChoices.length > 0) {
         const validChoices = await dependencies.getQuestionChoicesByQuestionId(
           answer.question.id
         );
         const validChoiceIds = validChoices.map((choice) => choice.id);
 
-        // Check if all provided choice IDs belong to the question
         const allChoicesValid = answer.questionChoices.every((choice) =>
           validChoiceIds.includes(choice.id)
         );
@@ -83,8 +84,40 @@ export const getApplicantsByJobOfferId =
     return applicants;
   };
 
+export const getJobOfferByApplicantId =
+  (
+    dependencies = {
+      getJobOfferByApplicantId:
+        typeormDatabase.applicantRepository.getJobOfferByApplicantId,
+      getSingleJobOfferByIdApply:
+        typeormDatabase.jobOfferRepository.getSingleJobOfferByIdApply,
+    }
+  ) =>
+  async (applicantId: string) => {
+    const applicantData = await dependencies.getJobOfferByApplicantId(
+      applicantId
+    );
+    if (!applicantData.jobOfferId) {
+      throw new AppErrors(ERROR_CODES.APPLICANT_JOB_OFFER_MISSING);
+    }
+    if (applicantData.applied) {
+      throw new AppErrors(ERROR_CODES.ALREADY_APPLIED);
+    }
+
+    const jobOffer = await dependencies.getSingleJobOfferByIdApply(
+      applicantData.jobOfferId
+    );
+
+    if (!jobOffer) {
+      throw new AppErrors(ERROR_CODES.APPLICANT_JOB_OFFER_MISSING);
+    }
+
+    return jobOffer;
+  };
+
 export default {
   createApplicant: createApplicant(),
   createApplication: createApplication(),
+  getJobOfferByApplicantId: getJobOfferByApplicantId(),
   getApplicantsByJobOfferId: getApplicantsByJobOfferId(),
 };

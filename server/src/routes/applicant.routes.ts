@@ -9,14 +9,19 @@ app.post(
   applicantController.createApplicant
 );
 
+app.get(
+  `${apiRoot}/applicant/job-offer/:applicantId`,
+  applicantController.getJobOfferByApplicantId
+);
+
 app.post(
   `${apiRoot}/applicant/apply/:jobOfferId/:applicantId`,
   applicantController.createApplication
 );
 
-app.get(
-  `${apiRoot}/applicant/get-all`,
-  applicantController.getApplicantsByJobOfferId
+app.post(
+  `${apiRoot}/applicant/:applicantId/:questionId/run-code`,
+  applicantController.runApplicantQuestionCode
 );
 
 export default app;

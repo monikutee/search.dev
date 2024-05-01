@@ -38,6 +38,9 @@ export class Applicant {
   @Column()
   city: string;
 
+  @Column({ default: false })
+  applied: boolean;
+
   @ManyToOne(() => JobOffer, (jobOffer) => jobOffer.applicants)
   jobOffer: JobOffer;
 

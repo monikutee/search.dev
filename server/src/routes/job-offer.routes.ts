@@ -29,9 +29,9 @@ app.get(
   jobOfferController.getSingleJobOfferByIdApplyInfo
 );
 
-app.get(
-  `${apiRoot}/apply/:jobOfferId`,
-  jobOfferController.getSingleJobOfferByIdApply
-);
+// app.get(
+//   `${apiRoot}/apply/:jobOfferId`,
+//   jobOfferController.getSingleJobOfferByIdApply
+// );
 
 export default app;

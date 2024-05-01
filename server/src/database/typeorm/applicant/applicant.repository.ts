@@ -14,11 +14,19 @@ export async function getApplicantsByJobOfferId(jobOfferId: string) {
   const applicantRepository = AppDB.getRepository(ApplicantEntity);
   return await applicantRepository.find({
     where: { jobOfferId: jobOfferId },
-    relations: ["answers", "answers.questionChoice", "answers.questionId"], // Assuming you want to load related entities
+    relations: ["answers", "answers.questionChoices", "answers.questionId"],
+  });
+}
+
+export async function getJobOfferByApplicantId(applicantId: string) {
+  const applicantRepository = AppDB.getRepository(ApplicantEntity);
+  return await applicantRepository.findOne({
+    where: { id: applicantId },
   });
 }
 
 export default {
   upsertApplicant,
+  getJobOfferByApplicantId,
   getApplicantsByJobOfferId,
 };

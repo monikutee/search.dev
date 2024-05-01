@@ -6,11 +6,11 @@ import { JobOffer as JobOfferEntity } from "./job-offer.entity";
 
 export async function getSingleJobOfferByIdApply(id: string) {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
-  const applicantRepository = AppDB.getRepository(ApplicantEntity);
 
   const jobOffer = await jobOfferRepository.findOne({
     where: { id, isActive: true },
     relations: [
+      "user",
       "quizzes",
       "quizzes.questions",
       "quizzes.questions.questionChoices",
@@ -19,10 +19,15 @@ export async function getSingleJobOfferByIdApply(id: string) {
 
   if (!jobOffer) return undefined;
 
-  const applicantCount = await applicantRepository
-    .createQueryBuilder("applicant")
-    .where("applicant.jobOfferId = :id", { id })
-    .getCount();
+  delete jobOffer.userId;
+  delete jobOffer.user.password;
+  delete jobOffer.user.createdAt;
+  delete jobOffer.user.updatedAt;
+  delete jobOffer.user.id;
+  delete jobOffer.user.city;
+  delete jobOffer.user.country;
+  delete jobOffer.user.isVerified;
+  delete jobOffer.user.verificationExpires;
 
   jobOffer.quizzes.forEach((quiz) => {
     quiz.questions.forEach((question) => {
@@ -32,7 +37,7 @@ export async function getSingleJobOfferByIdApply(id: string) {
     });
   });
 
-  return { ...jobOffer, applicantCount } || undefined;
+  return { ...jobOffer } || undefined;
 }
 
 export async function getSingleJobOfferByIdApplyInfo(id: string) {
