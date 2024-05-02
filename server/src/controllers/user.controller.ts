@@ -101,6 +101,8 @@ export const signup =
         throw new AppErrors(ERROR_CODES.CONSENT);
       }
 
+      const origin = req.headers.origin;
+
       const user = await dependencies.createUser({
         email,
         password,
@@ -111,7 +113,7 @@ export const signup =
         verificationExpires: new Date(new Date().getTime() + 30 * 60 * 1000),
       });
       const accessToken = getVerificationAccessToken(user.id, user.email);
-      await dependencies.verifyEmail(user.email, accessToken);
+      await dependencies.verifyEmail(user.email, accessToken, origin);
 
       res.send(
         "An e-mail has been sent to " + email + " with further instructions."
@@ -182,6 +184,8 @@ export const loginLocal =
   ) =>
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
+    const origin = req.headers.origin;
+
     try {
       const user = await dependencies.getUser(email);
       await dependencies.authLocal(password, user);
@@ -204,7 +208,11 @@ export const loginLocal =
             user.id,
             user.email
           );
-          await dependencies.verifyEmail(user.email, verificationAccessToken);
+          await dependencies.verifyEmail(
+            user.email,
+            verificationAccessToken,
+            origin
+          );
           await dependencies.editUser({
             id: user.id,
             verificationExpires: new Date(

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { User } from "../types/user.type";
-import { validateEmail, validateUser } from "../validation/user.validation";
+import { validateUser } from "../validation/user.validation";
 import { DataReset } from "../types/password-reset.type";
 import typeormDatabase from "../database/typeorm";
 import { AppErrors } from "../helpers/app-errors";
@@ -164,12 +164,12 @@ export const verifyEmail =
       verifyEmail: mailerService.verifyEmail,
     }
   ) =>
-  async (email: string, token: string) => {
+  async (email: string, token: string, origin: string) => {
     if (!email || !token) {
       throw new AppErrors(ERROR_CODES.INVALID_DATA);
     }
 
-    await dependencies.verifyEmail(email, token);
+    await dependencies.verifyEmail(email, token, origin);
   };
 
 export default {

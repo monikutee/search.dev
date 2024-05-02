@@ -1,7 +1,3 @@
-import bcrypt from "bcrypt";
-import { User } from "../types/user.type";
-import { validateEmail, validateUser } from "../validation/user.validation";
-import { DataReset } from "../types/password-reset.type";
 import typeormDatabase from "../database/typeorm";
 import { AppErrors } from "../helpers/app-errors";
 import { ERROR_CODES } from "../types/errors.enum";
@@ -11,12 +7,40 @@ export const createApplicant =
   (
     dependencies = {
       upsertApplicant: typeormDatabase.applicantRepository.upsertApplicant,
-      getSingleJobOfferById:
-        typeormDatabase.jobOfferRepository.getSingleJobOfferById,
+      getSingleJobOfferByIdApplyInfo:
+        typeormDatabase.jobOfferRepository.getSingleJobOfferByIdApplyInfo,
+      sendApplicantLink: mailerService.sendApplicantLink,
     }
   ) =>
-  async (applicant: any) => {
+  async (
+    applicant: {
+      email: string;
+      name: string;
+      surname: string;
+      phoneNumber: string;
+      about: string;
+      country: string;
+      city: string;
+      jobOfferId: string;
+    },
+    origin: string
+  ) => {
+    const jobOffer = await dependencies.getSingleJobOfferByIdApplyInfo(
+      applicant.jobOfferId
+    );
+    if (!jobOffer) {
+      throw new AppErrors(ERROR_CODES.INVALID_DATA);
+    }
     const newApplicant = await dependencies.upsertApplicant(applicant);
+    const applyLink = origin + "/apply/" + newApplicant.id;
+
+    await dependencies.sendApplicantLink(
+      applicant.email,
+      applyLink,
+      jobOffer.title,
+      jobOffer.user.name
+    );
+
     return newApplicant;
   };
 

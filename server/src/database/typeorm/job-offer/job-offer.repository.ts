@@ -134,10 +134,6 @@ export async function getSingleJobOfferById(id: string) {
       "quizzes",
       "quizzes.questions",
       "quizzes.questions.questionChoices",
-      // "applicants.answers",
-      // "applicants.answers.question",
-      // "applicants.answers.question.questionChoices",
-      // "applicants.answers.questionChoices",
     ],
   });
 

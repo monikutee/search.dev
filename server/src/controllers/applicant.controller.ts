@@ -35,19 +35,24 @@ export const createApplicant =
       const { jobOfferId } = req.params;
 
       if (!consent) res.status(200).send("Need consent");
-      const newApplicant = await dependencies.createApplicant({
-        email,
-        name,
-        surname,
-        phoneNumber,
-        about,
-        country,
-        city,
-        jobOfferId,
-      });
+      await dependencies.createApplicant(
+        {
+          email,
+          name,
+          surname,
+          phoneNumber,
+          about,
+          country,
+          city,
+          jobOfferId,
+        },
+        req.headers.origin
+      );
 
       res.status(200);
-      res.json(newApplicant);
+      res.send(
+        "An e-mail has been sent to " + email + " with further instructions."
+      );
     } catch (e) {
       handleErrorResponse(e, res);
     }
