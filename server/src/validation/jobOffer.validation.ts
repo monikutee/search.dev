@@ -3,7 +3,6 @@ import { AppErrors } from "../helpers/app-errors";
 import { ERROR_CODES } from "../types/errors.enum";
 import { AnswerTypeEnum, CodeLanguageEnum } from "../types/jobOffer.type";
 
-// Assuming these are the main attributes of a job offer you want to validate
 const titleSchema = joi.string().min(3).max(100).required().messages({
   "string.base": ERROR_CODES.WRONG_TITLE_BASE,
   "string.empty": ERROR_CODES.WRONG_TITLE_EMPTY,
@@ -106,14 +105,13 @@ const jobOfferSchema = joi.object({
   benefits: joi.array().items(joi.string()),
   commitments: joi.array().items(joi.string()),
   quizzes: joi.array().items(quizSchema),
-  // Add additional fields as necessary
 });
 
 function handleJobOfferError(e: joi.ValidationError) {
   throw new AppErrors(
     e.details.length > 0
       ? (e.details[0]?.message as ERROR_CODES)
-      : ERROR_CODES.VALIDATION_ERROR // Generic validation error code
+      : ERROR_CODES.VALIDATION_ERROR
   );
 }
 

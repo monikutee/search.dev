@@ -37,6 +37,13 @@ export async function getSingleJobOfferByIdApply(id: string) {
     });
   });
 
+  jobOffer.quizzes.forEach((quiz) => {
+    quiz.questions.reverse();
+    quiz.questions.forEach((question) => {
+      question.questionChoices.reverse();
+    });
+  });
+
   return { ...jobOffer } || undefined;
 }
 
@@ -134,18 +141,50 @@ export async function getSingleJobOfferById(id: string) {
     ],
   });
 
+  if (jobOffer) {
+    jobOffer.quizzes.forEach((quiz) => {
+      quiz.questions.reverse();
+      quiz.questions.forEach((question) => {
+        question.questionChoices.reverse();
+      });
+    });
+  }
+
   return jobOffer || undefined;
 }
 
 export async function getAllUserJobOffers(userId: string) {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
+  const applicantRepository = AppDB.getRepository(ApplicantEntity);
 
-  return (
-    (await jobOfferRepository.find({
-      where: { user: { id: userId } },
-      order: { updatedAt: "DESC" },
-    })) || []
-  );
+  const jobOffers = await jobOfferRepository.find({
+    where: { user: { id: userId } },
+    order: { updatedAt: "DESC" },
+  });
+
+  if (jobOffers.length === 0) return [];
+
+  const jobOfferIds = jobOffers.map((offer) => offer.id);
+
+  const applicantCounts = await applicantRepository
+    .createQueryBuilder("applicant")
+    .select("applicant.jobOfferId", "jobOfferId")
+    .addSelect("COUNT(*)", "count")
+    .where("applicant.jobOfferId IN (:...ids)", { ids: jobOfferIds })
+    .groupBy("applicant.jobOfferId")
+    .getRawMany();
+
+  const applicantCountMap = applicantCounts.reduce((map, item) => {
+    map[item.jobOfferId] = parseInt(item.count, 10);
+    return map;
+  }, {});
+
+  const enrichedJobOffers = jobOffers.map((offer) => ({
+    ...offer,
+    applicantCount: applicantCountMap[offer.id] || 0,
+  }));
+
+  return enrichedJobOffers;
 }
 
 export async function getAllJobOffersApply() {

@@ -98,26 +98,6 @@ export const getJobOfferByApplicantId =
     }
   };
 
-export const getApplicantsByJobOfferId =
-  (
-    dependencies = {
-      getApplicantsByJobOfferId: applicantsService.getApplicantsByJobOfferId,
-    }
-  ) =>
-  async (req: Request, res: Response) => {
-    try {
-      const { jobOfferId } = req.body;
-      const newApplicant = await dependencies.getApplicantsByJobOfferId(
-        jobOfferId
-      );
-
-      res.status(200);
-      res.json(newApplicant);
-    } catch (e) {
-      handleErrorResponse(e, res);
-    }
-  };
-
 export const runApplicantQuestionCode =
   (
     dependencies = {
@@ -167,6 +147,5 @@ export default {
   createApplicant: createApplicant(),
   createApplication: createApplication(),
   getJobOfferByApplicantId: getJobOfferByApplicantId(),
-  getApplicantsByJobOfferId: getApplicantsByJobOfferId(),
   runApplicantQuestionCode: runApplicantQuestionCode(),
 };

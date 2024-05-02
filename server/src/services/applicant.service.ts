@@ -73,15 +73,25 @@ export const getApplicantsByJobOfferId =
     dependencies = {
       getApplicantsByJobOfferId:
         typeormDatabase.applicantRepository.getApplicantsByJobOfferId,
+      getSingleJobOfferById:
+        typeormDatabase.jobOfferRepository.getSingleJobOfferById,
     }
   ) =>
-  async (jobOfferId: string) => {
-    const applicants = await dependencies.getApplicantsByJobOfferId(jobOfferId);
-    if (!applicants) {
-      //   throw new AppErrors(ERROR_CODES.USER_MISSING);
-      console.log("ERROR getApplicantsByJobOfferId");
+  async (jobOfferId: string, userId: string) => {
+    const jobOffer = await dependencies.getSingleJobOfferById(jobOfferId);
+
+    if (jobOffer) {
+      if (jobOffer.userId !== userId) {
+        throw new AppErrors(ERROR_CODES.VALIDATION_ERROR);
+      }
+      const applicants = await dependencies.getApplicantsByJobOfferId(
+        jobOfferId
+      );
+      if (!applicants) {
+        throw new AppErrors(ERROR_CODES.VALIDATION_ERROR);
+      }
+      return applicants;
     }
-    return applicants;
   };
 
 export const getJobOfferByApplicantId =
