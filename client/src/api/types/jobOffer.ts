@@ -23,6 +23,7 @@ export interface JobOfferDto {
   updatedAt?: Date;
   quizzes?: QuizI[];
   applicants?: [];
+  applicantCount?: number;
 }
 
 export interface JobOfferApplyMiniDto {

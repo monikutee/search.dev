@@ -9,7 +9,8 @@ export const SingleQuizForm: React.FC<{
   fieldName: string;
   formikHelpers: any;
   formikArrayHelpers: any;
-}> = ({ index, fieldName, formikHelpers, formikArrayHelpers }) => {
+  disable: boolean;
+}> = ({ index, fieldName, formikHelpers, formikArrayHelpers, disable }) => {
   const title = `${fieldName}[${index}].title`;
   const questions = `${fieldName}[${index}].questions`;
 
@@ -19,16 +20,22 @@ export const SingleQuizForm: React.FC<{
         <TextInput variant="filled" name={title} label="Quiz title" />
       </div>
       <QuestionsBlock
+        disable={disable}
         questions={formikHelpers.values["quizzes"][index]["questions"]}
         fieldName={questions}
         formikHelpers={formikHelpers}
         parentIndex={index}
       />
-      <div className="mt-3 d-flex justify-content-end">
-        <Button onClick={() => formikArrayHelpers.remove(index)} variant="text">
-          Remove quiz
-        </Button>
-      </div>
+      {!disable && (
+        <div className="mt-3 d-flex justify-content-end">
+          <Button
+            onClick={() => formikArrayHelpers.remove(index)}
+            variant="text"
+          >
+            Remove quiz
+          </Button>
+        </div>
+      )}
     </StyledQuiz>
   );
 };

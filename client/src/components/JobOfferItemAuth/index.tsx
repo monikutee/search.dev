@@ -33,6 +33,8 @@ import { AnswerTypeEnum } from "../../helpers/enums/JobOfferEnums";
 import { useNavigate } from "react-router-dom";
 import { RouteList } from "../../routes";
 import { CountryCitySelect } from "../Global/CountryCitySelect";
+import { toast } from "react-toastify";
+import { ErrorMessages } from "../../helpers/constants/ErrorMessages";
 
 export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
   const [error, setError] = React.useState<string | null>(null);
@@ -62,14 +64,30 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
           .then(() => {
             navigate(RouteList.MY_JOB_OFFERS_LIST);
           })
-          .catch((e) => setError(e.definedMessage));
+          .catch((e) => {
+            setError(ErrorMessages[e.definedMessage]);
+            toast.error(ErrorMessages[e.definedMessage], {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            navigate(RouteList.MY_JOB_OFFERS_LIST);
+          });
       } else
         Api.jobOffer
           .createJobOffer(userId, req)
           .then(() => {
             navigate(RouteList.MY_JOB_OFFERS_LIST);
           })
-          .catch((e) => setError(e.definedMessage));
+          .catch((e) => {
+            setError(e.definedMessage);
+            navigate(RouteList.MY_JOB_OFFERS_LIST);
+          });
   };
 
   const schema = Yup.object().shape({
@@ -313,6 +331,13 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
 
             {helpers.values.quizzes && (
               <QuizBlock
+                disable={
+                  data?.applicantCount
+                    ? data?.applicantCount > 0
+                      ? true
+                      : false
+                    : false
+                }
                 quizzes={helpers.values.quizzes}
                 fieldName="quizzes"
                 formikHelpers={helpers}

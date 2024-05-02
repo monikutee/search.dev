@@ -10,4 +10,7 @@ export const ErrorMessages: { [key: string]: string } = {
   [ErrorCodeEnum.QUESTION_CHOICES_MUST]:
     "Questions of type ONE or MULTI should have choices.",
   [ErrorCodeEnum.ALREADY_APPLIED]: "You already applied for this position",
+  [ErrorCodeEnum.JOB_OFFER_HAS_APPLICANTS]:
+    "This job offer already has applicants, thus you can not edit it",
+  [ErrorCodeEnum.INVALID_DATA]: "Given data is invalid",
 };

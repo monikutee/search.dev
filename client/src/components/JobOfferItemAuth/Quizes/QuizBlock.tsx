@@ -9,7 +9,8 @@ export const QuizBlock: React.FC<{
   quizzes: QuizI[];
   fieldName: string;
   formikHelpers: any;
-}> = ({ quizzes, fieldName, formikHelpers }) => {
+  disable: boolean;
+}> = ({ quizzes, fieldName, formikHelpers, disable }) => {
   return (
     <FieldArray
       name={fieldName}
@@ -28,22 +29,25 @@ export const QuizBlock: React.FC<{
             {quizzes.map((_quiz: any, index: number) => (
               <SingleQuizForm
                 key={index}
+                disable={disable}
                 index={index}
                 fieldName={fieldName}
                 formikHelpers={formikHelpers}
                 formikArrayHelpers={arrayHelpers}
               />
             ))}
-            <div className={"mt-4 mb-4 w-25"}>
-              <Button
-                onClick={async () => {
-                  addQuiz();
-                }}
-                variant="contained"
-              >
-                Add QUIZ
-              </Button>
-            </div>
+            {!disable && (
+              <div className={"mt-4 mb-4 w-25"}>
+                <Button
+                  onClick={async () => {
+                    addQuiz();
+                  }}
+                  variant="contained"
+                >
+                  Add QUIZ
+                </Button>
+              </div>
+            )}
           </>
         );
       }}

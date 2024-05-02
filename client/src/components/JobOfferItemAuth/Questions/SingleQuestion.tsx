@@ -28,6 +28,7 @@ export const SingleQuestion: React.FC<{
   formikHelpers: any;
   formikArrayHelpers: any;
   parentIndex: number;
+  disable: boolean;
 }> = ({
   question,
   index,
@@ -35,6 +36,7 @@ export const SingleQuestion: React.FC<{
   formikHelpers,
   formikArrayHelpers,
   parentIndex,
+  disable,
 }) => {
   const [show, setShow] = React.useState<boolean>(true);
   const formikContext = useFormikContext();
@@ -131,19 +133,21 @@ export const SingleQuestion: React.FC<{
           )}
         </div>
 
-        <div className="mt-1 d-flex justify-content-end">
-          <Button onClick={() => setShow(true)} variant="text">
-            Edit
-          </Button>
-          {formikHelpers.values.quizzes[parentIndex].questions.length > 1 && (
-            <Button
-              onClick={() => formikArrayHelpers.remove(index)}
-              variant="text"
-            >
-              Remove
+        {!disable && (
+          <div className="mt-1 d-flex justify-content-end">
+            <Button onClick={() => setShow(true)} variant="text">
+              Edit
             </Button>
-          )}
-        </div>
+            {formikHelpers.values.quizzes[parentIndex].questions.length > 1 && (
+              <Button
+                onClick={() => formikArrayHelpers.remove(index)}
+                variant="text"
+              >
+                Remove
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     );
   }

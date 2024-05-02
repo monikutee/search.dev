@@ -10,7 +10,8 @@ export const QuestionsBlock: React.FC<{
   fieldName: string;
   formikHelpers: any;
   parentIndex: number;
-}> = ({ questions, fieldName, formikHelpers, parentIndex }) => {
+  disable: boolean;
+}> = ({ questions, fieldName, formikHelpers, parentIndex, disable }) => {
   return (
     <FieldArray
       name={fieldName}
@@ -25,6 +26,7 @@ export const QuestionsBlock: React.FC<{
           <>
             {questions.map((question: QuestionI, index: number) => (
               <SingleQuestion
+                disable={disable}
                 question={question}
                 key={index}
                 index={index}
@@ -34,16 +36,18 @@ export const QuestionsBlock: React.FC<{
                 formikArrayHelpers={arrayHelpers}
               />
             ))}
-            <div className={"mt-4 mb-4 w-25"}>
-              <Button
-                onClick={async () => {
-                  addQuestion();
-                }}
-                variant="contained"
-              >
-                Add question
-              </Button>
-            </div>
+            {!disable && (
+              <div className={"mt-4 mb-4 w-25"}>
+                <Button
+                  onClick={async () => {
+                    addQuestion();
+                  }}
+                  variant="contained"
+                >
+                  Add question
+                </Button>
+              </div>
+            )}
           </>
         );
       }}
