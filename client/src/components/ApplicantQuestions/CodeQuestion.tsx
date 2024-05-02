@@ -20,16 +20,14 @@ export const CodeQuestion: React.FC<{
 
   const runPythonCode = (code: string) => {
     if (!applicantId) return;
-    try {
-      Api.applicant
-        .runQuestionCode(applicantId, question.id, {
-          code,
-          language: CodeLanguageEnum.PYTHON,
-        })
-        .then((res) => outputHelpers.setValue(res.data.output));
-    } catch (e) {
-      console.log(e);
-    }
+
+    Api.applicant
+      .runQuestionCode(applicantId, question.id, {
+        code,
+        language: CodeLanguageEnum.PYTHON,
+      })
+      .then((res) => outputHelpers.setValue(res.data.output))
+      .catch((e) => console.log(e));
   };
 
   const runJavascriptCode = (code: string) => {

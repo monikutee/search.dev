@@ -31,8 +31,9 @@ export const Login = () => {
   });
 
   const onSubmit = async (req: LoginDto) => {
-    try {
-      await Api.user.login(req).then((res) => {
+    Api.user
+      .login(req)
+      .then((res) => {
         if (res.data.id) {
           setUserId(res.data.id);
           hideModal();
@@ -41,10 +42,8 @@ export const Login = () => {
           hideModal();
           navigate(RouteList.EMAIL_VERIFICATION);
         }
-      });
-    } catch (e: any) {
-      setError(ErrorMessages[e.definedMessage]);
-    }
+      })
+      .catch((e) => setError(ErrorMessages[e.definedMessage]));
   };
 
   return (

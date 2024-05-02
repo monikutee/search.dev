@@ -55,21 +55,21 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
   });
 
   const onSubmit = async (req: JobOfferDto) => {
-    try {
-      if (userId)
-        if (data) {
-          await Api.jobOffer
-            .createJobOffer(userId, { ...req, id: data.id })
-            .then(() => {
-              navigate(RouteList.MY_JOB_OFFERS_LIST);
-            });
-        } else
-          await Api.jobOffer.createJobOffer(userId, req).then(() => {
+    if (userId)
+      if (data) {
+        Api.jobOffer
+          .createJobOffer(userId, { ...req, id: data.id })
+          .then(() => {
             navigate(RouteList.MY_JOB_OFFERS_LIST);
-          });
-    } catch (e: any) {
-      setError(e.definedMessage);
-    }
+          })
+          .catch((e) => setError(e.definedMessage));
+      } else
+        Api.jobOffer
+          .createJobOffer(userId, req)
+          .then(() => {
+            navigate(RouteList.MY_JOB_OFFERS_LIST);
+          })
+          .catch((e) => setError(e.definedMessage));
   };
 
   const schema = Yup.object().shape({

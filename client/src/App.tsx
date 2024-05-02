@@ -18,6 +18,7 @@ import { EmailVerificationCheck } from "./pages/EmailVerificationCheck";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import { ViewApplicants } from "./pages/ViewApplicants";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -54,6 +55,10 @@ const App = () => {
               <Route
                 path={RouteList.EDIT_JOB_OFFER}
                 element={<EditJobOffer />}
+              />
+              <Route
+                path={RouteList.APPLICANTS_LIST}
+                element={<ViewApplicants />}
               />
               <Route
                 path={RouteList.ALL_JOB_OFFERS}

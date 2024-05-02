@@ -58,14 +58,13 @@ export const SignUp = () => {
   });
 
   const onSubmit = async (req: SignUpDto) => {
-    try {
-      await Api.user.signUp(req).then(() => {
+    Api.user
+      .signUp(req)
+      .then(() => {
         navigate(RouteList.EMAIL_VERIFICATION);
-      });
-      hideModal();
-    } catch (e: any) {
-      setError(ErrorMessages[e.definedMessage]);
-    }
+      })
+      .catch((e) => setError(ErrorMessages[e.definedMessage]));
+    hideModal();
   };
 
   return (

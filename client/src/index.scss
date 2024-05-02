@@ -149,3 +149,16 @@ a {
     right: 20px;
   }
 }
+
+.MuiAccordion-root {
+  background: #eff2f6 !important;
+
+  .MuiAccordionSummary-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+}

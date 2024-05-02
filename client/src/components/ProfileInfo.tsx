@@ -40,9 +40,10 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   });
 
   const onSubmit = async (req: UserI) => {
-    try {
-      if (!user) return;
-      await Api.user.editUser(req).then((res) => {
+    if (!user) return;
+    Api.user
+      .editUser(req)
+      .then((res) => {
         setUserId(res.data.id);
         toast.success("Successfully updated your profile", {
           position: "top-right",
@@ -54,10 +55,10 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
           progress: undefined,
           theme: "light",
         });
+      })
+      .catch((e) => {
+        setError(e.definedMessage);
       });
-    } catch (e: any) {
-      setError(e.definedMessage);
-    }
   };
 
   return initialValues ? (

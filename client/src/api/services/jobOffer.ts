@@ -2,6 +2,7 @@ import Client from "./client";
 import Http from "../http";
 import type { AxiosResponse } from "axios";
 import { JobOfferApplyMiniDto, JobOfferDto } from "../types/jobOffer";
+import { ApplicantFullI } from "../types/applicant";
 
 class JobOffer extends Client {
   constructor(http: Http) {
@@ -18,6 +19,9 @@ class JobOffer extends Client {
       FETCH_ALL: this.defaultUrl(`${this.http.baseUrl}/job-offers/all`),
       FETCH_ONE_JOB_OFFER_INFO: this.defaultUrl(
         `${this.http.baseUrl}/job-offers/{jobOfferId}`
+      ),
+      FETCH_APPLICANTS: this.defaultUrl(
+        `${this.http.baseUrl}/{userId}/job-offer/applicants/{jobOfferId}`
       ),
     };
   }
@@ -53,6 +57,17 @@ class JobOffer extends Client {
     jobOfferId: string
   ): Promise<AxiosResponse<JobOfferApplyMiniDto>> => {
     const url = this.buildUrl(this.api.FETCH_ONE_JOB_OFFER_INFO, {
+      jobOfferId,
+    });
+    return this.http.get(url);
+  };
+
+  fetchApplicants = (
+    userId: string,
+    jobOfferId: string
+  ): Promise<AxiosResponse<ApplicantFullI[]>> => {
+    const url = this.buildUrl(this.api.FETCH_APPLICANTS, {
+      userId,
       jobOfferId,
     });
     return this.http.get(url);

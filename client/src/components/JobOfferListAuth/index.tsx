@@ -75,14 +75,18 @@ export const JobOfferList = () => {
           </Typography>
           <div className="d-flex justify-content-end gap-3">
             {/* TODO applicants add to this endpoint count */}
-            {item.applicants?.length > 0 && (
+            {item.applicantCount > 0 ? (
               <Link
-                to={generatePath(RouteList.EDIT_JOB_OFFER, {
+                to={generatePath(RouteList.APPLICANTS_LIST, {
                   jobOfferId: item.id,
                 })}
               >
                 <Button variant="outlined">View applicants</Button>
               </Link>
+            ) : (
+              <Button variant="outlined" disabled>
+                {"No applicants yet :("}
+              </Button>
             )}
             <Link
               to={generatePath(RouteList.EDIT_JOB_OFFER, {

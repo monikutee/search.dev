@@ -35,27 +35,28 @@ export const UserContextProvider: React.FC<{
   const navigate = useNavigate();
 
   const fetchUser = async (userId: string) => {
-    try {
-      await Api.user.fetchUser(userId).then((response) => {
+    Api.user
+      .fetchUser(userId)
+      .then((response) => {
         setUser(response.data);
         localStorage.setItem("user", response.data.id);
         setLoading(false);
+      })
+      .catch((e) => {
+        setUserId(null);
+        localStorage.removeItem("user");
+        navigate("/");
+        toast.error("An unexpected error occurred! You were logged out", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
-    } catch (e) {
-      setUserId(null);
-      localStorage.removeItem("user");
-      navigate("/");
-      toast.error("An unexpected error occurred! You were logged out", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
   };
 
   useEffect(() => {

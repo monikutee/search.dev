@@ -119,8 +119,8 @@ export const ApplyForJobOffer = () => {
                   question: Yup.object({
                     id: Yup.string().required("Question ID is required"),
                   }),
-                  answerText: Yup.string(),
-                  codeOutput: Yup.string(),
+                  answerText: Yup.string().max(5000),
+                  codeOutput: Yup.string().max(5000),
                   questionChoices: Yup.array().of(
                     Yup.object({
                       id: Yup.string().required("Question ID is required"),
@@ -246,8 +246,7 @@ export const ApplyForJobOffer = () => {
                 </div>
               )
             )}
-            {console.log(formik.errors)}
-            <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end mt-3">
               <Button variant="contained" type="submit">
                 Submit
               </Button>

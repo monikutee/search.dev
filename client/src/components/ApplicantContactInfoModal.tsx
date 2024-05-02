@@ -56,8 +56,9 @@ export const ApplicantContactInfoModal: React.FC<{
   });
 
   const onSubmit = async (req: ApplicantEntryI) => {
-    try {
-      await Api.applicant.createApplicantEntry(id, req).then(() => {
+    Api.applicant
+      .createApplicantEntry(id, req)
+      .then(() => {
         if (haveQuiz) {
           toast.success("Please check your email for the further information", {
             position: "top-right",
@@ -81,33 +82,33 @@ export const ApplicantContactInfoModal: React.FC<{
             theme: "light",
           });
         }
+      })
+      .catch((e) => {
+        if (e.definedMessage === ErrorCodeEnum.RECORD_EXIST) {
+          toast.error("You already applied for this role", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error("Error occurred, please try again later", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       });
-      hideModal();
-    } catch (e: any) {
-      if (e.definedMessage === ErrorCodeEnum.RECORD_EXIST) {
-        toast.error("You already applied for this role", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        toast.error("Error occurred, please try again later", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-    }
+    hideModal();
   };
 
   return (

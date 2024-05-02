@@ -19,25 +19,26 @@ export const Header = () => {
   const navigate = useNavigate();
 
   const logout = async () => {
-    try {
-      await Api.user.logout().then(() => {
+    Api.user
+      .logout()
+      .then(() => {
         setUser(null);
         setUserId(null);
         localStorage.removeItem("user");
         navigate(RouteList.HOME);
+      })
+      .catch((e) => {
+        toast.error("An unexpected error occured!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       });
-    } catch (e: any) {
-      toast.error("An unexpected error occured!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    }
   };
 
   return (

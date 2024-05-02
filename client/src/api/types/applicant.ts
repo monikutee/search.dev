@@ -14,6 +14,13 @@ export interface ApplicantEntryI {
   consent: boolean;
 }
 
+export interface ApplicantFullI extends ApplicantEntryI {
+  answers: ApplicantAnswerDto[];
+  id: string;
+  overallCorrectCount: string | null;
+  applyDate: string;
+}
+
 export interface ApplyQuestionI {
   id: string;
   questionText: string;
@@ -32,4 +39,31 @@ export interface ApplyAnswerI {
 export interface ApplyQuestionChoiceI {
   id: string;
   choiceText: string;
+}
+
+export interface ApplicantAnswerDto {
+  id: string;
+  codeOutput?: string | null;
+  answerText?: string | null;
+  createdAt: string;
+  questionChoices: QuestionChoice[];
+  question: ApplicantQuestionI;
+  correctCount: string | null;
+}
+
+interface QuestionChoice {
+  id: string;
+  choiceText: string;
+  isCorrect?: boolean;
+}
+
+export interface ApplicantQuestionI {
+  id: string;
+  questionText: string;
+  questionType: AnswerTypeEnum;
+  codeLanguage?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  questionChoices: QuestionChoice[];
 }
