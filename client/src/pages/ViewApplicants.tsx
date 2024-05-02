@@ -154,6 +154,11 @@ export const ViewApplicants = () => {
                         )}
                         {applicant.overallCorrectCount && (
                           <Chip
+                            color={
+                              Number(applicant.overallCorrectCount) > 0
+                                ? "success"
+                                : "warning"
+                            }
                             label={`Correct choice answers: ${applicant.overallCorrectCount}`}
                           />
                         )}
