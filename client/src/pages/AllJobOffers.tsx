@@ -58,6 +58,14 @@ export const AllJobOffers = () => {
               <hr />
             </div>
           ))}
+
+          {list.length === 0 && (
+            <div className="d-flex align-items-center justify-content-center">
+              <Typography color="primary" variant="h5">
+                There are no listed job offers at this time
+              </Typography>
+            </div>
+          )}
         </>
       ) : (
         <div className="d-flex align-items-center justify-content-center">
