@@ -127,7 +127,8 @@ export async function getSingleJobOfferByIdApplyInfo(id: string) {
 
 export async function getSingleJobOfferById(id: string) {
   const jobOfferRepository = AppDB.getRepository(JobOfferEntity);
-
+  const applicantRepository = AppDB.getRepository(ApplicantEntity);
+  let applicantCount = 0;
   const jobOffer = await jobOfferRepository.findOne({
     where: { id },
     relations: [
@@ -144,9 +145,14 @@ export async function getSingleJobOfferById(id: string) {
         question.questionChoices.reverse();
       });
     });
+
+    applicantCount = await applicantRepository
+      .createQueryBuilder("applicant")
+      .where("applicant.jobOfferId = :id", { id })
+      .getCount();
   }
 
-  return jobOffer || undefined;
+  return { ...jobOffer, applicantCount } || undefined;
 }
 
 export async function getAllUserJobOffers(userId: string) {
@@ -177,6 +183,7 @@ export async function getAllUserJobOffers(userId: string) {
 
   const enrichedJobOffers = jobOffers.map((offer) => ({
     ...offer,
+    description: offer.description.substring(0, 255) + "...",
     applicantCount: applicantCountMap[offer.id] || 0,
   }));
 

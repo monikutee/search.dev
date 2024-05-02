@@ -1,16 +1,35 @@
 import typeormDatabase from "../database/typeorm";
 import { AppErrors } from "../helpers/app-errors";
 import { ERROR_CODES } from "../types/errors.enum";
-import { AnswerTypeEnum, JobOfferType } from "../types/jobOffer.type";
+import { JobOfferType } from "../types/jobOffer.type";
 import { validateJobOffer } from "../validation/jobOffer.validation";
 
 export const createJobOffer =
   (
     dependencies = {
       upsertJobOffer: typeormDatabase.jobOfferRepository.upsertJobOffer,
+      getSingleJobOfferByIdApplyInfo:
+        typeormDatabase.jobOfferRepository.getSingleJobOfferByIdApplyInfo,
     }
   ) =>
   async (jobOffer: JobOfferType) => {
+    if (jobOffer.id) {
+      const oldJobOffer = await dependencies.getSingleJobOfferByIdApplyInfo(
+        jobOffer.id
+      );
+
+      if (
+        oldJobOffer &&
+        oldJobOffer.applicantCount &&
+        oldJobOffer.applicantCount > 0
+      ) {
+        const { quizzes, ...restJobOffer } = jobOffer;
+        await validateJobOffer(restJobOffer);
+        const newJobOffer = await dependencies.upsertJobOffer(restJobOffer);
+        return newJobOffer;
+      }
+    }
+
     await validateJobOffer(jobOffer);
     const newJobOffer = await dependencies.upsertJobOffer(jobOffer);
     return newJobOffer;

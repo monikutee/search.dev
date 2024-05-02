@@ -1,4 +1,5 @@
 import { AppDB } from "../../../connection";
+import { AnswerTypeEnum } from "../../../types/jobOffer.type";
 import { Applicant as ApplicantEntity } from "./applicant.entity";
 
 export async function upsertApplicant(applicant: {
@@ -35,53 +36,64 @@ export async function getApplicantsByJobOfferId(jobOfferId: string) {
   return applicants.map((applicant) => {
     let overallSelectedCorrect = 0;
     let overallTotalCorrect = 0;
+    let multiQuestionCount = 0;
 
     const detailedAnswers = applicant.answers.map((answer) => {
       let totalCorrectChoices = 0;
+      if (answer.question.questionType === AnswerTypeEnum.MULTI) {
+        multiQuestionCount++;
+        totalCorrectChoices = answer.question.questionChoices.filter(
+          (choice) => choice.isCorrect
+        ).length;
+        overallTotalCorrect += totalCorrectChoices;
 
-      totalCorrectChoices = answer.question.questionChoices.filter(
-        (choice) => choice.isCorrect
-      ).length;
-      overallTotalCorrect += totalCorrectChoices;
+        const correctChoicesSet = new Set(
+          answer.question.questionChoices
+            .filter((choice) => choice.isCorrect)
+            .map((choice) => choice.id)
+        );
+        const selectedChoicesSet = new Set(
+          answer.questionChoices.map((choice) => choice.id)
+        );
 
-      const correctChoicesSet = new Set(
-        answer.question.questionChoices
-          .filter((choice) => choice.isCorrect)
-          .map((choice) => choice.id)
-      );
-      const selectedChoicesSet = new Set(
-        answer.questionChoices.map((choice) => choice.id)
-      );
+        const correctSelectedCount = [...selectedChoicesSet].filter((id) =>
+          correctChoicesSet.has(id)
+        ).length;
 
-      const correctSelectedCount = [...selectedChoicesSet].filter((id) =>
-        correctChoicesSet.has(id)
-      ).length;
+        const incorrectSelectionExists = answer.questionChoices.some(
+          (choice) => !choice.isCorrect
+        );
 
-      const incorrectSelectionExists = answer.questionChoices.some(
-        (choice) => !choice.isCorrect
-      );
+        let score: number;
+        if (!incorrectSelectionExists) {
+          score = correctSelectedCount / totalCorrectChoices;
+        } else {
+          score = 0;
+        }
 
-      let score: number;
-      if (!incorrectSelectionExists) {
-        score = correctSelectedCount / totalCorrectChoices;
+        if (isNaN(score)) {
+          score = 0;
+        }
+
+        overallSelectedCorrect += score;
+
+        const correctCount = `${correctSelectedCount}/${totalCorrectChoices}`;
+
+        return {
+          ...answer,
+          correctCount,
+          score: score.toFixed(2),
+        };
       } else {
-        score = 0;
+        return {
+          ...answer,
+        };
       }
-
-      overallSelectedCorrect += score;
-
-      const correctCount = `${correctSelectedCount}/${totalCorrectChoices}`;
-
-      return {
-        ...answer,
-        correctCount,
-        score: score.toFixed(2),
-      };
     });
 
     const overallScore =
       overallTotalCorrect > 0
-        ? (overallSelectedCorrect / detailedAnswers.length).toFixed(2)
+        ? (overallSelectedCorrect / multiQuestionCount).toFixed(2)
         : null;
 
     return {
