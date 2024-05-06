@@ -15,6 +15,7 @@ export interface ApplicantEntryI {
 }
 
 export interface ApplicantFullI extends ApplicantEntryI {
+  applied: boolean;
   answers: ApplicantAnswerDto[];
   id: string;
   overallCorrectCount: string | null;

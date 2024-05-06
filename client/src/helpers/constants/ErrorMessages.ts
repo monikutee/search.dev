@@ -13,4 +13,6 @@ export const ErrorMessages: { [key: string]: string } = {
   [ErrorCodeEnum.JOB_OFFER_HAS_APPLICANTS]:
     "This job offer already has applicants, thus you can not edit it",
   [ErrorCodeEnum.INVALID_DATA]: "Given data is invalid",
+  [ErrorCodeEnum.PROVIDED_TEXT_FLAGGED]:
+    "Provided description was classified as potentially harmful across several categories.",
 };

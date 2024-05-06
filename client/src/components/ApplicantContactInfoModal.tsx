@@ -19,6 +19,7 @@ import Api from "../api";
 import { ApplicantEntryI } from "../api/types/applicant";
 import { toast } from "react-toastify";
 import { ErrorCodeEnum } from "../helpers/enums/ErrorCodeEnum";
+import { ErrorMessages } from "../helpers/constants/ErrorMessages";
 
 export const ApplicantContactInfoModal: React.FC<{
   id: string;
@@ -86,6 +87,17 @@ export const ApplicantContactInfoModal: React.FC<{
       .catch((e) => {
         if (e.definedMessage === ErrorCodeEnum.RECORD_EXIST) {
           toast.error("You already applied for this role", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else if (e.definedMessage === ErrorCodeEnum.PROVIDED_TEXT_FLAGGED) {
+          toast.error(ErrorMessages[e.definedMessage], {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,

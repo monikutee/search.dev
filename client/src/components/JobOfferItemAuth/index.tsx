@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import * as Yup from "yup";
 import Api from "../../api";
 import { UserContext } from "../../helpers/UserStore";
-
+import Typography from "@mui/material/Typography";
 import {
   RemoteEnum,
   ExperienceLevelEnum,
@@ -76,7 +76,6 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
               progress: undefined,
               theme: "light",
             });
-            navigate(RouteList.MY_JOB_OFFERS_LIST);
           });
       } else
         Api.jobOffer
@@ -85,8 +84,17 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
             navigate(RouteList.MY_JOB_OFFERS_LIST);
           })
           .catch((e) => {
-            setError(e.definedMessage);
-            navigate(RouteList.MY_JOB_OFFERS_LIST);
+            setError(ErrorMessages[e.definedMessage]);
+            toast.error(ErrorMessages[e.definedMessage], {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
           });
   };
 
@@ -343,6 +351,13 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
                 formikHelpers={helpers}
               />
             )}
+            {data?.applicantCount ? (
+              data?.applicantCount > 0 ? (
+                <Typography color="secondary">
+                  *You can not edit quizzes, because there are applicants
+                </Typography>
+              ) : null
+            ) : null}
 
             <hr />
             <Button type="submit" variant="contained">

@@ -145,7 +145,21 @@ export const ViewApplicants = () => {
                           />
                         )}
                         {applicant.email && (
-                          <Chip label={`Email: ${applicant.email}`} />
+                          <Chip
+                            label={
+                              <div>
+                                Email:{" "}
+                                {
+                                  <a
+                                    href={`mailto:${applicant.email}`}
+                                    onClick={(e: any) => e.stopPropagation()}
+                                  >
+                                    {applicant.email}
+                                  </a>
+                                }
+                              </div>
+                            }
+                          />
                         )}
                         {applicant.city && applicant.country && (
                           <Chip
@@ -159,7 +173,9 @@ export const ViewApplicants = () => {
                                 ? "success"
                                 : "warning"
                             }
-                            label={`Correct choice answers: ${applicant.overallCorrectCount}`}
+                            label={`Result from choice questions: ${
+                              Number(applicant.overallCorrectCount) * 100
+                            } (%)`}
                           />
                         )}
                         {applicant.applyDate && (
@@ -174,6 +190,12 @@ export const ViewApplicants = () => {
                               hour12: false,
                               minute: "2-digit",
                             })}`}
+                          />
+                        )}
+                        {applicant.applied && (
+                          <Chip
+                            label={`Answered application details`}
+                            color="primary"
                           />
                         )}
                       </div>
