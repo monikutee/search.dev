@@ -2,6 +2,9 @@ import typeormDatabase from "../database/typeorm";
 import { AppErrors } from "../helpers/app-errors";
 import { ERROR_CODES } from "../types/errors.enum";
 import mailerService from "./mailer.service";
+import OpenAI from "openai";
+
+const openai = new OpenAI({ apiKey: process.env.CHAT_GPT_SECRET_KEY });
 
 export const createApplicant =
   (
@@ -30,6 +33,13 @@ export const createApplicant =
     );
     if (!jobOffer) {
       throw new AppErrors(ERROR_CODES.INVALID_DATA);
+    }
+    const moderation = await openai.moderations.create({
+      input: applicant.about,
+    });
+
+    if (moderation.results[0].flagged) {
+      throw new AppErrors(ERROR_CODES.PROVIDED_TEXT_FLAGGED);
     }
     const newApplicant = await dependencies.upsertApplicant(applicant);
     const applyLink = origin + "/apply/" + newApplicant.id;
@@ -121,16 +131,13 @@ export const getApplicantsByJobOfferId =
 export const getJobOfferByApplicantId =
   (
     dependencies = {
-      getJobOfferByApplicantId:
-        typeormDatabase.applicantRepository.getJobOfferByApplicantId,
+      getApplicantById: typeormDatabase.applicantRepository.getApplicantById,
       getSingleJobOfferByIdApply:
         typeormDatabase.jobOfferRepository.getSingleJobOfferByIdApply,
     }
   ) =>
   async (applicantId: string) => {
-    const applicantData = await dependencies.getJobOfferByApplicantId(
-      applicantId
-    );
+    const applicantData = await dependencies.getApplicantById(applicantId);
     if (!applicantData.jobOfferId) {
       throw new AppErrors(ERROR_CODES.APPLICANT_JOB_OFFER_MISSING);
     }

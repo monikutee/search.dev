@@ -104,7 +104,7 @@ export async function getApplicantsByJobOfferId(jobOfferId: string) {
   });
 }
 
-export async function getJobOfferByApplicantId(applicantId: string) {
+export async function getApplicantById(applicantId: string) {
   const applicantRepository = AppDB.getRepository(ApplicantEntity);
   return await applicantRepository.findOne({
     where: { id: applicantId },
@@ -113,6 +113,6 @@ export async function getJobOfferByApplicantId(applicantId: string) {
 
 export default {
   upsertApplicant,
-  getJobOfferByApplicantId,
+  getApplicantById,
   getApplicantsByJobOfferId,
 };

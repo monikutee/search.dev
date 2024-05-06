@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { AppErrors, handleErrorResponse } from "../helpers/app-errors";
-import { getAccessToken, verifyAccessToken } from "../helpers/util";
-import { authService, jobOfferService } from "../services";
+import { jobOfferService } from "../services";
 import applicantService from "../services/applicant.service";
 import { ERROR_CODES } from "../types/errors.enum";
 

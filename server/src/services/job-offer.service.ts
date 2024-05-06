@@ -3,6 +3,9 @@ import { AppErrors } from "../helpers/app-errors";
 import { ERROR_CODES } from "../types/errors.enum";
 import { JobOfferType } from "../types/jobOffer.type";
 import { validateJobOffer } from "../validation/jobOffer.validation";
+import OpenAI from "openai";
+
+const openai = new OpenAI({ apiKey: process.env.CHAT_GPT_SECRET_KEY });
 
 export const createJobOffer =
   (
@@ -24,10 +27,19 @@ export const createJobOffer =
         oldJobOffer.applicantCount > 0
       ) {
         const { quizzes, ...restJobOffer } = jobOffer;
+
         await validateJobOffer(restJobOffer);
         const newJobOffer = await dependencies.upsertJobOffer(restJobOffer);
         return newJobOffer;
       }
+    }
+
+    const moderation = await openai.moderations.create({
+      input: jobOffer.description,
+    });
+
+    if (moderation.results[0].flagged) {
+      throw new AppErrors(ERROR_CODES.PROVIDED_TEXT_FLAGGED);
     }
 
     await validateJobOffer(jobOffer);
