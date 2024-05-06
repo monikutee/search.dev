@@ -116,7 +116,11 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
             *If you want to update any of the disabled fields, please contact{" "}
             <a href="mailto:petrulevicmonika@gmail.com">our support</a>
           </Typography>
-          <Button type="submit" variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={helpers.isSubmitting}
+          >
             Update
           </Button>
         </form>

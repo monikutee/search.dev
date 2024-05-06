@@ -143,7 +143,11 @@ export const SignUp = () => {
             <FormHelperText error>{helpers.errors.consent}</FormHelperText>
           )}
           {error && <FormHelperText error>{error}</FormHelperText>}
-          <Button type="submit" variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={helpers.isSubmitting}
+          >
             Sign up
           </Button>
         </form>

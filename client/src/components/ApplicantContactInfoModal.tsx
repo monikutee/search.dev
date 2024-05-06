@@ -187,7 +187,11 @@ export const ApplicantContactInfoModal: React.FC<{
                 <FormHelperText error>{helpers.errors.consent}</FormHelperText>
               )}
 
-              <Button type="submit" variant="contained">
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={helpers.isSubmitting}
+              >
                 Apply
               </Button>
             </form>

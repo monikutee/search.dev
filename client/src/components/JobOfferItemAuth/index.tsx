@@ -360,7 +360,11 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
             ) : null}
 
             <hr />
-            <Button type="submit" variant="contained">
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={helpers.isSubmitting}
+            >
               {data ? "Update" : "Create"}
             </Button>
           </form>

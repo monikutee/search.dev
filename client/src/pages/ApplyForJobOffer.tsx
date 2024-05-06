@@ -205,9 +205,9 @@ export const ApplyForJobOffer = () => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        {(formik) => (
+        {(helpers) => (
           <Form>
-            {formik.values.quizzes.map(
+            {helpers.values.quizzes.map(
               (
                 quiz: { title: string; questions: ApplyAnswerI[] },
                 index: number
@@ -247,7 +247,11 @@ export const ApplyForJobOffer = () => {
               )
             )}
             <div className="d-flex justify-content-end mt-3">
-              <Button variant="contained" type="submit">
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={helpers.isSubmitting}
+              >
                 Submit
               </Button>
             </div>

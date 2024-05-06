@@ -54,25 +54,32 @@ export const Login = () => {
       onSubmit={onSubmit}
       enableReinitialize={true}
     >
-      {({ handleSubmit, handleChange, touched, errors }) => (
-        <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
+      {(helpers) => (
+        <form
+          onSubmit={helpers.handleSubmit}
+          className="d-flex flex-column gap-3"
+        >
           <TextField
             name="email"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             label="Email"
-            error={touched.email && !!errors.email}
-            helperText={errors.email}
+            error={helpers.touched.email && !!helpers.errors.email}
+            helperText={helpers.errors.email}
           />
           <TextField
             name="password"
-            onChange={handleChange}
+            onChange={helpers.handleChange}
             label="Password"
             type="password"
-            error={touched.password && !!errors.password}
-            helperText={errors.password}
+            error={helpers.touched.password && !!helpers.errors.password}
+            helperText={helpers.errors.password}
           />
           {error && <FormHelperText error>{error}</FormHelperText>}
-          <Button type="submit" variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={helpers.isSubmitting}
+          >
             Log in
           </Button>
         </form>

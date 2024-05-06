@@ -34,7 +34,7 @@ export const Homepage = () => {
     {
       title: "Results",
       description:
-        "In the final stage, the outcomes of the recruitment process are communicated to the candidates. ",
+        "In the final stage, the outcomes of the recruitment process is visible for the recruiters",
       icon: <AutoGraphIcon className="step-icon" color="primary" />,
     },
   ];
