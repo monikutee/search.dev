@@ -140,7 +140,7 @@ export async function getSingleJobOfferById(id: string) {
 
   if (jobOffer) {
     jobOffer.quizzes.forEach((quiz) => {
-      quiz.questions.reverse();
+      // quiz.questions.reverse();
       quiz.questions.forEach((question) => {
         question.questionChoices.reverse();
       });

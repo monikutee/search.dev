@@ -23,15 +23,16 @@ app.get(
   jobOfferController.getSingleJobOfferById
 );
 
+app.get(
+  `${apiRoot}/:userId/job-offer/applicants/:jobOfferId`,
+  verifyUser,
+  jobOfferController.getJobOfferApplicants
+);
+
 app.get(`${apiRoot}/job-offers/all`, jobOfferController.getAllJobOffersApply);
 app.get(
   `${apiRoot}/job-offers/:jobOfferId`,
   jobOfferController.getSingleJobOfferByIdApplyInfo
-);
-
-app.get(
-  `${apiRoot}/:userId/job-offer/applicants/:jobOfferId`,
-  jobOfferController.getJobOfferApplicants
 );
 
 export default app;

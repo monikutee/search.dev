@@ -14,6 +14,12 @@ export const verifyUser = async (req, res, next) => {
       throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);
     }
 
+    const { userId } = req.params;
+
+    if (userData.userId !== userId) {
+      throw new AppErrors(ERROR_CODES.PERMISSION_DENIED, undefined, 401);
+    }
+
     const userCompact = await userService.getUser(userData.email);
     if (userData.userId !== userCompact.id) {
       throw new AppErrors(ERROR_CODES.INVALID_TOKEN, undefined, 401);

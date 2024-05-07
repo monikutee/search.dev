@@ -7,21 +7,26 @@ const apiRoot = process.env.API_ROOT;
 
 app.post(`${apiRoot}/user/login`, userController.login);
 app.post(`${apiRoot}/user/signup`, userController.signup);
-app.get(`${apiRoot}/user/:id`, verifyUser, userController.getUserById);
-app.post(`${apiRoot}/user/logout`, verifyUser, userController.logout);
-app.post(`${apiRoot}/user/get`, verifyUser, userController.getUsersByIds);
-app.post(`${apiRoot}/user/edit`, verifyUser, userController.edit);
-app.post(`${apiRoot}/user/refresh`, verifyUser, userController.refresh);
+app.get(`${apiRoot}/user/:userId`, verifyUser, userController.getUserById);
+app.post(`${apiRoot}/user/:userId/logout`, verifyUser, userController.logout);
 app.post(
-  `${apiRoot}/user/start-password-reset`,
+  `${apiRoot}/user/:userId/get`,
+  verifyUser,
+  userController.getUsersByIds
+);
+app.post(`${apiRoot}/user/:userId/edit`, verifyUser, userController.edit);
+app.post(`${apiRoot}/user/:userId/refresh`, verifyUser, userController.refresh);
+app.post(
+  `${apiRoot}/user/:userId/start-password-reset`,
   verifyUser,
   userController.startPasswordReset
 );
 app.post(
-  `${apiRoot}/user/finish-password-reset`,
+  `${apiRoot}/user/:userId/finish-password-reset`,
   verifyUser,
   userController.finishPasswordReset
 );
+
 app.post(`${apiRoot}/user/verify/:token`, userController.checkVerification);
 
 export default app;
