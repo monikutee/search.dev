@@ -25,7 +25,7 @@ class User extends Client {
   };
 
   logout = (userId: string) => {
-    const url = this.buildUrl(this.api.EDIT, { userId });
+    const url = this.buildUrl(this.api.LOGOUT, { userId });
     return this.http.post(url);
   };
 

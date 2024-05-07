@@ -15,4 +15,5 @@ export const ErrorMessages: { [key: string]: string } = {
   [ErrorCodeEnum.INVALID_DATA]: "Given data is invalid",
   [ErrorCodeEnum.PROVIDED_TEXT_FLAGGED]:
     "Provided description was classified as potentially harmful across several categories.",
+  [ErrorCodeEnum.PERMISSION_DENIED]: "Permission denied",
 };
