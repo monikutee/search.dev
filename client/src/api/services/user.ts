@@ -8,10 +8,10 @@ class User extends Client {
 
     this.api = {
       LOGIN: this.defaultUrl(`${this.http.baseUrl}/user/login`),
-      EDIT: this.defaultUrl(`${this.http.baseUrl}/user/edit`),
-      LOGOUT: this.defaultUrl(`${this.http.baseUrl}/user/logout`),
       SIGNUP: this.defaultUrl(`${this.http.baseUrl}/user/signup`),
-      FETCH_USER: this.defaultUrl(`${this.http.baseUrl}/user/{id}`),
+      EDIT: this.defaultUrl(`${this.http.baseUrl}/user/{userId}/edit`),
+      LOGOUT: this.defaultUrl(`${this.http.baseUrl}/user/{userId}/logout`),
+      FETCH_USER: this.defaultUrl(`${this.http.baseUrl}/user/{userId}`),
       VERIFY_EMAIL: this.defaultUrl(`${this.http.baseUrl}/user/verify/{token}`),
     };
   }
@@ -20,20 +20,25 @@ class User extends Client {
     return this.http.post(this.api.LOGIN, data);
   };
 
-  logout = () => {
-    return this.http.post(this.api.LOGOUT);
-  };
-
   signUp = (data: Omit<SignUpDto, "id">) => {
     return this.http.post(this.api.SIGNUP, data);
   };
 
-  editUser = (data: UserI): Promise<AxiosResponse<{ id: string }>> => {
-    return this.http.post(this.api.EDIT, data);
+  logout = (userId: string) => {
+    const url = this.buildUrl(this.api.EDIT, { userId });
+    return this.http.post(url);
   };
 
-  fetchUser = (id: string) => {
-    const url = this.buildUrl(this.api.FETCH_USER, { id });
+  editUser = (
+    userId: string,
+    data: UserI
+  ): Promise<AxiosResponse<{ id: string }>> => {
+    const url = this.buildUrl(this.api.EDIT, { userId });
+    return this.http.post(url, data);
+  };
+
+  fetchUser = (userId: string) => {
+    const url = this.buildUrl(this.api.FETCH_USER, { userId });
     return this.http.get(url);
   };
 

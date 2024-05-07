@@ -42,7 +42,7 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   const onSubmit = async (req: UserI) => {
     if (!user) return;
     Api.user
-      .editUser(req)
+      .editUser(user.id, req)
       .then((res) => {
         setUserId(res.data.id);
         toast.success("Successfully updated your profile", {

@@ -19,8 +19,9 @@ export const Header = () => {
   const navigate = useNavigate();
 
   const logout = async () => {
+    if (!user) return;
     Api.user
-      .logout()
+      .logout(user.id)
       .then(() => {
         setUser(null);
         setUserId(null);
