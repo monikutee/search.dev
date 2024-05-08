@@ -237,10 +237,17 @@ export const ViewApplicants = () => {
                             })}`}
                           />
                         )}
-                        {applicant.applied && (
+                        {applicant.applied &&
+                        jobOffer?.quizzes &&
+                        jobOffer.quizzes.length > 0 ? (
                           <Chip
                             label={`Answered application details`}
                             color="primary"
+                          />
+                        ) : (
+                          <Chip
+                            label={`Did not answered application details`}
+                            color="secondary"
                           />
                         )}
                       </div>
