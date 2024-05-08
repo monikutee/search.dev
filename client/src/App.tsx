@@ -13,7 +13,7 @@ import { EditJobOffer } from "./pages/EditJobOffer";
 import { AllJobOffers } from "./pages/AllJobOffers";
 import { ViewJobOffer } from "./pages/ViewJobOffer";
 import { ApplyForJobOffer } from "./pages/ApplyForJobOffer";
-import { EmailVerification } from "./pages/EmailVerification";
+import { CheckEmail } from "./pages/EmailVerification";
 import { EmailVerificationCheck } from "./pages/EmailVerificationCheck";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import TimeAgo from "javascript-time-ago";
@@ -38,7 +38,7 @@ const App = () => {
               />
               <Route
                 path={RouteList.EMAIL_VERIFICATION}
-                element={<EmailVerification />}
+                element={<CheckEmail />}
               />
               <Route
                 path={RouteList.EMAIL_VERIFICATION_PROCESS}

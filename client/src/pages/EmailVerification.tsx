@@ -1,7 +1,7 @@
 import { Layout } from "../containers";
 import Typography from "@mui/material/Typography";
 
-export const EmailVerification = () => {
+export const CheckEmail = () => {
   return (
     <Layout>
       <div className="d-flex align-items-center justify-content-center h-100">

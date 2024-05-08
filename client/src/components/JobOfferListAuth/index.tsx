@@ -81,7 +81,9 @@ export const JobOfferList = () => {
                   jobOfferId: item.id,
                 })}
               >
-                <Button variant="outlined">View applicants</Button>
+                <Button variant="outlined">
+                  View applicants ({item.applicantCount})
+                </Button>
               </Link>
             ) : (
               <Button variant="outlined" disabled>

@@ -83,21 +83,21 @@ export const SignUp = () => {
           <TextField
             name="name"
             onChange={helpers.handleChange}
-            label="Company name"
+            label="Company name (will be visible for candidates)"
             helperText={helpers.errors.name}
             error={helpers.touched.name && !!helpers.errors.name}
           />
           <TextField
             name="email"
             onChange={helpers.handleChange}
-            label="Email"
+            label="Email (will be visible for candidates)"
             helperText={helpers.errors.email}
             error={helpers.touched.email && !!helpers.errors.email}
           />
           <TextField
             name="phoneNumber"
             onChange={helpers.handleChange}
-            label="Phone number"
+            label="Phone number (will be visible for candidates)"
             helperText={helpers.errors.phoneNumber}
             error={helpers.touched.phoneNumber && !!helpers.errors.phoneNumber}
           />
