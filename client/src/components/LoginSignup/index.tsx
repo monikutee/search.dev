@@ -8,9 +8,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import { Login } from "./Login";
 import { SignUp } from "./SignUp";
+import { ForgotPasswordStart } from "../ForgotPasswordModals.tsx/ForgotPasswordStart";
 
 export const LoginSignUpModal = () => {
-  const { hideModal } = useGlobalModalContext();
+  const { hideModal, showModal } = useGlobalModalContext();
   const [isLogin, setIsLogin] = React.useState(true);
 
   return (
@@ -38,14 +39,24 @@ export const LoginSignUpModal = () => {
 
         {isLogin ? <Login /> : <SignUp />}
         {isLogin ? (
-          <Button
-            variant={"text"}
-            size={"small"}
-            sx={{ mt: 2 }}
-            onClick={() => setIsLogin(false)}
-          >
-            Do not have an account?
-          </Button>
+          <div className="d-flex justify-content-between">
+            <Button
+              variant={"text"}
+              size={"small"}
+              sx={{ mt: 2 }}
+              onClick={() => setIsLogin(false)}
+            >
+              Do not have an account?
+            </Button>
+            <Button
+              variant={"text"}
+              size={"small"}
+              sx={{ mt: 2 }}
+              onClick={() => showModal(<ForgotPasswordStart />)}
+            >
+              Forgot password?
+            </Button>
+          </div>
         ) : (
           <Button
             variant={"text"}

@@ -13,6 +13,12 @@ class User extends Client {
       LOGOUT: this.defaultUrl(`${this.http.baseUrl}/user/{userId}/logout`),
       FETCH_USER: this.defaultUrl(`${this.http.baseUrl}/user/{userId}`),
       VERIFY_EMAIL: this.defaultUrl(`${this.http.baseUrl}/user/verify/{token}`),
+      START_PASSWORD_RESET: this.defaultUrl(
+        `${this.http.baseUrl}/user/start-password-reset`
+      ),
+      FINISH_PASSWORD_RESET: this.defaultUrl(
+        `${this.http.baseUrl}/user/finish-password-reset`
+      ),
     };
   }
 
@@ -45,6 +51,14 @@ class User extends Client {
   verifyEmail = (token: string) => {
     const url = this.buildUrl(this.api.VERIFY_EMAIL, { token });
     return this.http.post(url);
+  };
+
+  startPasswordReset = (email: string) => {
+    return this.http.post(this.api.START_PASSWORD_RESET, { email });
+  };
+
+  finishPasswordReset = (payload: { token: string; password: string }) => {
+    return this.http.post(this.api.FINISH_PASSWORD_RESET, payload);
   };
 }
 
