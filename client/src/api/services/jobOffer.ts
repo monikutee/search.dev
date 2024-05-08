@@ -2,7 +2,7 @@ import Client from "./client";
 import Http from "../http";
 import type { AxiosResponse } from "axios";
 import { JobOfferApplyMiniDto, JobOfferDto } from "../types/jobOffer";
-import { ApplicantFullI } from "../types/applicant";
+import { ApplicantsDtoI } from "../types/applicant";
 
 class JobOffer extends Client {
   constructor(http: Http) {
@@ -65,7 +65,7 @@ class JobOffer extends Client {
   fetchApplicants = (
     userId: string,
     jobOfferId: string
-  ): Promise<AxiosResponse<ApplicantFullI[]>> => {
+  ): Promise<AxiosResponse<ApplicantsDtoI>> => {
     const url = this.buildUrl(this.api.FETCH_APPLICANTS, {
       userId,
       jobOfferId,

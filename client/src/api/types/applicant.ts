@@ -2,6 +2,7 @@ import {
   AnswerTypeEnum,
   CodeLanguageEnum,
 } from "../../helpers/enums/JobOfferEnums";
+import { JobOfferApplyMiniDto } from "./jobOffer";
 
 export interface ApplicantEntryI {
   email: string;
@@ -67,4 +68,9 @@ export interface ApplicantQuestionI {
   createdAt: string;
   updatedAt: string;
   questionChoices: QuestionChoice[];
+}
+
+export interface ApplicantsDtoI {
+  jobOffer: JobOfferApplyMiniDto;
+  applicants: ApplicantFullI[];
 }

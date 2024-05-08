@@ -32,7 +32,7 @@ export const ViewApplicants = () => {
       try {
         Api.jobOffer
           .fetchApplicants(userId, jobOfferId)
-          .then((res) => setApplicants(res.data));
+          .then((res) => setApplicants(res.data.applicants));
       } catch {
         console.log("error");
       }
