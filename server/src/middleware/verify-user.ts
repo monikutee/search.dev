@@ -15,7 +15,6 @@ export const verifyUser = async (req, res, next) => {
     }
 
     const { userId } = req.params;
-
     if (userData.userId !== userId) {
       throw new AppErrors(ERROR_CODES.PERMISSION_DENIED, undefined, 401);
     }
@@ -32,7 +31,7 @@ export const verifyUser = async (req, res, next) => {
     if (error.code === "INVALID_TOKEN") {
       res.status(401).send({ error: "Invalid token" });
     } else {
-      res.status(500).send({ error: "An unexpected error occurred" });
+      res.status(500).send({ error: error.code });
     }
   }
 };

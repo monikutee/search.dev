@@ -18,9 +18,9 @@ export const resetPassword = () => async (email: string, token: string) => {
             Email: email,
           },
         ],
-        Subject: "Your password reset link",
-        TextPart: "Dear user, here is your password reset link.",
-        HTMLPart: `<h3>Dear user,</h3><p>Here is your password reset token: ${token}</p>`,
+        Subject: "Your password reset token",
+        TextPart: "Dear user, here is your password reset token.",
+        HTMLPart: `<h3>Dear user,</h3><p>Here is your password reset token: <bold>${token}</bold></p>`,
       },
     ],
   });

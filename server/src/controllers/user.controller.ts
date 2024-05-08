@@ -17,8 +17,8 @@ export const getUserById =
   ) =>
   async (req: Request, res: Response) => {
     try {
-      const { id } = req.params;
-      const user = await dependencies.getUserById(id);
+      const { userId } = req.params;
+      const user = await dependencies.getUserById(userId);
       if (!user) {
         res.status(400).json("User not found");
       }
@@ -26,25 +26,6 @@ export const getUserById =
       delete user.password;
 
       res.status(200).json(user);
-    } catch (e) {
-      handleErrorResponse(e, res);
-    }
-  };
-
-export const getUsersByIds =
-  (
-    dependencies = {
-      getUsersByIds: userService.getUsersByIds,
-      getUser: userService.getUser,
-    }
-  ) =>
-  async (req: Request, res: Response) => {
-    try {
-      const { ids } = req.body;
-      const users = await dependencies.getUsersByIds(ids);
-
-      users.forEach((user) => delete user.password);
-      res.status(200).json(users);
     } catch (e) {
       handleErrorResponse(e, res);
     }
@@ -173,6 +154,7 @@ export const finishPasswordReset =
       handleErrorResponse(e, res);
     }
   };
+
 export const loginLocal =
   (
     dependencies = {
@@ -270,7 +252,6 @@ export const checkVerification =
 export default {
   login: loginLocal(),
   getUserById: getUserById(),
-  getUsersByIds: getUsersByIds(),
   edit: edit(),
   signup: signup(),
   refresh: refresh(),
