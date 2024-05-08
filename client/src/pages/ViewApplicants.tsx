@@ -238,18 +238,21 @@ export const ViewApplicants = () => {
                           />
                         )}
                         {applicant.applied &&
-                        jobOffer?.quizzes &&
-                        jobOffer.quizzes.length > 0 ? (
-                          <Chip
-                            label={`Answered application details`}
-                            color="primary"
-                          />
-                        ) : (
-                          <Chip
-                            label={`Did not answered application details`}
-                            color="secondary"
-                          />
-                        )}
+                          jobOffer?.quizzes &&
+                          jobOffer.quizzes.length > 0 && (
+                            <Chip
+                              label={`Answered application details`}
+                              color="primary"
+                            />
+                          )}
+                        {!applicant.applied &&
+                          jobOffer?.quizzes &&
+                          jobOffer.quizzes.length > 0 && (
+                            <Chip
+                              label={`Did not answered application details`}
+                              color="secondary"
+                            />
+                          )}
                       </div>
                     </AccordionSummary>
                     <AccordionDetails>
