@@ -354,10 +354,20 @@ export const JobOffer: React.FC<{ data?: JobOfferDto }> = ({ data = null }) => {
             {data?.applicantCount ? (
               data?.applicantCount > 0 ? (
                 <Typography color="secondary">
-                  *You can not edit quizzes, because there are applicants
+                  *You can not edit quizzes, because there are applicants.
                 </Typography>
-              ) : null
-            ) : null}
+              ) : (
+                <Typography color="secondary">
+                  *When this job offer will have at least one applicant editing
+                  quizzes or adding new ones will be forbidden.
+                </Typography>
+              )
+            ) : (
+              <Typography color="secondary">
+                *When this job offer will have at least one applicant editing
+                quizzes or adding new ones will be forbidden.
+              </Typography>
+            )}
 
             <hr />
             <Button

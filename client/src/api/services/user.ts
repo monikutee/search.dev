@@ -35,10 +35,7 @@ class User extends Client {
     return this.http.post(url);
   };
 
-  editUser = (
-    userId: string,
-    data: UserI
-  ): Promise<AxiosResponse<{ id: string }>> => {
+  editUser = (userId: string, data: UserI): Promise<AxiosResponse<UserI>> => {
     const url = this.buildUrl(this.api.EDIT, { userId });
     return this.http.post(url, data);
   };

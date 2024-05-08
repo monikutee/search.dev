@@ -14,7 +14,7 @@ import { CountryCitySelect } from "./Global/CountryCitySelect";
 
 export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
   const [error, setError] = React.useState(null);
-  const { setUserId } = useContext(UserContext);
+  const { setUserId, setUser } = useContext(UserContext);
   const [initialValues, setInitialValues] = React.useState<UserI | null>(null);
 
   React.useEffect(() => {
@@ -45,6 +45,7 @@ export const ProfileInfo: React.FC<{ user: UserI }> = ({ user }) => {
       .editUser(user.id, req)
       .then((res) => {
         setUserId(res.data.id);
+        setUser(res.data);
         toast.success("Successfully updated your profile", {
           position: "top-right",
           autoClose: 5000,
