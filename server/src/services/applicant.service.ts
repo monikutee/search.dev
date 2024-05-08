@@ -44,12 +44,13 @@ export const createApplicant =
     const newApplicant = await dependencies.upsertApplicant(applicant);
     const applyLink = origin + "/apply/" + newApplicant.id;
 
-    await dependencies.sendApplicantLink(
-      applicant.email,
-      applyLink,
-      jobOffer.title,
-      jobOffer.user.name
-    );
+    if (jobOffer.quizzes && jobOffer.quizzes.length > 0)
+      await dependencies.sendApplicantLink(
+        applicant.email,
+        applyLink,
+        jobOffer.title,
+        jobOffer.user.name
+      );
 
     return newApplicant;
   };

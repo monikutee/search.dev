@@ -38,7 +38,6 @@ export async function getSingleJobOfferByIdApply(id: string) {
   });
 
   jobOffer.quizzes.forEach((quiz) => {
-    quiz.questions.reverse();
     quiz.questions.forEach((question) => {
       question.questionChoices.reverse();
     });
@@ -140,7 +139,6 @@ export async function getSingleJobOfferById(id: string) {
 
   if (jobOffer) {
     jobOffer.quizzes.forEach((quiz) => {
-      // quiz.questions.reverse();
       quiz.questions.forEach((question) => {
         question.questionChoices.reverse();
       });
