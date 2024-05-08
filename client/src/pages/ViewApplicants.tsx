@@ -167,6 +167,7 @@ export const ViewApplicants = () => {
             </>
           )}
         </Grid>
+        <Grid item xs={12} md={3} />
         <Grid item xs={12} md={9}>
           {applicants.length > 0 ? (
             <div className="mt-3 mt-md-0">
