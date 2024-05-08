@@ -34,13 +34,13 @@ export const ViewJobOffer = () => {
 
   React.useEffect(() => {
     if (jobOfferId) {
-      try {
-        Api.jobOffer
-          .fetchOneJobOfferInfo(jobOfferId)
-          .then((res) => setJobOffer(res.data));
-      } catch {
-        console.log("error");
-      }
+      Api.jobOffer
+        .fetchOneJobOfferInfo(jobOfferId)
+        .then((res) => setJobOffer(res.data))
+        .catch((e) => {
+          console.error(e);
+          navigate(RouteList.HOME);
+        });
     } else {
       navigate(RouteList.HOME);
     }

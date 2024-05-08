@@ -18,13 +18,13 @@ export const EditJobOffer = () => {
 
   React.useEffect(() => {
     if (jobOfferId && userId) {
-      try {
-        Api.jobOffer
-          .fetchOneJobOfferUsers(userId, jobOfferId)
-          .then((res) => setJobOffer(res.data));
-      } catch {
-        console.log("error");
-      }
+      Api.jobOffer
+        .fetchOneJobOfferUsers(userId, jobOfferId)
+        .then((res) => setJobOffer(res.data))
+        .catch((e) => {
+          console.error(e);
+          navigate(RouteList.HOME);
+        });
     } else {
       navigate(RouteList.HOME);
     }

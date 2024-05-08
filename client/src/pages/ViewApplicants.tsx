@@ -41,14 +41,16 @@ export const ViewApplicants = () => {
 
   React.useEffect(() => {
     if (jobOfferId && userId) {
-      try {
-        Api.jobOffer.fetchApplicants(userId, jobOfferId).then((res) => {
+      Api.jobOffer
+        .fetchApplicants(userId, jobOfferId)
+        .then((res) => {
           setApplicants(res.data.applicants);
           setJobOffer(res.data.jobOffer);
+        })
+        .catch((e) => {
+          console.error(e);
+          navigate(RouteList.HOME);
         });
-      } catch {
-        console.log("error");
-      }
     } else {
       navigate(RouteList.HOME);
     }

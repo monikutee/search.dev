@@ -11,17 +11,20 @@ import {
   RemoteText,
 } from "../helpers/constants/JobOffer";
 import { RouteList } from "../routes";
-import { generatePath, Link } from "react-router-dom";
+import { generatePath, Link, useNavigate } from "react-router-dom";
 
 export const AllJobOffers = () => {
   const [list, setList] = React.useState<JobOfferApplyMiniDto[] | null>(null);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
-    try {
-      Api.jobOffer.fetchAllJobOffers().then((res) => setList(res.data));
-    } catch {
-      console.log("error");
-    }
+    Api.jobOffer
+      .fetchAllJobOffers()
+      .then((res) => setList(res.data))
+      .catch((e) => {
+        console.error(e);
+        navigate(RouteList.HOME);
+      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -22,13 +22,10 @@ export const JobOfferList = () => {
 
   React.useEffect(() => {
     if (userId)
-      try {
-        Api.jobOffer
-          .fetchAllUsersJobOffers(userId)
-          .then((res) => setList(res.data));
-      } catch {
-        console.log("error");
-      }
+      Api.jobOffer
+        .fetchAllUsersJobOffers(userId)
+        .then((res) => setList(res.data))
+        .catch((e) => console.error(e));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
