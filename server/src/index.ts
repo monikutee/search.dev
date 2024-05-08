@@ -31,20 +31,6 @@ connection
     const apiTrackerMiddleware = hookApiTracker(dependencies);
 
     await validateEnv(process.env);
-    app.use((req, res, next) =>
-      apiTrackerMiddleware(
-        req,
-        res,
-        () =>
-          new Promise<Response>((_resolve, reject) => {
-            try {
-              next();
-            } catch (error) {
-              reject(error);
-            }
-          })
-      )
-    );
 
     app.use(function (req: Request, res: Response, next) {
       res.header("Access-Control-Allow-Origin", "*");
@@ -69,6 +55,21 @@ connection
     app.use(cookieParser());
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+
+    app.use((req, res, next) =>
+      apiTrackerMiddleware(
+        req,
+        res,
+        () =>
+          new Promise<Response>((_resolve, reject) => {
+            try {
+              next();
+            } catch (error) {
+              reject(error);
+            }
+          })
+      )
+    );
 
     app.use(userApp);
     app.use(applicantApp);

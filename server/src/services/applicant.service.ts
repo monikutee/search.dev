@@ -125,7 +125,7 @@ export const getApplicantsByJobOfferId =
       if (!applicants) {
         throw new AppErrors(ERROR_CODES.VALIDATION_ERROR);
       }
-      return applicants;
+      return { jobOffer, applicants };
     }
   };
 

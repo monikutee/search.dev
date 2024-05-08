@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { ApiData, ApiDataDB } from "../types/api-data.type";
 import onFinished from "on-finished";
 import typeormDatabase from "../database/typeorm";
+import { AppErrors, handleErrorResponse } from "../helpers/app-errors";
+import { ERROR_CODES } from "../types/errors.enum";
 
 interface PreCallbackOptions {
   trackRequestData?: boolean;
@@ -35,7 +37,7 @@ const DEFAULT_OPTIONS: TrackerOptions = {
     limitRateForIp: undefined,
   },
   postCallback: {
-    trackResponseData: false,
+    trackResponseData: true,
   },
 };
 
@@ -95,7 +97,7 @@ export function hookApiTracker(
     if (!ip) {
       return {
         stopRequest: true,
-        error: "Unable to get ip",
+        error: ERROR_CODES.UNABLE_TO_GET_IP,
         status: 400,
       };
     }
@@ -103,7 +105,7 @@ export function hookApiTracker(
     if (count > limit) {
       return {
         stopRequest: true,
-        error: `Call limit of ${limit} was reached`,
+        error: ERROR_CODES.CALL_LIMIT_WAS_REACHED,
         status: 429,
       };
     }
@@ -136,7 +138,11 @@ export function hookApiTracker(
   }
 
   function endRequest(res: Response, apiData: ApiData) {
-    res.status(apiData.status || 400).json(apiData.error);
+    try {
+      throw new AppErrors(apiData.error);
+    } catch (e) {
+      handleErrorResponse(e, res);
+    }
   }
 
   function checkForRequired(apiData: ApiData) {
@@ -144,7 +150,7 @@ export function hookApiTracker(
       return {
         ...apiData,
         stopRequest: true,
-        error: "Something went wrong",
+        error: ERROR_CODES.SOMETHING_WENT_WRONG,
         status: 400,
       };
     }
@@ -171,9 +177,7 @@ export function hookApiTracker(
       res.locals.body = body;
       return oldJson.call(res, body);
     };
-    if (apiData.stopRequest) {
-      endRequest(res, apiData);
-    } else {
+    if (!apiData.stopRequest) {
       next(req, res);
       apiData = await new Promise((resolve) => {
         onFinished(res, async function (err, res) {
